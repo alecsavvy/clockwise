@@ -2,11 +2,11 @@
 
 clockwise is simple. clockwise is ephemeral. a blockchain for decentralized and finalized message passing.
 
-implement a function for service discovery that continuously gets polled.
-implement a signing and validation function for communication between nodes.
-blocks are signed deterministically by a node, sealer is based on hash of block num -> node.
-nodes have three types, archive, signer, and validator.
-network config must match for nodes to participate.
+- implement a function for service discovery that continuously gets polled.
+- implement a signing and validation function for communication between nodes.
+- blocks are signed deterministically by a node, sealer is based on hash of block num -> node.
+- nodes have three types, archive, signer, and validator.
+- network config must match for nodes to participate.
 
 ## node types
 
