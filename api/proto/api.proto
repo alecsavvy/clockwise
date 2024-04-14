@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package network;
+
+option go_package = "api/gen";
+
+message NodeHealthRequest {}
+
+message NodeHealthResponse {
+    bool healthy = 1;
+    int64 timestamp = 2;
+}
+
+service UserService {
+    rpc GetNodeHealth(network.NodeHealthRequest) returns (network.NodeHealthResponse) {}
+}
