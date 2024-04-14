@@ -24,11 +24,9 @@ func New(logger *slog.Logger, db *db.DB, discovery *discovery.Discovery) (*App, 
 }
 
 func (app *App) Run() error {
-	bootstrapNodes := []string{"http://localhost:6001", "http://localhost:6002"}
-
 	type taskFunc func() error
 	tasks := []taskFunc{
-		func() error { return app.discovery.DiscoverNodes(bootstrapNodes) },
+		func() error { return app.discovery.DiscoverNodes([]string{}) },
 	}
 
 	var wg sync.WaitGroup
