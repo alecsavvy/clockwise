@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package network;
 
-option go_package = "api/gen";
+option go_package = "grpc/gen";
 
 message NodeHealthRequest {}
 
@@ -11,6 +11,6 @@ message NodeHealthResponse {
     int64 timestamp = 2;
 }
 
-service UserService {
+service NodeService {
     rpc GetNodeHealth(network.NodeHealthRequest) returns (network.NodeHealthResponse) {}
 }

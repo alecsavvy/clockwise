@@ -7,9 +7,12 @@ import (
 	"github.com/alecsavvy/clockwise/common"
 	"github.com/alecsavvy/clockwise/db"
 	"github.com/alecsavvy/clockwise/discovery"
+	"github.com/alecsavvy/clockwise/grpc"
 )
 
 func run() error {
+	host := "localhost:6000"
+
 	logger, err := common.NewLogger()
 	if err != nil {
 		return err
@@ -20,12 +23,17 @@ func run() error {
 		return err
 	}
 
-	discovery, err := discovery.New("http://localhost:6000")
+	discovery, err := discovery.New(host)
 	if err != nil {
 		return err
 	}
 
-	app, err := app.New(logger, db, discovery)
+	grpc, err := grpc.New(host)
+	if err != nil {
+		return err
+	}
+
+	app, err := app.New(logger, grpc, db, discovery)
 	if err != nil {
 		return err
 	}

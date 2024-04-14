@@ -1,6 +1,9 @@
 package discovery
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 type NodeSet map[string]bool
 
@@ -18,6 +21,9 @@ func New(endpoint string) (*Discovery, error) {
 
 func (discovery *Discovery) DiscoverNodes(bootstrap []string) error {
 	fmt.Println("bootstrapping nodes")
-	fmt.Println("discovery nodes...")
+	for true {
+		time.Sleep(time.Duration(time.Second * 3))
+		fmt.Println("discovered new nodes")
+	}
 	return nil
 }
