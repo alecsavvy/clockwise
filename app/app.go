@@ -4,34 +4,39 @@ import (
 	"log/slog"
 	"sync"
 
-	"github.com/alecsavvy/clockwise/db"
+	"github.com/alecsavvy/clockwise/common"
 	"github.com/alecsavvy/clockwise/peer"
 	"github.com/alecsavvy/clockwise/server"
+	"github.com/alecsavvy/clockwise/storage"
 )
 
-// entrypoint to most logic connecting the discovery, hashrings, dbs, and stuff together
 type App struct {
+	/** common */
+	config *common.Config
+	state  *common.AppState
 	logger *slog.Logger
-	server *server.Server
-	db     *db.DB
-	peers  *peer.PeerManager
+
+	/** services */
+	rpcService     *server.RpcService
+	peerService    *peer.PeerService
+	storageService *storage.StorageService
 }
 
-func New(logger *slog.Logger, server *server.Server, db *db.DB, discovery *peer.PeerManager) (*App, error) {
+func New(logger *slog.Logger, server *server.RpcService, db *storage.StorageService, discovery *peer.PeerService) (*App, error) {
 	return &App{
-		logger: logger,
-		server: server,
-		db:     db,
-		peers:  discovery,
+		logger:         logger,
+		rpcService:     server,
+		storageService: db,
+		peerService:    discovery,
 	}, nil
 }
 
 func (app *App) Run() error {
 	type taskFunc func() error
 	tasks := []taskFunc{
-		app.peers.ConnectPeers,
-		app.peers.PollPeerHealth,
-		app.server.Serve,
+		app.peerService.ConnectPeers,
+		app.peerService.PollPeerHealth,
+		app.rpcService.Serve,
 	}
 
 	var wg sync.WaitGroup

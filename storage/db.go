@@ -1,4 +1,4 @@
-package db
+package storage
 
 import (
 	"context"
@@ -7,18 +7,18 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 
-	"github.com/alecsavvy/clockwise/db/gen"
+	"github.com/alecsavvy/clockwise/storage/gen"
 )
 
 //go:embed sql/schema.sql
 var ddl string
 
-type DB struct {
+type StorageService struct {
 	db      *sql.DB
 	Queries *gen.Queries
 }
 
-func New() (*DB, error) {
+func New() (*StorageService, error) {
 	ctx := context.Background()
 	db, err := sql.Open("sqlite3", ":memory:")
 	if err != nil {
@@ -31,7 +31,7 @@ func New() (*DB, error) {
 	}
 
 	queries := gen.New(db)
-	return &DB{
+	return &StorageService{
 		db:      db,
 		Queries: queries,
 	}, nil

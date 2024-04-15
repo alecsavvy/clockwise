@@ -2,7 +2,7 @@ package common
 
 type PeerState struct {
 	IsHealthy bool
-	NodeType  int
+	NodeType  string
 }
 
 // internal state of the application held in memory

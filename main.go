@@ -6,9 +6,9 @@ import (
 
 	"github.com/alecsavvy/clockwise/app"
 	"github.com/alecsavvy/clockwise/common"
-	"github.com/alecsavvy/clockwise/db"
 	"github.com/alecsavvy/clockwise/peer"
 	"github.com/alecsavvy/clockwise/server"
+	"github.com/alecsavvy/clockwise/storage"
 )
 
 func run() error {
@@ -25,7 +25,7 @@ func run() error {
 		return err
 	}
 
-	db, err := db.New()
+	db, err := storage.New()
 	if err != nil {
 		return err
 	}

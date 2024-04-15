@@ -11,21 +11,21 @@ import (
 
 type PeerSet map[string]Peer
 
-type PeerManager struct {
+type PeerService struct {
 	self   string
 	nodes  PeerSet
 	config *common.Config
 }
 
-func New(config *common.Config) (*PeerManager, error) {
-	return &PeerManager{
+func New(config *common.Config) (*PeerService, error) {
+	return &PeerService{
 		self:   config.NodeEndpoint,
 		nodes:  make(PeerSet),
 		config: config,
 	}, nil
 }
 
-func (pm *PeerManager) ConnectPeers() error {
+func (pm *PeerService) ConnectPeers() error {
 	fmt.Println("connecting to peers")
 	for {
 		bootstrapNodes := pm.config.NodeBootstrapPeers
@@ -60,7 +60,7 @@ func (pm *PeerManager) ConnectPeers() error {
 	}
 }
 
-func (pm *PeerManager) PollPeerHealth() error {
+func (pm *PeerService) PollPeerHealth() error {
 	fmt.Println("bootstrapping nodes")
 	for {
 		for endpoint, node := range pm.nodes {
