@@ -1,0 +1,10 @@
+NetworkID = "dev"
+NetworkTransactionCeiling = 1000
+NetworkBlockMineMaximumMS = 5000
+
+NodeEndpoint = "localhost:8081"
+NodeBootstrapPeers = ["localhost:8080", "localhost:8082"]
+NodeType = "sealer"
+
+DatabaseBlockPersistenceThreshold = 15000
+DatabasePruningIntervalMS = 60000

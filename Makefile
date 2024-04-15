@@ -15,9 +15,6 @@ run:
 clean:
 	rm -f $(BINARY_NAME)
 
-dev:
-	$(GORUN) main.go
-
 deps:
 	go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
@@ -27,3 +24,14 @@ deps:
 gen:
 	cd ./db/sql && sqlc generate
 	cd ./grpc/proto && protoc --proto_path=. --go_out=../../ --go-grpc_out=../../ *.proto
+
+# dev cluster
+
+node1:
+	$(GORUN) main.go --config=./dev_config/node_1.toml
+
+node2:
+	$(GORUN) main.go --config=./dev_config/node_2.toml
+
+node3:
+	$(GORUN) main.go --config=./dev_config/node_3.toml

@@ -1,19 +1,26 @@
 package main
 
 import (
+	"flag"
 	"log"
 
 	"github.com/alecsavvy/clockwise/app"
 	"github.com/alecsavvy/clockwise/common"
 	"github.com/alecsavvy/clockwise/db"
-	"github.com/alecsavvy/clockwise/discovery"
-	"github.com/alecsavvy/clockwise/grpc"
+	"github.com/alecsavvy/clockwise/peer"
+	"github.com/alecsavvy/clockwise/server"
 )
 
 func run() error {
-	host := "localhost:6000"
-
 	logger, err := common.NewLogger()
+	if err != nil {
+		return err
+	}
+
+	configPath := flag.String("config", "./clockwise.toml", "path to configuration file")
+	flag.Parse()
+
+	config, err := common.ReadConfig(*configPath)
 	if err != nil {
 		return err
 	}
@@ -23,17 +30,17 @@ func run() error {
 		return err
 	}
 
-	discovery, err := discovery.New(host)
+	discovery, err := peer.New(config)
 	if err != nil {
 		return err
 	}
 
-	grpc, err := grpc.New(host)
+	server, err := server.New(config)
 	if err != nil {
 		return err
 	}
 
-	app, err := app.New(logger, grpc, db, discovery)
+	app, err := app.New(logger, server, db, discovery)
 	if err != nil {
 		return err
 	}
