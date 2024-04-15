@@ -4,11 +4,7 @@ import (
 	"flag"
 	"log"
 
-	"github.com/alecsavvy/clockwise/app"
 	"github.com/alecsavvy/clockwise/common"
-	"github.com/alecsavvy/clockwise/peer"
-	"github.com/alecsavvy/clockwise/server"
-	"github.com/alecsavvy/clockwise/storage"
 )
 
 func run() error {
@@ -25,22 +21,7 @@ func run() error {
 		return err
 	}
 
-	db, err := storage.New()
-	if err != nil {
-		return err
-	}
-
-	discovery, err := peer.New(config)
-	if err != nil {
-		return err
-	}
-
-	server, err := server.New(config)
-	if err != nil {
-		return err
-	}
-
-	app, err := app.New(logger, server, db, discovery)
+	app, err := NewApp(logger, config)
 	if err != nil {
 		return err
 	}

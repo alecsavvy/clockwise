@@ -25,7 +25,11 @@ func New(config *common.Config) (*PeerService, error) {
 	}, nil
 }
 
-func (pm *PeerService) ConnectPeers() error {
+func (ps *PeerService) Run() error {
+	return nil
+}
+
+func (pm *PeerService) connectPeers() error {
 	fmt.Println("connecting to peers")
 	for {
 		bootstrapNodes := pm.config.NodeBootstrapPeers
@@ -60,7 +64,7 @@ func (pm *PeerService) ConnectPeers() error {
 	}
 }
 
-func (pm *PeerService) PollPeerHealth() error {
+func (pm *PeerService) pollPeerHealth() error {
 	fmt.Println("bootstrapping nodes")
 	for {
 		for endpoint, node := range pm.nodes {

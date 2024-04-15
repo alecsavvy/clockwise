@@ -29,26 +29,33 @@ type Config struct {
 	/** Database Config */
 	DatabaseBlockPersistenceThreshold uint32
 	DatabasePruningIntervalMS         uint32
+	DatabaseFilePath                  string
 
 	/** Peer Config */
 	PeerMaximumConnected      uint32
 	PeerReconnectIntervalMS   uint32
 	PeerHealthCheckIntervalMS uint32
+
+	/** UI Config */
+	UIEndpoint string
 }
 
 func DefaultConfig() *Config {
+	defaultEndpoint := "localhost:8080"
 	return &Config{
 		NetworkID:                         "dev",
 		NetworkTransactionCeiling:         1000,
 		NetworkBlockMineMaximumMS:         5000,
-		NodeEndpoint:                      "localhost:8080",
+		NodeEndpoint:                      defaultEndpoint,
 		NodeBootstrapPeers:                []string{"localhost:8081", "localhost:8082"},
 		NodeType:                          "sealer",
 		DatabaseBlockPersistenceThreshold: 15000,
 		DatabasePruningIntervalMS:         60000,
+		DatabaseFilePath:                  ":memory:",
 		PeerMaximumConnected:              0,
 		PeerReconnectIntervalMS:           60000,
 		PeerHealthCheckIntervalMS:         5000,
+		UIEndpoint:                        fmt.Sprintf("%s0", defaultEndpoint),
 	}
 }
 

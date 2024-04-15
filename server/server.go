@@ -31,7 +31,7 @@ func New(config *common.Config) (*RpcService, error) {
 	}, nil
 }
 
-func (server *RpcService) Serve() error {
+func (server *RpcService) Run() error {
 	fmt.Printf("grpc server starting up on %s\n", server.config.NodeEndpoint)
 	return server.impl.Serve(server.lis)
 }
