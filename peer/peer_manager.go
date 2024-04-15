@@ -63,7 +63,6 @@ func (pm *PeerManager) ConnectPeers() error {
 func (pm *PeerManager) PollPeerHealth() error {
 	fmt.Println("bootstrapping nodes")
 	for {
-		time.Sleep(time.Duration(time.Second * 3))
 		for endpoint, node := range pm.nodes {
 			_, err := node.rpc.GetNodeHealth(context.Background(), nil)
 			if err != nil {
@@ -72,5 +71,6 @@ func (pm *PeerManager) PollPeerHealth() error {
 			}
 			fmt.Printf("received health from node %s\n", endpoint)
 		}
+		time.Sleep(time.Duration(time.Second * 3))
 	}
 }
