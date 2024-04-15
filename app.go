@@ -8,6 +8,7 @@ import (
 	"github.com/alecsavvy/clockwise/server"
 	"github.com/alecsavvy/clockwise/state"
 	"github.com/alecsavvy/clockwise/storage"
+	"github.com/alecsavvy/clockwise/ui"
 )
 
 type App struct {
@@ -20,6 +21,7 @@ type App struct {
 	rpcService     *server.RpcService
 	peerService    *peer.PeerService
 	storageService *storage.StorageService
+	uiService      *ui.UIService
 }
 
 func NewApp(plogger *slog.Logger, config *common.Config) (*App, error) {
@@ -39,6 +41,6 @@ func NewApp(plogger *slog.Logger, config *common.Config) (*App, error) {
 }
 
 func (app *App) Run() error {
-	common.Await(app.logger, app.peerService.Run, app.rpcService.Run, app.storageService.Run)
+	common.Await(app.logger, app.peerService.Run, app.rpcService.Run, app.storageService.Run, app.uiService.Run)
 	return nil
 }
