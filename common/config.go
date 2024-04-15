@@ -29,17 +29,38 @@ type Config struct {
 	/** Database Config */
 	DatabaseBlockPersistenceThreshold uint32
 	DatabasePruningIntervalMS         uint32
+
+	/** Peer Config */
+	PeerMaximumConnected      uint32
+	PeerReconnectIntervalMS   uint32
+	PeerHealthCheckIntervalMS uint32
+}
+
+func DefaultConfig() *Config {
+	return &Config{
+		NetworkID:                         "dev",
+		NetworkTransactionCeiling:         1000,
+		NetworkBlockMineMaximumMS:         5000,
+		NodeEndpoint:                      "localhost:8080",
+		NodeBootstrapPeers:                []string{"localhost:8081", "localhost:8082"},
+		NodeType:                          "sealer",
+		DatabaseBlockPersistenceThreshold: 15000,
+		DatabasePruningIntervalMS:         60000,
+		PeerMaximumConnected:              0,
+		PeerReconnectIntervalMS:           60000,
+		PeerHealthCheckIntervalMS:         5000,
+	}
 }
 
 func ReadConfig(path string) (*Config, error) {
-	var config Config
+	config := DefaultConfig()
 	if _, err := toml.DecodeFile(path, &config); err != nil {
 		return nil, err
 	}
 	if !IsValidNodeType(config.NodeType) {
 		return nil, errors.New(fmt.Sprintf("invalid node type %s", config.NodeType))
 	}
-	return &config, nil
+	return config, nil
 }
 
 func IsValidNodeType(nodeType NodeType) bool {
