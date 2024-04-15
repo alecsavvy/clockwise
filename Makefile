@@ -26,4 +26,4 @@ deps:
 
 gen:
 	cd ./db/sql && sqlc generate
-	cd ./api/proto && protoc --proto_path=. --go_out=../../ --go-grpc_out=../../ *.proto
+	cd ./grpc/proto && protoc --proto_path=. --go_out=../../ --go-grpc_out=../../ *.proto
