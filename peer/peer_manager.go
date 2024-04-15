@@ -28,7 +28,6 @@ func New(config *common.Config) (*PeerManager, error) {
 func (pm *PeerManager) ConnectPeers() error {
 	fmt.Println("connecting to peers")
 	for {
-		time.Sleep(time.Duration(time.Second * 5))
 		bootstrapNodes := pm.config.NodeBootstrapPeers
 
 		var wg sync.WaitGroup
@@ -57,6 +56,7 @@ func (pm *PeerManager) ConnectPeers() error {
 			}(endpoint)
 		}
 		wg.Wait()
+		time.Sleep(time.Duration(time.Second * 5))
 	}
 }
 
