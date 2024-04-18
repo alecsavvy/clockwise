@@ -58,24 +58,24 @@ func NewApp(host string, initialPeers []string) *App {
 func (app *App) Run() error {
 	app.logger.Info("started")
 
-	// Start server in a goroutine to allow for graceful shutdown handling
 	go func() {
 		if err := app.e.Start(app.host); err != nil && err != http.ErrServerClosed {
 			app.logger.Error("Error starting server:", err)
 		}
 	}()
 
-	// Set up channel to receive OS signals for graceful shutdown
+	return app.Shutdown()
+}
+
+func (app *App) Shutdown() error {
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 
-	// Context with timeout for shutting down the server
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	app.logger.Info("Shutting down server...")
 
-	// Attempt to gracefully shut down the server
 	if err := app.e.Shutdown(ctx); err != nil {
 		app.logger.Error("Error during server shutdown:", err)
 		return err
