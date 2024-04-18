@@ -26,12 +26,5 @@ gen:
 	cd ./grpc/proto && protoc --proto_path=. --go_out=../../ --go-grpc_out=../../ *.proto
 
 # dev cluster
-
-node1:
-	$(GORUN) main.go --config=./dev_config/node_1.toml
-
-node2:
-	$(GORUN) main.go --config=./dev_config/node_2.toml
-
-node3:
-	$(GORUN) main.go --config=./dev_config/node_3.toml
+dev:
+	$(GORUN) main.go

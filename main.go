@@ -1,36 +1,29 @@
 package main
 
-import (
-	"flag"
-	"log"
-
-	"github.com/alecsavvy/clockwise/common"
-)
-
-func run() error {
-	logger, err := common.NewLogger()
-	if err != nil {
-		return err
-	}
-
-	configPath := flag.String("config", "./clockwise.toml", "path to configuration file")
-	flag.Parse()
-
-	config, err := common.ReadConfig(*configPath)
-	if err != nil {
-		return err
-	}
-
-	app, err := NewApp(logger, config)
-	if err != nil {
-		return err
-	}
-
-	return app.Run()
-}
+import "sync"
 
 func main() {
-	if err := run(); err != nil {
-		log.Fatalf("clockwise crashed: %s", err)
-	}
+	var wg sync.WaitGroup
+
+	wg.Add(3)
+
+	go func() {
+		defer wg.Done()
+		app := NewApp("localhost:6000", make([]string, 0))
+		app.Run()
+	}()
+
+	go func() {
+		defer wg.Done()
+		app := NewApp("localhost:6001", make([]string, 0))
+		app.Run()
+	}()
+
+	go func() {
+		defer wg.Done()
+		app := NewApp("localhost:6002", make([]string, 0))
+		app.Run()
+	}()
+
+	wg.Wait()
 }

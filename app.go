@@ -1,46 +1,86 @@
 package main
 
 import (
+	"context"
 	"log/slog"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
-	"github.com/alecsavvy/clockwise/common"
-	"github.com/alecsavvy/clockwise/peer"
-	"github.com/alecsavvy/clockwise/server"
-	"github.com/alecsavvy/clockwise/state"
-	"github.com/alecsavvy/clockwise/storage"
-	"github.com/alecsavvy/clockwise/ui"
+	"github.com/labstack/echo/v4"
 )
 
 type App struct {
-	/** common */
-	config *common.Config
+	/** config */
+	host                   string
+	maxBlockHistory        uint64
+	maxTransactionPerBlock uint64
+
+	/** state */
+	currentBlock uint64
+	blocks       []Block
+	memPool      []Transaction
+	peers        []Peer
+
+	/** utils */
 	logger *slog.Logger
-	state  *state.AppState
 
 	/** services */
-	rpcService     *server.RpcService
-	peerService    *peer.PeerService
-	storageService *storage.StorageService
-	uiService      *ui.UIService
+	e *echo.Echo
 }
 
-func NewApp(plogger *slog.Logger, config *common.Config) (*App, error) {
-	logger := plogger.With("module", "app")
-
-	// initialize app state
-	state, err := state.New(logger, config)
-	if err != nil {
-		return nil, err
+func NewApp(host string, initialPeers []string) *App {
+	var peers []Peer
+	for _, endpoint := range initialPeers {
+		peers = append(peers, NewPeer(endpoint))
 	}
 
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil)).With("node", host)
+
+	e := echo.New()
+	e.HideBanner = true
+
 	return &App{
-		logger: logger,
-		config: config,
-		state:  state,
-	}, nil
+		host:                   host,
+		peers:                  peers,
+		maxBlockHistory:        100,
+		maxTransactionPerBlock: 10,
+		currentBlock:           0,
+		blocks:                 make([]Block, 0),
+		memPool:                make([]Transaction, 0),
+		logger:                 logger,
+		e:                      e,
+	}
 }
 
 func (app *App) Run() error {
-	common.Await(app.logger, app.peerService.Run, app.rpcService.Run, app.storageService.Run, app.uiService.Run)
+	app.logger.Info("started")
+
+	// Start server in a goroutine to allow for graceful shutdown handling
+	go func() {
+		if err := app.e.Start(app.host); err != nil && err != http.ErrServerClosed {
+			app.logger.Error("Error starting server:", err)
+		}
+	}()
+
+	// Set up channel to receive OS signals for graceful shutdown
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+
+	// Context with timeout for shutting down the server
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	app.logger.Info("Shutting down server...")
+
+	// Attempt to gracefully shut down the server
+	if err := app.e.Shutdown(ctx); err != nil {
+		app.logger.Error("Error during server shutdown:", err)
+		return err
+	}
+
+	app.logger.Info("Server gracefully stopped")
 	return nil
 }
