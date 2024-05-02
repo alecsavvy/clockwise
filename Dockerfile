@@ -53,8 +53,5 @@ RUN --mount=type=cache,target=/var/cache/apk \
 COPY --from=build /bin/server /bin/
 COPY ./cmt-home ./cmt-home
 
-# Expose the port that the application listens on.
-EXPOSE 26656 26657
-
 # What the container should run when it is started.
 ENTRYPOINT [ "/bin/server" ]

@@ -1,10 +1,56 @@
 services:
-  server:
+  node-1:
+    container_name: discoveryprovider1.docker.co
     build:
       context: .
       target: final
     ports:
-      - "66610:26656" # CometBFT P2P Server
-      - "66611:26657" # CometBFT RPC Server
-      - "66612:26658" # CometBFT ABCI Server
-      - "66613:26659" # Clockwise GRPC Server
+      - "6610:26656" # CometBFT P2P Server
+      - "6611:26657" # CometBFT RPC Server
+      - "6612:26658" # CometBFT ABCI Server
+      - "6613:26659" # Clockwise GRPC Server
+
+  node-2:
+    container_name: discoveryprovider2.docker.co
+    build:
+      context: .
+      target: final
+    ports:
+      - "6620:26656" # CometBFT P2P Server
+      - "6621:26657" # CometBFT RPC Server
+      - "6622:26658" # CometBFT ABCI Server
+      - "6623:26659" # Clockwise GRPC Server
+
+  node-3:
+    container_name: discoveryprovider3.docker.co
+    build:
+      context: .
+      target: final
+    ports:
+      - "6630:26656" # CometBFT P2P Server
+      - "6631:26657" # CometBFT RPC Server
+      - "6632:26658" # CometBFT ABCI Server
+      - "6633:26659" # Clockwise GRPC Server
+
+  node-4:
+    container_name: discoveryprovider4.docker.co
+    build:
+      context: .
+      target: final
+    ports:
+      - "6640:26656" # CometBFT P2P Server
+      - "6641:26657" # CometBFT RPC Server
+      - "6642:26658" # CometBFT ABCI Server
+      - "6643:26659" # Clockwise GRPC Server
+
+
+  node-5:
+    container_name: discoveryprovider5.docker.co
+    build:
+      context: .
+      target: final
+    ports:
+      - "6650:26656" # CometBFT P2P Server
+      - "6651:26657" # CometBFT RPC Server
+      - "6652:26658" # CometBFT ABCI Server
+      - "6653:26659" # Clockwise GRPC Server
