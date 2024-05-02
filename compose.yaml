@@ -1,0 +1,10 @@
+services:
+  server:
+    build:
+      context: .
+      target: final
+    ports:
+      - "66610:26656" # CometBFT P2P Server
+      - "66611:26657" # CometBFT RPC Server
+      - "66612:26658" # CometBFT ABCI Server
+      - "66613:26659" # Clockwise GRPC Server

@@ -1,3 +1,0 @@
-NetworkID = "dev"
-NodeEndpoint = "localhost:8080"
-NodeBootstrapPeers = ["localhost:8081", "localhost:8082"]
