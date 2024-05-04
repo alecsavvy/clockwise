@@ -120,6 +120,25 @@ services:
       audius-testnet:
         ipv4_address: 192.167.10.8
 
+  geth:
+    container_name: ethereum.docker.co
+    image: ethereum/client-go:latest
+    command:
+      - "--dev"
+      - "--http"
+      - "--http.addr"
+      - "0.0.0.0"
+      - "--http.api"
+      - "personal,eth,net,web3,txpool,miner"
+      - "--verbosity"
+      - "3"
+    ports:
+      - "8545:8545"
+      - "8546:8546"
+    networks:
+      audius-testnet:
+        ipv4_address: 192.167.10.9
+
 networks:
   audius-testnet:
     driver: bridge
