@@ -1,5 +1,6 @@
 default:
 	make down
+	make init-testnet
 	make up
 
 up:
@@ -7,9 +8,10 @@ up:
 
 down:
 	docker compose down
+	rm -rf testnet-home
 
 init:
 	cometbft init --home ./cmt-home
 
 init-testnet:
-	cometbft testnet --n=4 --v=3 --o=./testnet-home --starting-ip-address 192.167.10.2
+	cometbft testnet --n=4 --v=3 --config ./config_template.toml --o=./testnet-home --starting-ip-address 192.167.10.2
