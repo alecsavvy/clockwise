@@ -51,7 +51,9 @@ RUN --mount=type=cache,target=/var/cache/apk \
 
 # Copy the executable from the "build" stage.
 COPY --from=build /bin/server /bin/
-COPY ./cmt-home ./cmt-home
+ARG NODE
+ENV NODE=${NODE}
+COPY ./testnet-home/node${NODE} ./cmt-home
 
 # What the container should run when it is started.
 ENTRYPOINT [ "/bin/server" ]

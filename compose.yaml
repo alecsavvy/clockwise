@@ -1,56 +1,122 @@
+version: "3.7"
+
 services:
+  node-0:
+    container_name: discoveryprovider0.docker.co
+    build:
+      context: .
+      target: final
+      args:
+        NODE: "0"
+    ports:
+      - "6600:26656" # CometBFT P2P Server
+      - "6601:26657" # CometBFT RPC Server
+      - "6602:26658" # CometBFT ABCI Server
+      - "6603:26659" # Clockwise GRPC Server
+    networks:
+      audius-testnet:
+        ipv4_address: 192.167.10.2
+
   node-1:
     container_name: discoveryprovider1.docker.co
     build:
       context: .
       target: final
+      args:
+        NODE: "1"
     ports:
-      - "6610:26656" # CometBFT P2P Server
-      - "6611:26657" # CometBFT RPC Server
-      - "6612:26658" # CometBFT ABCI Server
-      - "6613:26659" # Clockwise GRPC Server
+      - "6610:26656"
+      - "6611:26657"
+      - "6612:26658"
+      - "6613:26659"
+    networks:
+      audius-testnet:
+        ipv4_address: 192.167.10.3
 
   node-2:
     container_name: discoveryprovider2.docker.co
     build:
       context: .
       target: final
+      args:
+        NODE: "2"
     ports:
-      - "6620:26656" # CometBFT P2P Server
-      - "6621:26657" # CometBFT RPC Server
-      - "6622:26658" # CometBFT ABCI Server
-      - "6623:26659" # Clockwise GRPC Server
+      - "6620:26656"
+      - "6621:26657"
+      - "6622:26658"
+      - "6623:26659"
+    networks:
+      audius-testnet:
+        ipv4_address: 192.167.10.4
 
   node-3:
     container_name: discoveryprovider3.docker.co
     build:
       context: .
       target: final
+      args:
+        NODE: "3"
     ports:
-      - "6630:26656" # CometBFT P2P Server
-      - "6631:26657" # CometBFT RPC Server
-      - "6632:26658" # CometBFT ABCI Server
-      - "6633:26659" # Clockwise GRPC Server
+      - "6630:26656"
+      - "6631:26657"
+      - "6632:26658"
+      - "6633:26659"
+    networks:
+      audius-testnet:
+        ipv4_address: 192.167.10.5
 
   node-4:
     container_name: discoveryprovider4.docker.co
     build:
       context: .
       target: final
+      args:
+        NODE: "4"
     ports:
-      - "6640:26656" # CometBFT P2P Server
-      - "6641:26657" # CometBFT RPC Server
-      - "6642:26658" # CometBFT ABCI Server
-      - "6643:26659" # Clockwise GRPC Server
-
+      - "6640:26656"
+      - "6641:26657"
+      - "6642:26658"
+      - "6643:26659"
+    networks:
+      audius-testnet:
+        ipv4_address: 192.167.10.6
 
   node-5:
     container_name: discoveryprovider5.docker.co
     build:
       context: .
       target: final
+      args:
+        NODE: "5"
     ports:
-      - "6650:26656" # CometBFT P2P Server
-      - "6651:26657" # CometBFT RPC Server
-      - "6652:26658" # CometBFT ABCI Server
-      - "6653:26659" # Clockwise GRPC Server
+      - "6650:26656"
+      - "6651:26657"
+      - "6652:26658"
+      - "6653:26659"
+    networks:
+      audius-testnet:
+        ipv4_address: 192.167.10.7
+
+  node-6:
+    container_name: discoveryprovider6.docker.co
+    build:
+      context: .
+      target: final
+      args:
+        NODE: "6"
+    ports:
+      - "6660:26656"
+      - "6661:26657"
+      - "6662:26658"
+      - "6663:26659"
+    networks:
+      audius-testnet:
+        ipv4_address: 192.167.10.8
+
+networks:
+  audius-testnet:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.167.0.0/16
