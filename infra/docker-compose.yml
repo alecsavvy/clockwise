@@ -4,7 +4,8 @@ services:
   node-0:
     container_name: discoveryprovider0.docker.co
     build:
-      context: .
+      context: ../
+      dockerfile: ./infra/Dockerfile
       target: final
       args:
         NODE: "0"
@@ -20,7 +21,8 @@ services:
   node-1:
     container_name: discoveryprovider1.docker.co
     build:
-      context: .
+      context: ../
+      dockerfile: ./infra/Dockerfile
       target: final
       args:
         NODE: "1"
@@ -36,7 +38,8 @@ services:
   node-2:
     container_name: discoveryprovider2.docker.co
     build:
-      context: .
+      context: ../
+      dockerfile: ./infra/Dockerfile
       target: final
       args:
         NODE: "2"
@@ -52,7 +55,8 @@ services:
   node-3:
     container_name: discoveryprovider3.docker.co
     build:
-      context: .
+      context: ../
+      dockerfile: ./infra/Dockerfile
       target: final
       args:
         NODE: "3"
@@ -68,7 +72,8 @@ services:
   node-4:
     container_name: discoveryprovider4.docker.co
     build:
-      context: .
+      context: ../
+      dockerfile: ./infra/Dockerfile
       target: final
       args:
         NODE: "4"
@@ -84,7 +89,8 @@ services:
   node-5:
     container_name: discoveryprovider5.docker.co
     build:
-      context: .
+      context: ../
+      dockerfile: ./infra/Dockerfile
       target: final
       args:
         NODE: "5"
@@ -100,7 +106,8 @@ services:
   node-6:
     container_name: discoveryprovider6.docker.co
     build:
-      context: .
+      context: ../
+      dockerfile: ./infra/Dockerfile
       target: final
       args:
         NODE: "6"

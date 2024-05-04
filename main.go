@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -22,7 +21,6 @@ import (
 )
 
 func main() {
-	flag.Parse()
 	homeDir := "./cmt-home"
 
 	config := cfg.DefaultConfig()
