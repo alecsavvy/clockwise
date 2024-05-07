@@ -6,7 +6,6 @@ require (
 	github.com/99designs/gqlgen v0.17.45
 	github.com/cometbft/cometbft v0.38.7
 	github.com/spf13/viper v1.18.1
-	github.com/vektah/gqlparser/v2 v2.5.11
 )
 
 require (
@@ -64,6 +63,7 @@ require (
 	github.com/urfave/cli/v2 v2.27.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
+	github.com/vektah/gqlparser/v2 v2.5.11 // indirect
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
 	go.etcd.io/bbolt v1.3.6 // indirect
 	go.uber.org/multierr v1.10.0 // indirect
