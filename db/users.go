@@ -8,3 +8,16 @@ func (db *DB) GetUser(handle string) (*User, error) {
 	}
 	return &user, nil
 }
+
+func (db *DB) InsertUser(handle, bio string) (*User, error) {
+	model := User{
+		Handle: handle,
+		Bio:    bio,
+	}
+
+	result := db.db.Create(&model)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &model, nil
+}

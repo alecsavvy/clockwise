@@ -10,7 +10,8 @@ type User struct {
 
 type Track struct {
 	gorm.Model
-	Title       string
+	Title       string `gorm:"unique"`
+	StreamUrl   string
 	Description string
 	UserID      uint
 }

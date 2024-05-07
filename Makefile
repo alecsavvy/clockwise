@@ -15,3 +15,6 @@ init:
 
 init-testnet:
 	cometbft testnet --n=4 --v=3 --config ./infra/config_template.toml --o=./testnet-home --starting-ip-address 192.167.10.2
+
+gen-gql:
+	cd server/gql && go run github.com/99designs/gqlgen generate
