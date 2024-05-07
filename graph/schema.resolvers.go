@@ -6,29 +6,43 @@ package graph
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/alecsavvy/clockwise/graph/model"
+	"github.com/google/uuid"
 )
 
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: CreateUser - createUser"))
+	newUser := &model.User{
+		ID:     uuid.NewString(),
+		Handle: input.Handle,
+		Bio:    input.Bio,
+	}
+	r.users = append(r.users, newUser)
+	return newUser, nil
 }
 
 // CreateTrack is the resolver for the createTrack field.
 func (r *mutationResolver) CreateTrack(ctx context.Context, input model.NewTrack) (*model.Track, error) {
-	panic(fmt.Errorf("not implemented: CreateTrack - createTrack"))
+	newTrack := &model.Track{
+		ID:          uuid.NewString(),
+		Title:       input.Title,
+		Description: input.Description,
+		StreamURL:   input.StreamURL,
+		UserID:      input.UserID,
+	}
+	r.tracks = append(r.tracks, newTrack)
+	return newTrack, nil
 }
 
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
-	panic(fmt.Errorf("not implemented: Users - users"))
+	return r.users, nil
 }
 
 // Tracks is the resolver for the tracks field.
 func (r *queryResolver) Tracks(ctx context.Context) ([]*model.Track, error) {
-	panic(fmt.Errorf("not implemented: Tracks - tracks"))
+	return r.tracks, nil
 }
 
 // Mutation returns MutationResolver implementation.

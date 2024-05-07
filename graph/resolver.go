@@ -2,8 +2,16 @@
 
 package graph
 
-// This file will not be regenerated automatically.
-//
-// It serves as dependency injection for your app, add any dependencies you require here.
+import "github.com/alecsavvy/clockwise/graph/model"
 
-type Resolver struct{}
+type UserDB = []*model.User
+type TrackDB = []*model.Track
+
+type Resolver struct {
+	users  UserDB
+	tracks TrackDB
+}
+
+func NewResolver() *Resolver {
+	return &Resolver{}
+}
