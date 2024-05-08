@@ -7,7 +7,6 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/alecsavvy/clockwise/chain"
-	"github.com/alecsavvy/clockwise/db"
 	"github.com/alecsavvy/clockwise/graph"
 	"github.com/alecsavvy/clockwise/utils"
 	"github.com/labstack/echo/v4"
@@ -23,10 +22,6 @@ func run() error {
 	homeDir := "./cmt-home"
 
 	// db setup
-	_, err := db.New()
-	if err != nil {
-		return utils.AppError("db initialization error", err)
-	}
 
 	// chain setup
 	node, err := chain.New(homeDir)

@@ -3,7 +3,6 @@ package chain
 import (
 	"context"
 
-	"github.com/alecsavvy/clockwise/db"
 	"github.com/cometbft/cometbft/abci/types"
 )
 
@@ -11,7 +10,6 @@ import (
 // everything related to consensus MUST go through here
 // https://docs.cometbft.com/v0.38/spec/abci/abci++_methods
 type Application struct {
-	db *db.DB
 }
 
 // ApplySnapshotChunk implements types.Application.
@@ -87,6 +85,6 @@ func (a *Application) VerifyVoteExtension(context.Context, *types.RequestVerifyV
 // compile time check for abci compatibility
 // var _ abcitypes.Application = (*Application)(nil)
 
-func NewApplication(db *db.DB) *Application {
-	return &Application{db: db}
+func NewApplication() *Application {
+	return &Application{}
 }

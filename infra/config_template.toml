@@ -4,3 +4,6 @@ laddr = "tcp://0.0.0.0:26657"
 laddr = "tcp://0.0.0.0:26656"
 [instrumentation]
 prometheus = false
+[consensus]
+create_empty_blocks = false
+create_empty_blocks_interval = "0s"
