@@ -1,37 +1,23 @@
-GOCMD=go
-GOBUILD=$(GOCMD) build
-GORUN=$(GOCMD) run
-BINARY_NAME=myapp
-
-all: build run
-
-build:
+default:
+	make down
 	make gen
-	$(GOBUILD) -o $(BINARY_NAME) main.go
+	make up
 
-run:
-	./$(BINARY_NAME)
+up:
+	cd infra && docker compose up --build -d
 
-clean:
-	rm -f $(BINARY_NAME)
+down:
+	cd infra && docker compose down
+	rm -rf testnet-home
 
-deps:
-	go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
-	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
-	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+init:
+	cometbft init --home ./cmt-home
 
+init-testnet:
+	cometbft testnet --n=4 --v=3 --config ./infra/config_template.toml --o=./testnet-home --starting-ip-address 192.167.10.2
 
 gen:
-	cd ./db/sql && sqlc generate
-	cd ./grpc/proto && protoc --proto_path=. --go_out=../../ --go-grpc_out=../../ *.proto
-
-# dev cluster
-
-node1:
-	$(GORUN) main.go --config=./dev_config/node_1.toml
-
-node2:
-	$(GORUN) main.go --config=./dev_config/node_2.toml
-
-node3:
-	$(GORUN) main.go --config=./dev_config/node_3.toml
+	make init-testnet
+	go generate ./...
+	cd db && sqlc generate
+	go mod tidy

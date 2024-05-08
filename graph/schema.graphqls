@@ -1,0 +1,35 @@
+type User {
+  id: ID!
+  handle: String!
+  bio: String!
+}
+
+type Track {
+  id: ID!
+  title: String!
+  streamUrl: String!
+  description: String!
+  userId: String!
+}
+
+type Query {
+  users: [User!]!
+  tracks: [Track!]!
+}
+
+input NewTrack {
+  title: String!
+  streamUrl: String!
+  description: String!
+  userId: String!
+}
+
+input NewUser {
+  handle: String!
+  bio: String!
+}
+
+type Mutation {
+  createUser(input: NewUser!): User!
+  createTrack(input: NewTrack!): Track!
+}
