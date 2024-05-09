@@ -8,7 +8,7 @@ services:
       args:
         NODE: "0"
     environment:
-      - pgConnectionString="postgresql://discovery_db:postgres@pass:5432/db0"
+      - pgConnectionString="postgresql://discovery_db:postgres@pass:5432/db0?sslmode=disable&pool_max_conns=10"
     ports:
       - "6600:26656" # CometBFT P2P Server
       - "6601:26657" # CometBFT RPC Server
@@ -27,7 +27,7 @@ services:
       args:
         NODE: "1"
     environment:
-      - pgConnectionString="postgresql://discovery_db:postgres@pass:5432/db1"
+      - pgConnectionString="postgresql://discovery_db:postgres@pass:5432/db1?sslmode=disable&pool_max_conns=10"
     ports:
       - "6610:26656"
       - "6611:26657"
@@ -46,7 +46,7 @@ services:
       args:
         NODE: "2"
     environment:
-      - pgConnectionString="postgresql://discovery_db:postgres@pass:5432/db2"
+      - pgConnectionString="postgresql://discovery_db:postgres@pass:5432/db2?sslmode=disable&pool_max_conns=10"
     ports:
       - "6620:26656"
       - "6621:26657"
@@ -65,7 +65,7 @@ services:
       args:
         NODE: "3"
     environment:
-      - pgConnectionString="postgresql://discovery_db:postgres@pass:5432/db3"
+      - pgConnectionString="postgresql://discovery_db:postgres@pass:5432/db3?sslmode=disable&pool_max_conns=10"
     ports:
       - "6630:26656"
       - "6631:26657"
@@ -84,7 +84,7 @@ services:
       args:
         NODE: "4"
     environment:
-      - pgConnectionString="postgresql://discovery_db:postgres@pass:5432/db4"
+      - pgConnectionString="postgresql://discovery_db:postgres@pass:5432/db4?sslmode=disable&pool_max_conns=10"
     ports:
       - "6640:26656"
       - "6641:26657"
@@ -103,7 +103,7 @@ services:
       args:
         NODE: "5"
     environment:
-      - pgConnectionString="postgresql://discovery_db:postgres@pass:5432/db5"
+      - pgConnectionString="postgresql://discovery_db:postgres@pass:5432/db5?sslmode=disable&pool_max_conns=10"
     ports:
       - "6650:26656"
       - "6651:26657"
@@ -122,7 +122,7 @@ services:
       args:
         NODE: "6"
     environment:
-      - pgConnectionString="postgresql://discovery_db:postgres@pass:5432/db6"
+      - pgConnectionString="postgresql://discovery_db:postgres@pass:5432/db6?sslmode=disable&pool_max_conns=10"
     ports:
       - "6660:26656"
       - "6661:26657"

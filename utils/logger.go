@@ -19,7 +19,8 @@ func NewLogger(opts *slog.HandlerOptions) *Logger {
 }
 
 func (l *Logger) With(keyvals ...interface{}) log.Logger {
-	return l.With(keyvals...)
+	newLogger := l.With(keyvals...)
+	return newLogger
 }
 
 var _ log.Logger = (*Logger)(nil)

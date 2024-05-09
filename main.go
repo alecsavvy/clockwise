@@ -1,14 +1,19 @@
 package main
 
 import (
+	"context"
 	"log"
+	"os"
 	"sync"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/alecsavvy/clockwise/chain"
+	"github.com/alecsavvy/clockwise/db"
 	"github.com/alecsavvy/clockwise/graph"
 	"github.com/alecsavvy/clockwise/utils"
+	rpchttp "github.com/cometbft/cometbft/rpc/client/http"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -22,12 +27,29 @@ func run() error {
 	homeDir := "./cmt-home"
 
 	// db setup
+	ctx := context.Background()
+	pgConnectionString := os.Getenv("pgConnectionString")
+	pool, err := pgxpool.New(ctx, pgConnectionString)
+	if err != nil {
+		return utils.AppError("failure to create db pool", err)
+	}
+
+	defer pool.Close()
+	_ = db.New(pool)
 
 	// chain setup
-	node, err := chain.New(homeDir)
+	node, err := chain.New(logger, homeDir)
 	if err != nil {
 		return utils.AppError("failure to init chain", err)
 	}
+
+	// rpc client setup
+	rpcUrl := node.RPC()
+	client, err := rpchttp.New(rpcUrl, "/websocket")
+	if err != nil {
+		return utils.AppError("failure to init chain rpc", err)
+	}
+	client.SetLogger(logger)
 
 	// graphql setup
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))

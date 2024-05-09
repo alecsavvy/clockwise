@@ -24,7 +24,7 @@ type Node struct {
 	abci *KVStoreApplication
 }
 
-func New(homeDir string) (*Node, error) {
+func New(plogger cmtlog.Logger, homeDir string) (*Node, error) {
 	config := cfg.DefaultConfig()
 	config.SetRoot(homeDir)
 	viper.SetConfigFile(fmt.Sprintf("%s/%s", homeDir, "config/config.toml"))
@@ -58,7 +58,8 @@ func New(homeDir string) (*Node, error) {
 		return nil, utils.AppError("Error loading p2p key", err)
 	}
 
-	logger := cmtlog.NewTMLogger(cmtlog.NewSyncWriter(os.Stdout))
+	// logger := cmtlog.NewTMLogger(cmtlog.NewSyncWriter(os.Stdout))
+	logger := plogger.With("chain", "logger")
 
 	node, err := nm.NewNode(
 		config,
@@ -81,11 +82,16 @@ func New(homeDir string) (*Node, error) {
 	}, nil
 }
 
+func (n *Node) RPC() string {
+	return n.node.Config().RPC.ListenAddress
+}
+
 func (n *Node) Run() {
 	node := n.node
 	abci := n.abci
 
 	node.Start()
+
 	defer func() {
 		if err := abci.db.Close(); err != nil {
 			log.Printf("Closing database: %v", err)
