@@ -5,53 +5,53 @@ import (
 	"errors"
 	"time"
 
+	"embed"
+
 	"github.com/alecsavvy/clockwise/utils"
-	_ "github.com/jackc/pgx/v5/stdlib"
-	"github.com/pressly/goose/v3"
+	migrate "github.com/rubenv/sql-migrate"
 )
+
+//go:embed sql/migrations/*
+var migrationsFS embed.FS
 
 func RunMigrations(logger *utils.Logger, pgConnectionString string) error {
 	tries := 10
+	db, err := sql.Open("postgres", pgConnectionString)
+	if err != nil {
+		return utils.AppError("error opening sql db", err)
+	}
+	defer db.Close()
 	for {
 		if tries < 0 {
 			return errors.New("ran out of retries for migrations")
 		}
-		err := runMigrations(logger, pgConnectionString)
+		err = db.Ping()
 		if err != nil {
 			tries = tries - 1
-			logger.Info("issue running migrations", "error", err, "tries_left", tries)
-			time.Sleep(3 * time.Second)
+			time.Sleep(2 * time.Second)
 			continue
+		}
+		err := runMigrations(logger, db)
+		if err != nil {
+			logger.Info("issue running migrations", "error", err, "tries_left", tries)
+			return utils.AppError("can't run migrations", err)
 		}
 		return nil
 	}
 }
 
-func runMigrations(logger *utils.Logger, pgConnectionString string) error {
-	db, err := sql.Open("pgx", pgConnectionString)
-	if err != nil {
-		return utils.AppError("error opening sql db", err)
-	}
-	defer db.Close()
-
-	err = db.Ping()
-	if err != nil {
-		return utils.AppError("could not ping db", err)
+func runMigrations(logger *utils.Logger, db *sql.DB) error {
+	migrations := migrate.EmbedFileSystemMigrationSource{
+		FileSystem: migrationsFS,
+		Root:       "sql/migrations",
 	}
 
-	migrationsDir := "./sql/migrations"
-
-	goose.SetLogger(logger)
-
-	err = goose.SetDialect("postgres")
+	n, err := migrate.Exec(db, "postgres", migrations, migrate.Up)
 	if err != nil {
-		return utils.AppError("error setting goose dialect", err)
+		return utils.AppError("error running migrations", err)
 	}
 
-	err = goose.Up(db, migrationsDir)
-	if err != nil {
-		return utils.AppError("error on goose up", err)
-	}
+	logger.Infof("Applied %d successful migrations!", n)
 
 	return nil
 }

@@ -24,6 +24,5 @@ COPY --from=build /bin/server /bin/
 ARG NODE
 ENV NODE=${NODE}
 COPY ./testnet-home/node${NODE} ./cmt-home
-COPY ./db/sql/migrations ./sql/migrations
 
 ENTRYPOINT [ "/bin/server" ]

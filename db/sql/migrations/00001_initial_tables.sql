@@ -1,4 +1,4 @@
--- +goose Up
+-- +migrate Up
 create table users (
     id uuid primary key,
     handle text not null,
@@ -19,7 +19,7 @@ create table blocks (
     blocktime date not null
 );
 
--- +goose Down
+-- +migrate Down
 drop table if exists users;
 
 drop table if exists tracks;
