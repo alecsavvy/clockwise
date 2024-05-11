@@ -6,6 +6,7 @@ import (
 	"errors"
 	"log"
 
+	"github.com/alecsavvy/clockwise/utils"
 	abcitypes "github.com/cometbft/cometbft/abci/types"
 	"github.com/dgraph-io/badger/v4"
 )
@@ -13,6 +14,7 @@ import (
 type KVStoreApplication struct {
 	db           *badger.DB
 	onGoingBlock *badger.Txn
+	logger       *utils.Logger
 }
 
 // ApplySnapshotChunk implements types.Application.
@@ -143,12 +145,14 @@ func (k *KVStoreApplication) VerifyVoteExtension(context.Context, *abcitypes.Req
 
 var _ abcitypes.Application = (*KVStoreApplication)(nil)
 
-func NewKVStoreApplication(db *badger.DB) *KVStoreApplication {
-	return &KVStoreApplication{db: db}
+func NewKVStoreApplication(logger *utils.Logger, db *badger.DB) *KVStoreApplication {
+	return &KVStoreApplication{db: db, logger: logger}
 }
 
 func (app *KVStoreApplication) isValid(tx []byte) uint32 {
 	// check format
+	app.logger.Info("checking tx", "tx", tx, "str", string(tx))
+
 	parts := bytes.Split(tx, []byte("="))
 	if len(parts) != 2 {
 		return 1

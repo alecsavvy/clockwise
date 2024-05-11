@@ -2,7 +2,17 @@
 
 package model
 
+type Kv struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
+}
+
 type Mutation struct {
+}
+
+type NewKv struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
 }
 
 type NewTrack struct {

@@ -46,7 +46,8 @@ func New(plogger cmtlog.Logger, homeDir string) (*Node, error) {
 		return nil, utils.AppError("Opening database", err)
 	}
 
-	app := NewKVStoreApplication(db)
+	logger := plogger.With("chain", "logger")
+	app := NewKVStoreApplication(logger.(*utils.Logger), db)
 
 	pv := privval.LoadFilePV(
 		config.PrivValidatorKeyFile(),
@@ -59,7 +60,6 @@ func New(plogger cmtlog.Logger, homeDir string) (*Node, error) {
 	}
 
 	// logger := cmtlog.NewTMLogger(cmtlog.NewSyncWriter(os.Stdout))
-	logger := plogger.With("chain", "logger")
 
 	node, err := nm.NewNode(
 		config,

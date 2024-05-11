@@ -52,7 +52,8 @@ func run() error {
 	client.SetLogger(logger)
 
 	// graphql setup
-	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
+	gqlResolver := graph.NewResolver(logger, client)
+	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: gqlResolver}))
 	queryHandler := func(c echo.Context) error {
 		srv.ServeHTTP(c.Response(), c.Request())
 		return nil

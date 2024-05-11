@@ -2,16 +2,25 @@
 
 package graph
 
-import "github.com/alecsavvy/clockwise/graph/model"
+import (
+	"github.com/alecsavvy/clockwise/graph/model"
+	"github.com/alecsavvy/clockwise/utils"
+	rpchttp "github.com/cometbft/cometbft/rpc/client/http"
+)
 
 type UserDB = []*model.User
 type TrackDB = []*model.Track
 
 type Resolver struct {
-	users  UserDB
-	tracks TrackDB
+	users       UserDB
+	tracks      TrackDB
+	chainClient *rpchttp.HTTP
+	logger      *utils.Logger
 }
 
-func NewResolver() *Resolver {
-	return &Resolver{}
+func NewResolver(logger *utils.Logger, chainClient *rpchttp.HTTP) *Resolver {
+	return &Resolver{
+		chainClient: chainClient,
+		logger:      logger,
+	}
 }

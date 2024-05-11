@@ -6,8 +6,11 @@ package graph
 
 import (
 	"context"
+	"fmt"
+	"time"
 
 	"github.com/alecsavvy/clockwise/graph/model"
+	"github.com/alecsavvy/clockwise/utils"
 	"github.com/google/uuid"
 )
 
@@ -35,6 +38,45 @@ func (r *mutationResolver) CreateTrack(ctx context.Context, input model.NewTrack
 	return newTrack, nil
 }
 
+// CreateKv is the resolver for the createKV field.
+func (r *mutationResolver) CreateKv(ctx context.Context, input *model.NewKv) (*model.Kv, error) {
+	cc := r.chainClient
+	logger := r.logger
+
+	kvPair := fmt.Sprintf("%s=%s", input.Key, input.Value)
+	logger.Info("got kv pair", "pair", kvPair)
+	txBytes := []byte(kvPair)
+
+	result, err := cc.BroadcastTxSync(ctx, txBytes)
+	logger.Info("chain result", "result", result, "error", err)
+	if err != nil {
+		return nil, utils.AppError("failure to broadcast tx", err)
+	}
+
+	for {
+		confirmation, err := cc.Tx(ctx, result.Hash, true)
+		if err != nil {
+			logger.Info("could not find tx yet")
+			time.Sleep(250 * time.Millisecond)
+		}
+		if confirmation != nil {
+			break
+		}
+	}
+
+	logger.Info("result data", "result", result)
+
+	qResult, err := cc.ABCIQuery(ctx, "", []byte(input.Key))
+	if err != nil {
+		return nil, utils.AppError("could not query for kv pair", err)
+	}
+
+	key := qResult.Response.Key
+	value := qResult.Response.Value
+
+	return &model.Kv{Key: string(key), Value: string(value)}, nil
+}
+
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 	return r.users, nil
@@ -43,6 +85,19 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 // Tracks is the resolver for the tracks field.
 func (r *queryResolver) Tracks(ctx context.Context) ([]*model.Track, error) {
 	return r.tracks, nil
+}
+
+// Kv is the resolver for the kv field.
+func (r *queryResolver) Kv(ctx context.Context, key string) (*model.Kv, error) {
+	cc := r.chainClient
+	qResult, err := cc.ABCIQuery(ctx, "", []byte(key))
+	if err != nil {
+		return nil, utils.AppError("could not query for kv pair", err)
+	}
+
+	value := qResult.Response.Value
+
+	return &model.Kv{Key: key, Value: string(value)}, nil
 }
 
 // Mutation returns MutationResolver implementation.

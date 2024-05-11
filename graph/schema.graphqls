@@ -12,9 +12,15 @@ type Track {
   userId: String!
 }
 
+type KV {
+  key: String!
+  value: String!
+}
+
 type Query {
   users: [User!]!
   tracks: [Track!]!
+  kv(key: String!): KV
 }
 
 input NewTrack {
@@ -29,7 +35,13 @@ input NewUser {
   bio: String!
 }
 
+input NewKV {
+  key: String!
+  value: String!
+}
+
 type Mutation {
   createUser(input: NewUser!): User!
   createTrack(input: NewTrack!): Track!
+  createKV(input: NewKV): KV!
 }

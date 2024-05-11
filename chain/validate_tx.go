@@ -17,5 +17,5 @@ import (
 func (a *Application) CheckTx(ctx context.Context, req *abcitypes.RequestCheckTx) (*abcitypes.ResponseCheckTx, error) {
 	_ = req.GetTx()
 
-	return &abcitypes.ResponseCheckTx{}, nil
+	return &abcitypes.ResponseCheckTx{Code: abcitypes.CodeTypeOK}, nil
 }
