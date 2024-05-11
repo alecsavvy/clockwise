@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"log/slog"
 	"os"
 
@@ -33,6 +34,36 @@ func (l *Logger) Error(msg string, keyvals ...interface{}) {
 func (l *Logger) With(keyvals ...interface{}) log.Logger {
 	newLogger := l.log.With(keyvals...)
 	return &Logger{log: *newLogger}
+}
+
+func (l *Logger) Debugf(msg string, keyvals ...interface{}) {
+	message := fmt.Sprintf(msg, keyvals...)
+	l.log.Debug(message)
+}
+
+func (l *Logger) Errorf(msg string, keyvals ...interface{}) {
+	message := fmt.Sprintf(msg, keyvals...)
+	l.log.Error(message)
+}
+
+func (l *Logger) Infof(msg string, keyvals ...interface{}) {
+	message := fmt.Sprintf(msg, keyvals...)
+	l.log.Info(message)
+}
+
+func (l *Logger) Warningf(msg string, keyvals ...interface{}) {
+	message := fmt.Sprintf(msg, keyvals...)
+	l.log.Warn(message)
+}
+
+func (l *Logger) Fatalf(format string, v ...interface{}) {
+	message := fmt.Sprintf(format, v...)
+	l.log.Error(message)
+}
+
+func (l *Logger) Printf(format string, v ...interface{}) {
+	message := fmt.Sprintf(format, v...)
+	l.log.Info(message)
 }
 
 var _ log.Logger = (*Logger)(nil)

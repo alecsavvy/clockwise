@@ -1,4 +1,4 @@
-log_level = "main:info,state:info,statesync:info,*:error"
+log_level = "main:info,state:warn,statesync:warn,*:error"
 
 [rpc]
 laddr = "tcp://0.0.0.0:26657"

@@ -10,7 +10,6 @@ import (
 
 	"github.com/alecsavvy/clockwise/utils"
 	cfg "github.com/cometbft/cometbft/config"
-	cmtlog "github.com/cometbft/cometbft/libs/log"
 	nm "github.com/cometbft/cometbft/node"
 	"github.com/cometbft/cometbft/p2p"
 	"github.com/cometbft/cometbft/privval"
@@ -24,7 +23,7 @@ type Node struct {
 	abci *KVStoreApplication
 }
 
-func New(plogger cmtlog.Logger, homeDir string) (*Node, error) {
+func New(logger *utils.Logger, homeDir string) (*Node, error) {
 	config := cfg.DefaultConfig()
 	config.SetRoot(homeDir)
 	viper.SetConfigFile(fmt.Sprintf("%s/%s", homeDir, "config/config.toml"))
@@ -40,14 +39,15 @@ func New(plogger cmtlog.Logger, homeDir string) (*Node, error) {
 	}
 
 	dbPath := filepath.Join(homeDir, "badger")
-	db, err := badger.Open(badger.DefaultOptions(dbPath))
+	dbOpts := badger.DefaultOptions(dbPath)
+	dbOpts.Logger = logger
+	db, err := badger.Open(dbOpts)
 
 	if err != nil {
 		return nil, utils.AppError("Opening database", err)
 	}
 
-	logger := plogger.With("chain", "logger")
-	app := NewKVStoreApplication(logger.(*utils.Logger), db)
+	app := NewKVStoreApplication(logger, db)
 
 	pv := privval.LoadFilePV(
 		config.PrivValidatorKeyFile(),

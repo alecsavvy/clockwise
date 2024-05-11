@@ -16,7 +16,7 @@ func RunMigrations(logger *utils.Logger, pgConnectionString string) error {
 		if tries < 0 {
 			return errors.New("ran out of retries for migrations")
 		}
-		err := runMigrations(pgConnectionString)
+		err := runMigrations(logger, pgConnectionString)
 		if err != nil {
 			tries = tries - 1
 			logger.Info("issue running migrations", "error", err, "tries_left", tries)
@@ -27,7 +27,7 @@ func RunMigrations(logger *utils.Logger, pgConnectionString string) error {
 	}
 }
 
-func runMigrations(pgConnectionString string) error {
+func runMigrations(logger *utils.Logger, pgConnectionString string) error {
 	db, err := sql.Open("pgx", pgConnectionString)
 	if err != nil {
 		return utils.AppError("error opening sql db", err)
@@ -40,6 +40,8 @@ func runMigrations(pgConnectionString string) error {
 	}
 
 	migrationsDir := "./sql/migrations"
+
+	goose.SetLogger(logger)
 
 	err = goose.SetDialect("postgres")
 	if err != nil {
