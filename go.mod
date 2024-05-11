@@ -92,6 +92,7 @@ require (
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/flatbuffers v1.12.1 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
+	github.com/jackc/pgx v3.6.2+incompatible
 	github.com/klauspost/compress v1.17.0 // indirect
 	github.com/labstack/echo/v4 v4.12.0
 	github.com/oasisprotocol/curve25519-voi v0.0.0-20220708102147-0a8a51822cae // indirect
