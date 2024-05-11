@@ -1,3 +1,4 @@
+-- +goose Up
 create table users (
     id uuid primary key,
     handle text not null,
@@ -17,3 +18,10 @@ create table blocks (
     blocknumber bigint primary key,
     blocktime date not null
 );
+
+-- +goose Down
+drop table if exists users;
+
+drop table if exists tracks;
+
+drop table if exists blocks;

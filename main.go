@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"log"
+	"fmt"
 	"os"
 	"sync"
 
@@ -29,6 +29,12 @@ func run() error {
 	// db setup
 	ctx := context.Background()
 	pgConnectionString := os.Getenv("pgConnectionString")
+
+	err := db.RunMigrations(pgConnectionString)
+	if err != nil {
+		return utils.AppError("could not complete database migrations", err)
+	}
+
 	pool, err := pgxpool.New(ctx, pgConnectionString)
 	if err != nil {
 		return utils.AppError("failure to create db pool", err)
@@ -99,6 +105,7 @@ func run() error {
 
 func main() {
 	if err := run(); err != nil {
-		log.Fatal("fatal error", err)
+		fmt.Println("fatal error: ", err)
 	}
+
 }
