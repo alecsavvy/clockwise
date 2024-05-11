@@ -50,18 +50,3 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) error {
 	_, err := q.db.Exec(ctx, createUser, arg.ID, arg.Handle, arg.Bio)
 	return err
 }
-
-const insertBlock = `-- name: InsertBlock :exec
-insert into blocks (blocknumber, blocktime)
-values ($1, $2)
-`
-
-type InsertBlockParams struct {
-	Blocknumber int64
-	Blocktime   pgtype.Date
-}
-
-func (q *Queries) InsertBlock(ctx context.Context, arg InsertBlockParams) error {
-	_, err := q.db.Exec(ctx, insertBlock, arg.Blocknumber, arg.Blocktime)
-	return err
-}

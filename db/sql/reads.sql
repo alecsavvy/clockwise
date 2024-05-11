@@ -8,7 +8,9 @@ select *
 from tracks
 order by title;
 
--- name: GetBlocks :many
-select *
-from blocks
-order by blocknumber desc;
+-- name: GetFollowersByHandle :many
+select u2.*
+from users u1
+    join follows f on u1.id = f.following_id
+    join users u2 on f.follower_id = u2.id
+where u1.handle = $1;

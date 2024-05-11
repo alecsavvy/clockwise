@@ -8,9 +8,14 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-type Block struct {
-	Blocknumber int64
-	Blocktime   pgtype.Date
+type Follow struct {
+	FollowerID  pgtype.UUID
+	FollowingID pgtype.UUID
+}
+
+type Repost struct {
+	ReposterID pgtype.UUID
+	TrackID    pgtype.UUID
 }
 
 type Track struct {
@@ -22,7 +27,8 @@ type Track struct {
 }
 
 type User struct {
-	ID     pgtype.UUID
-	Handle string
-	Bio    pgtype.Text
+	ID      pgtype.UUID
+	Handle  string
+	Address string
+	Bio     pgtype.Text
 }

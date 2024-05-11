@@ -9,22 +9,29 @@ import (
 	"context"
 )
 
-const getBlocks = `-- name: GetBlocks :many
-select blocknumber, blocktime
-from blocks
-order by blocknumber desc
+const getFollowersByHandle = `-- name: GetFollowersByHandle :many
+select u2.id, u2.handle, u2.address, u2.bio
+from users u1
+    join follows f on u1.id = f.following_id
+    join users u2 on f.follower_id = u2.id
+where u1.handle = $1
 `
 
-func (q *Queries) GetBlocks(ctx context.Context) ([]Block, error) {
-	rows, err := q.db.Query(ctx, getBlocks)
+func (q *Queries) GetFollowersByHandle(ctx context.Context, handle string) ([]User, error) {
+	rows, err := q.db.Query(ctx, getFollowersByHandle, handle)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Block
+	var items []User
 	for rows.Next() {
-		var i Block
-		if err := rows.Scan(&i.Blocknumber, &i.Blocktime); err != nil {
+		var i User
+		if err := rows.Scan(
+			&i.ID,
+			&i.Handle,
+			&i.Address,
+			&i.Bio,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -68,7 +75,7 @@ func (q *Queries) GetTracks(ctx context.Context) ([]Track, error) {
 }
 
 const getUsers = `-- name: GetUsers :many
-select id, handle, bio
+select id, handle, address, bio
 from users
 order by handle
 `
@@ -82,7 +89,12 @@ func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
 	var items []User
 	for rows.Next() {
 		var i User
-		if err := rows.Scan(&i.ID, &i.Handle, &i.Bio); err != nil {
+		if err := rows.Scan(
+			&i.ID,
+			&i.Handle,
+			&i.Address,
+			&i.Bio,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
