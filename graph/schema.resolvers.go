@@ -41,30 +41,23 @@ func (r *mutationResolver) CreateTrack(ctx context.Context, input model.NewTrack
 // CreateKv is the resolver for the createKV field.
 func (r *mutationResolver) CreateKv(ctx context.Context, input *model.NewKv) (*model.Kv, error) {
 	cc := r.chainClient
-	logger := r.logger
 
 	kvPair := fmt.Sprintf("%s=%s", input.Key, input.Value)
-	logger.Info("got kv pair", "pair", kvPair)
 	txBytes := []byte(kvPair)
 
 	result, err := cc.BroadcastTxSync(ctx, txBytes)
-	logger.Info("chain result", "result", result, "error", err)
 	if err != nil {
 		return nil, utils.AppError("failure to broadcast tx", err)
 	}
 
 	for {
-		confirmation, err := cc.Tx(ctx, result.Hash, true)
+		_, err := cc.Tx(ctx, result.Hash, true)
 		if err != nil {
-			logger.Info("could not find tx yet")
-			time.Sleep(250 * time.Millisecond)
+			time.Sleep(100 * time.Millisecond)
+			continue
 		}
-		if confirmation != nil {
-			break
-		}
+		break
 	}
-
-	logger.Info("result data", "result", result)
 
 	qResult, err := cc.ABCIQuery(ctx, "", []byte(input.Key))
 	if err != nil {
