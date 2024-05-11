@@ -30,7 +30,7 @@ func run() error {
 	ctx := context.Background()
 	pgConnectionString := os.Getenv("pgConnectionString")
 
-	err := db.RunMigrations(pgConnectionString)
+	err := db.RunMigrations(logger, pgConnectionString)
 	if err != nil {
 		return utils.AppError("could not complete database migrations", err)
 	}

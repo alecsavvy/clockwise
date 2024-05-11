@@ -2,17 +2,32 @@ package db
 
 import (
 	"database/sql"
-	"embed"
+	"errors"
+	"time"
 
 	"github.com/alecsavvy/clockwise/utils"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/pressly/goose/v3"
 )
 
-//go:embed sql/migrations/*
-var dbMigrations embed.FS
+func RunMigrations(logger *utils.Logger, pgConnectionString string) error {
+	tries := 10
+	for {
+		if tries < 0 {
+			return errors.New("ran out of retries for migrations")
+		}
+		err := runMigrations(pgConnectionString)
+		if err != nil {
+			tries = tries - 1
+			logger.Info("issue running migrations", "error", err, "tries_left", tries)
+			time.Sleep(3 * time.Second)
+			continue
+		}
+		return nil
+	}
+}
 
-func RunMigrations(pgConnectionString string) error {
+func runMigrations(pgConnectionString string) error {
 	db, err := sql.Open("pgx", pgConnectionString)
 	if err != nil {
 		return utils.AppError("error opening sql db", err)
