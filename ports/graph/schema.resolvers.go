@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/alecsavvy/clockwise/graph/model"
+	"github.com/alecsavvy/clockwise/ports/graph/model"
 	"github.com/alecsavvy/clockwise/utils"
 	"github.com/google/uuid"
 )

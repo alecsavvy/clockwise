@@ -14,7 +14,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/alecsavvy/clockwise/graph/model"
+	"github.com/alecsavvy/clockwise/ports/graph/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -374,7 +374,7 @@ func (ec *executionContext) field_Mutation_createKV_args(ctx context.Context, ra
 	var arg0 *model.NewKv
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalONewKV2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐNewKv(ctx, tmp)
+		arg0, err = ec.unmarshalONewKV2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐNewKv(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -389,7 +389,7 @@ func (ec *executionContext) field_Mutation_createTrack_args(ctx context.Context,
 	var arg0 model.NewTrack
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNNewTrack2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐNewTrack(ctx, tmp)
+		arg0, err = ec.unmarshalNNewTrack2githubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐNewTrack(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -404,7 +404,7 @@ func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, 
 	var arg0 model.NewUser
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNNewUser2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐNewUser(ctx, tmp)
+		arg0, err = ec.unmarshalNNewUser2githubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐNewUser(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -597,7 +597,7 @@ func (ec *executionContext) _Mutation_createUser(ctx context.Context, field grap
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -660,7 +660,7 @@ func (ec *executionContext) _Mutation_createTrack(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Track)
 	fc.Result = res
-	return ec.marshalNTrack2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐTrack(ctx, field.Selections, res)
+	return ec.marshalNTrack2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐTrack(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createTrack(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -727,7 +727,7 @@ func (ec *executionContext) _Mutation_createKV(ctx context.Context, field graphq
 	}
 	res := resTmp.(*model.Kv)
 	fc.Result = res
-	return ec.marshalNKV2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐKv(ctx, field.Selections, res)
+	return ec.marshalNKV2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐKv(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createKV(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -788,7 +788,7 @@ func (ec *executionContext) _Query_users(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.([]*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐUserᚄ(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐUserᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_users(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -840,7 +840,7 @@ func (ec *executionContext) _Query_tracks(ctx context.Context, field graphql.Col
 	}
 	res := resTmp.([]*model.Track)
 	fc.Result = res
-	return ec.marshalNTrack2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐTrackᚄ(ctx, field.Selections, res)
+	return ec.marshalNTrack2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐTrackᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_tracks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -893,7 +893,7 @@ func (ec *executionContext) _Query_kv(ctx context.Context, field graphql.Collect
 	}
 	res := resTmp.(*model.Kv)
 	fc.Result = res
-	return ec.marshalOKV2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐKv(ctx, field.Selections, res)
+	return ec.marshalOKV2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐKv(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_kv(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3988,11 +3988,11 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 	return res
 }
 
-func (ec *executionContext) marshalNKV2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐKv(ctx context.Context, sel ast.SelectionSet, v model.Kv) graphql.Marshaler {
+func (ec *executionContext) marshalNKV2githubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐKv(ctx context.Context, sel ast.SelectionSet, v model.Kv) graphql.Marshaler {
 	return ec._KV(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNKV2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐKv(ctx context.Context, sel ast.SelectionSet, v *model.Kv) graphql.Marshaler {
+func (ec *executionContext) marshalNKV2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐKv(ctx context.Context, sel ast.SelectionSet, v *model.Kv) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -4002,12 +4002,12 @@ func (ec *executionContext) marshalNKV2ᚖgithubᚗcomᚋalecsavvyᚋclockwise�
 	return ec._KV(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNNewTrack2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐNewTrack(ctx context.Context, v interface{}) (model.NewTrack, error) {
+func (ec *executionContext) unmarshalNNewTrack2githubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐNewTrack(ctx context.Context, v interface{}) (model.NewTrack, error) {
 	res, err := ec.unmarshalInputNewTrack(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNNewUser2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐNewUser(ctx context.Context, v interface{}) (model.NewUser, error) {
+func (ec *executionContext) unmarshalNNewUser2githubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐNewUser(ctx context.Context, v interface{}) (model.NewUser, error) {
 	res, err := ec.unmarshalInputNewUser(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
@@ -4027,11 +4027,11 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) marshalNTrack2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐTrack(ctx context.Context, sel ast.SelectionSet, v model.Track) graphql.Marshaler {
+func (ec *executionContext) marshalNTrack2githubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐTrack(ctx context.Context, sel ast.SelectionSet, v model.Track) graphql.Marshaler {
 	return ec._Track(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTrack2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐTrackᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Track) graphql.Marshaler {
+func (ec *executionContext) marshalNTrack2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐTrackᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Track) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -4055,7 +4055,7 @@ func (ec *executionContext) marshalNTrack2ᚕᚖgithubᚗcomᚋalecsavvyᚋclock
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNTrack2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐTrack(ctx, sel, v[i])
+			ret[i] = ec.marshalNTrack2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐTrack(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -4075,7 +4075,7 @@ func (ec *executionContext) marshalNTrack2ᚕᚖgithubᚗcomᚋalecsavvyᚋclock
 	return ret
 }
 
-func (ec *executionContext) marshalNTrack2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐTrack(ctx context.Context, sel ast.SelectionSet, v *model.Track) graphql.Marshaler {
+func (ec *executionContext) marshalNTrack2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐTrack(ctx context.Context, sel ast.SelectionSet, v *model.Track) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -4085,11 +4085,11 @@ func (ec *executionContext) marshalNTrack2ᚖgithubᚗcomᚋalecsavvyᚋclockwis
 	return ec._Track(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNUser2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2githubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {
 	return ec._User(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐUserᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐUserᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.User) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -4113,7 +4113,7 @@ func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockw
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNUser2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐUser(ctx, sel, v[i])
+			ret[i] = ec.marshalNUser2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐUser(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -4133,7 +4133,7 @@ func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockw
 	return ret
 }
 
-func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -4422,14 +4422,14 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
-func (ec *executionContext) marshalOKV2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐKv(ctx context.Context, sel ast.SelectionSet, v *model.Kv) graphql.Marshaler {
+func (ec *executionContext) marshalOKV2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐKv(ctx context.Context, sel ast.SelectionSet, v *model.Kv) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._KV(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalONewKV2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐNewKv(ctx context.Context, v interface{}) (*model.NewKv, error) {
+func (ec *executionContext) unmarshalONewKV2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐNewKv(ctx context.Context, v interface{}) (*model.NewKv, error) {
 	if v == nil {
 		return nil, nil
 	}

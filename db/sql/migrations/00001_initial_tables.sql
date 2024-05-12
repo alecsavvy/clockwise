@@ -24,7 +24,7 @@ create table follows (
 
 create table reposts (
     reposter_id uuid references users(id),
-    track_id uuid references track(id),
+    track_id uuid references tracks(id),
     primary key (reposter_id, track_id)
 );
 
@@ -34,3 +34,5 @@ drop table if exists users;
 drop table if exists tracks;
 
 drop table if exists follows;
+
+drop table if exists reposts;

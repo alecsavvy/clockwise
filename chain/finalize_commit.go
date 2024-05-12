@@ -8,9 +8,7 @@ package chain
 import (
 	"context"
 
-	"github.com/alecsavvy/clockwise/db"
 	abcitypes "github.com/cometbft/cometbft/abci/types"
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 // Prepares a block for commitment and provides final validation
@@ -21,17 +19,7 @@ func (a *Application) FinalizeBlock(ctx context.Context, rfb *abcitypes.RequestF
 	}
 	defer dbTx.Rollback(ctx)
 
-	qtx := a.queries.WithTx(dbTx)
-
-	// do db logic with qtx
-	blockTime := pgtype.Date{
-		Time:  rfb.Time,
-		Valid: true,
-	}
-	qtx.InsertBlock(ctx, db.InsertBlockParams{
-		Blocknumber: rfb.Height,
-		Blocktime:   blockTime,
-	})
+	_ = a.queries.WithTx(dbTx)
 
 	// set transaction to be committed in commit step
 	a.currentTx = dbTx

@@ -10,7 +10,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/alecsavvy/clockwise/chain"
 	"github.com/alecsavvy/clockwise/db"
-	"github.com/alecsavvy/clockwise/graph"
+	"github.com/alecsavvy/clockwise/ports/graph"
 	"github.com/alecsavvy/clockwise/utils"
 	rpchttp "github.com/cometbft/cometbft/rpc/client/http"
 	"github.com/jackc/pgx/v5/pgxpool"

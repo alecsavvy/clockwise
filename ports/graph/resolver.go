@@ -3,7 +3,7 @@
 package graph
 
 import (
-	"github.com/alecsavvy/clockwise/graph/model"
+	"github.com/alecsavvy/clockwise/ports/graph/model"
 	"github.com/alecsavvy/clockwise/utils"
 	rpchttp "github.com/cometbft/cometbft/rpc/client/http"
 )
