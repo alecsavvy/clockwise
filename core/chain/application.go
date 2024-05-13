@@ -1,7 +1,7 @@
 package chain
 
 import (
-	"github.com/alecsavvy/clockwise/db"
+	"github.com/alecsavvy/clockwise/core/db"
 	abcitypes "github.com/cometbft/cometbft/abci/types"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"

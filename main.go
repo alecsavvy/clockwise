@@ -8,8 +8,8 @@ import (
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/alecsavvy/clockwise/chain"
-	"github.com/alecsavvy/clockwise/db"
+	"github.com/alecsavvy/clockwise/core/chain"
+	"github.com/alecsavvy/clockwise/core/db"
 	"github.com/alecsavvy/clockwise/ports/graph"
 	"github.com/alecsavvy/clockwise/utils"
 	rpchttp "github.com/cometbft/cometbft/rpc/client/http"
