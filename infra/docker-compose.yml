@@ -8,7 +8,8 @@ services:
       args:
         NODE: "0"
     environment:
-      - pgConnectionString="postgresql://discovery_db:postgres@pass:5432/db0"
+      - pgConnectionString=postgresql://postgres:pass@discovery_db:5432/db0?sslmode=disable
+    restart: unless-stopped
     ports:
       - "6600:26656" # CometBFT P2P Server
       - "6601:26657" # CometBFT RPC Server
@@ -17,6 +18,9 @@ services:
     networks:
       audius-testnet:
         ipv4_address: 192.167.10.2
+    depends_on:
+      - geth
+      - postgres
 
   node-1:
     container_name: discoveryprovider1.docker.co
@@ -27,7 +31,8 @@ services:
       args:
         NODE: "1"
     environment:
-      - pgConnectionString="postgresql://discovery_db:postgres@pass:5432/db1"
+      - pgConnectionString=postgresql://postgres:pass@discovery_db:5432/db1?sslmode=disable
+    restart: unless-stopped
     ports:
       - "6610:26656"
       - "6611:26657"
@@ -36,6 +41,9 @@ services:
     networks:
       audius-testnet:
         ipv4_address: 192.167.10.3
+    depends_on:
+      - geth
+      - postgres
 
   node-2:
     container_name: discoveryprovider2.docker.co
@@ -46,7 +54,8 @@ services:
       args:
         NODE: "2"
     environment:
-      - pgConnectionString="postgresql://discovery_db:postgres@pass:5432/db2"
+      - pgConnectionString=postgresql://postgres:pass@discovery_db:5432/db2?sslmode=disable
+    restart: unless-stopped
     ports:
       - "6620:26656"
       - "6621:26657"
@@ -55,6 +64,9 @@ services:
     networks:
       audius-testnet:
         ipv4_address: 192.167.10.4
+    depends_on:
+      - geth
+      - postgres
 
   node-3:
     container_name: discoveryprovider3.docker.co
@@ -65,7 +77,8 @@ services:
       args:
         NODE: "3"
     environment:
-      - pgConnectionString="postgresql://discovery_db:postgres@pass:5432/db3"
+      - pgConnectionString=postgresql://postgres:pass@discovery_db:5432/db3?sslmode=disable
+    restart: unless-stopped
     ports:
       - "6630:26656"
       - "6631:26657"
@@ -74,6 +87,9 @@ services:
     networks:
       audius-testnet:
         ipv4_address: 192.167.10.5
+    depends_on:
+      - geth
+      - postgres
 
   node-4:
     container_name: discoveryprovider4.docker.co
@@ -84,7 +100,8 @@ services:
       args:
         NODE: "4"
     environment:
-      - pgConnectionString="postgresql://discovery_db:postgres@pass:5432/db4"
+      - pgConnectionString=postgresql://postgres:pass@discovery_db:5432/db4?sslmode=disable
+    restart: unless-stopped
     ports:
       - "6640:26656"
       - "6641:26657"
@@ -93,6 +110,9 @@ services:
     networks:
       audius-testnet:
         ipv4_address: 192.167.10.6
+    depends_on:
+      - geth
+      - postgres
 
   node-5:
     container_name: discoveryprovider5.docker.co
@@ -103,7 +123,8 @@ services:
       args:
         NODE: "5"
     environment:
-      - pgConnectionString="postgresql://discovery_db:postgres@pass:5432/db5"
+      - pgConnectionString=postgresql://postgres:pass@discovery_db:5432/db5?sslmode=disable
+    restart: unless-stopped
     ports:
       - "6650:26656"
       - "6651:26657"
@@ -112,6 +133,9 @@ services:
     networks:
       audius-testnet:
         ipv4_address: 192.167.10.7
+    depends_on:
+      - geth
+      - postgres
 
   node-6:
     container_name: discoveryprovider6.docker.co
@@ -122,7 +146,8 @@ services:
       args:
         NODE: "6"
     environment:
-      - pgConnectionString="postgresql://discovery_db:postgres@pass:5432/db6"
+      - pgConnectionString=postgresql://postgres:pass@discovery_db:5432/db6?sslmode=disable
+    restart: unless-stopped
     ports:
       - "6660:26656"
       - "6661:26657"
@@ -131,6 +156,9 @@ services:
     networks:
       audius-testnet:
         ipv4_address: 192.167.10.8
+    depends_on:
+      - geth
+      - postgres
 
   geth:
     container_name: ethereum.docker.co
@@ -163,6 +191,9 @@ services:
       - "5432:5432"
     volumes:
       - ./init_db:/docker-entrypoint-initdb.d
+    networks:
+      audius-testnet:
+        ipv4_address: 192.167.10.10
 
 networks:
   audius-testnet:

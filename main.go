@@ -1,14 +1,21 @@
 package main
 
 import (
-	"log"
+	"context"
+	"fmt"
+	"os"
 	"sync"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/alecsavvy/clockwise/chain"
-	"github.com/alecsavvy/clockwise/graph"
+	"github.com/alecsavvy/clockwise/core/adapters"
+	"github.com/alecsavvy/clockwise/core/chain"
+	chainclient "github.com/alecsavvy/clockwise/core/chain_client"
+	"github.com/alecsavvy/clockwise/core/db"
+	"github.com/alecsavvy/clockwise/ports/graph"
 	"github.com/alecsavvy/clockwise/utils"
+	rpchttp "github.com/cometbft/cometbft/rpc/client/http"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -22,15 +29,43 @@ func run() error {
 	homeDir := "./cmt-home"
 
 	// db setup
+	ctx := context.Background()
+	pgConnectionString := os.Getenv("pgConnectionString")
+
+	err := db.RunMigrations(logger, pgConnectionString)
+	if err != nil {
+		return utils.AppError("could not complete database migrations", err)
+	}
+
+	pool, err := pgxpool.New(ctx, pgConnectionString)
+	if err != nil {
+		return utils.AppError("failure to create db pool", err)
+	}
+	defer pool.Close()
+
+	db := db.New(pool)
 
 	// chain setup
-	node, err := chain.New(homeDir)
+	node, err := chain.New(logger, homeDir, pool)
 	if err != nil {
 		return utils.AppError("failure to init chain", err)
 	}
 
+	// rpc client setup
+	rpcUrl := node.RPC()
+	client, err := rpchttp.New(rpcUrl, "/websocket")
+	if err != nil {
+		return utils.AppError("failure to init chain rpc", err)
+	}
+	client.SetLogger(logger)
+	chainClient := chainclient.New(logger, client)
+
+	// user repo setup
+	userRepo := adapters.NewUserRepo(logger, chainClient, db)
+
 	// graphql setup
-	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
+	gqlResolver := graph.NewResolver(logger, userRepo)
+	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: gqlResolver}))
 	queryHandler := func(c echo.Context) error {
 		srv.ServeHTTP(c.Response(), c.Request())
 		return nil
@@ -76,6 +111,7 @@ func run() error {
 
 func main() {
 	if err := run(); err != nil {
-		log.Fatal("fatal error", err)
+		fmt.Println("fatal error: ", err)
 	}
+
 }

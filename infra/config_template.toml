@@ -1,9 +1,14 @@
+log_level = "main:info,state:warn,statesync:warn,*:error"
+
 [rpc]
 laddr = "tcp://0.0.0.0:26657"
+
 [p2p]
 laddr = "tcp://0.0.0.0:26656"
+
 [instrumentation]
 prometheus = false
+
 [consensus]
 create_empty_blocks = false
 create_empty_blocks_interval = "0s"

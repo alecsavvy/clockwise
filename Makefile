@@ -19,5 +19,5 @@ init-testnet:
 gen:
 	make init-testnet
 	go generate ./...
-	cd db && sqlc generate
+	cd core/db && sqlc generate
 	go mod tidy
