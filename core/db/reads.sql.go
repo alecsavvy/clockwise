@@ -74,6 +74,25 @@ func (q *Queries) GetTracks(ctx context.Context) ([]Track, error) {
 	return items, nil
 }
 
+const getUserByHandle = `-- name: GetUserByHandle :one
+select id, handle, address, bio
+from users
+where handle = $1
+limit 1
+`
+
+func (q *Queries) GetUserByHandle(ctx context.Context, handle string) (User, error) {
+	row := q.db.QueryRow(ctx, getUserByHandle, handle)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Handle,
+		&i.Address,
+		&i.Bio,
+	)
+	return i, err
+}
+
 const getUsers = `-- name: GetUsers :many
 select id, handle, address, bio
 from users

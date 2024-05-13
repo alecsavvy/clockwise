@@ -3,6 +3,12 @@ select *
 from users
 order by handle;
 
+-- name: GetUserByHandle :one
+select *
+from users
+where handle = $1
+limit 1;
+
 -- name: GetTracks :many
 select *
 from tracks

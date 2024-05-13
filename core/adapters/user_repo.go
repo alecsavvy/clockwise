@@ -1,29 +1,83 @@
 package adapters
 
 import (
+	"context"
+
+	chainclient "github.com/alecsavvy/clockwise/core/chain_client"
+	"github.com/alecsavvy/clockwise/core/db"
 	"github.com/alecsavvy/clockwise/cqrs/commands"
 	"github.com/alecsavvy/clockwise/cqrs/entities"
 	"github.com/alecsavvy/clockwise/cqrs/events"
 	"github.com/alecsavvy/clockwise/cqrs/services"
 	"github.com/alecsavvy/clockwise/utils"
+	"github.com/google/uuid"
 )
 
-type UserRepository struct{}
-
-func (ur *UserRepository) CreateUser(cmd *commands.CreateUserCommand) (*events.UserCreatedEvent, error) {
-	return nil, utils.AppError("not implemented", nil)
+type UserRepository struct {
+	logger *utils.Logger
+	cc     *chainclient.ChainClient
+	db     *db.Queries
 }
 
-func (ur *UserRepository) GetUserByHandle(handle string) (*entities.UserEntity, error) {
-	return nil, utils.AppError("not implemented", nil)
+func (ur *UserRepository) CreateUser(cmd *commands.CreateUserCommand) (*events.UserCreatedEvent, error) {
+	ctx := context.Background()
+	cc := ur.cc
+	db := ur.db
+
+	// submit command to chain
+	res, err := cc.Send(cmd)
+	if err != nil {
+		return nil, err
+	}
+
+	// construct event
+	var event events.UserCreatedEvent
+	event.BlockHeight = uint64(res.Height)
+	event.TransactionHash = string(res.Hash)
+
+	user, err := db.GetUserByHandle(ctx, cmd.Handle)
+	if err != nil {
+		return nil, err
+	}
+
+	userEntity := &entities.UserEntity{
+		ID:      uuid.UUID(user.ID.Bytes),
+		Handle:  user.Handle,
+		Bio:     user.Bio.String,
+		Address: user.Address,
+	}
+
+	event.User = *userEntity
+
+	return &event, nil
 }
 
 func (ur *UserRepository) GetUsers() ([]*entities.UserEntity, error) {
-	return nil, utils.AppError("not implemented", nil)
+	ctx := context.Background()
+
+	users, err := ur.db.GetUsers(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	userEntities := utils.Map(users, func(user db.User) *entities.UserEntity {
+		return &entities.UserEntity{
+			ID:      uuid.UUID(user.ID.Bytes),
+			Handle:  user.Handle,
+			Bio:     user.Bio.String,
+			Address: user.Address,
+		}
+	})
+
+	return userEntities, nil
 }
 
-func NewUserRepo() *UserRepository {
-	return &UserRepository{}
+func NewUserRepo(logger *utils.Logger, cc *chainclient.ChainClient, db *db.Queries) *UserRepository {
+	return &UserRepository{
+		logger: logger,
+		cc:     cc,
+		db:     db,
+	}
 }
 
 var _ services.UserService = (*UserRepository)(nil)

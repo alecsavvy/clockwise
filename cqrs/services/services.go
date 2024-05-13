@@ -13,12 +13,10 @@ import (
 
 type UserService interface {
 	CreateUser(*commands.CreateUserCommand) (*events.UserCreatedEvent, error)
-	GetUserByHandle(handle string) (*entities.UserEntity, error)
 	GetUsers() ([]*entities.UserEntity, error)
 }
 
 type TrackService interface {
 	CreateTrack(*commands.CreateTrackCommand) (*events.TrackCreatedEvent, error)
-	GetTrackByTitle(title string) (*entities.TrackEntity, error)
 	GetTracks() ([]*entities.TrackEntity, error)
 }
