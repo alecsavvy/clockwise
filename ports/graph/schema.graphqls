@@ -35,3 +35,8 @@ type Mutation {
   createUser(input: NewUser!): User!
   createTrack(input: NewTrack!): Track!
 }
+
+type Subscription {
+  newUser: User!
+  newTrack: Track!
+}

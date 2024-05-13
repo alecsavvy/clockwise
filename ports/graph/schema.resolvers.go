@@ -6,6 +6,7 @@ package graph
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/alecsavvy/clockwise/cqrs/commands"
 	"github.com/alecsavvy/clockwise/cqrs/entities"
@@ -79,11 +80,25 @@ func (r *queryResolver) Tracks(ctx context.Context) ([]*model.Track, error) {
 	return r.tracks, nil
 }
 
+// NewUser is the resolver for the newUser field.
+func (r *subscriptionResolver) NewUser(ctx context.Context) (<-chan *model.User, error) {
+	panic(fmt.Errorf("not implemented: NewUser - newUser"))
+}
+
+// NewTrack is the resolver for the newTrack field.
+func (r *subscriptionResolver) NewTrack(ctx context.Context) (<-chan *model.Track, error) {
+	panic(fmt.Errorf("not implemented: NewTrack - newTrack"))
+}
+
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
+// Subscription returns SubscriptionResolver implementation.
+func (r *Resolver) Subscription() SubscriptionResolver { return &subscriptionResolver{r} }
+
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+type subscriptionResolver struct{ *Resolver }
