@@ -50,8 +50,6 @@ func New(logger *utils.Logger, homeDir string, pool *pgxpool.Pool) (*Node, error
 		return nil, utils.AppError("Error loading p2p key", err)
 	}
 
-	// logger := cmtlog.NewTMLogger(cmtlog.NewSyncWriter(os.Stdout))
-
 	node, err := nm.NewNode(
 		config,
 		pv,
