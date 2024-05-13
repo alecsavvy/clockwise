@@ -47,19 +47,12 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
-	KV struct {
-		Key   func(childComplexity int) int
-		Value func(childComplexity int) int
-	}
-
 	Mutation struct {
-		CreateKv    func(childComplexity int, input *model.NewKv) int
 		CreateTrack func(childComplexity int, input model.NewTrack) int
 		CreateUser  func(childComplexity int, input model.NewUser) int
 	}
 
 	Query struct {
-		Kv     func(childComplexity int, key string) int
 		Tracks func(childComplexity int) int
 		Users  func(childComplexity int) int
 	}
@@ -73,21 +66,20 @@ type ComplexityRoot struct {
 	}
 
 	User struct {
-		Bio    func(childComplexity int) int
-		Handle func(childComplexity int) int
-		ID     func(childComplexity int) int
+		Address func(childComplexity int) int
+		Bio     func(childComplexity int) int
+		Handle  func(childComplexity int) int
+		ID      func(childComplexity int) int
 	}
 }
 
 type MutationResolver interface {
 	CreateUser(ctx context.Context, input model.NewUser) (*model.User, error)
 	CreateTrack(ctx context.Context, input model.NewTrack) (*model.Track, error)
-	CreateKv(ctx context.Context, input *model.NewKv) (*model.Kv, error)
 }
 type QueryResolver interface {
 	Users(ctx context.Context) ([]*model.User, error)
 	Tracks(ctx context.Context) ([]*model.Track, error)
-	Kv(ctx context.Context, key string) (*model.Kv, error)
 }
 
 type executableSchema struct {
@@ -108,32 +100,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	ec := executionContext{nil, e, 0, 0, nil}
 	_ = ec
 	switch typeName + "." + field {
-
-	case "KV.key":
-		if e.complexity.KV.Key == nil {
-			break
-		}
-
-		return e.complexity.KV.Key(childComplexity), true
-
-	case "KV.value":
-		if e.complexity.KV.Value == nil {
-			break
-		}
-
-		return e.complexity.KV.Value(childComplexity), true
-
-	case "Mutation.createKV":
-		if e.complexity.Mutation.CreateKv == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createKV_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateKv(childComplexity, args["input"].(*model.NewKv)), true
 
 	case "Mutation.createTrack":
 		if e.complexity.Mutation.CreateTrack == nil {
@@ -158,18 +124,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateUser(childComplexity, args["input"].(model.NewUser)), true
-
-	case "Query.kv":
-		if e.complexity.Query.Kv == nil {
-			break
-		}
-
-		args, err := ec.field_Query_kv_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.Kv(childComplexity, args["key"].(string)), true
 
 	case "Query.tracks":
 		if e.complexity.Query.Tracks == nil {
@@ -220,6 +174,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Track.UserID(childComplexity), true
 
+	case "User.address":
+		if e.complexity.User.Address == nil {
+			break
+		}
+
+		return e.complexity.User.Address(childComplexity), true
+
 	case "User.bio":
 		if e.complexity.User.Bio == nil {
 			break
@@ -249,7 +210,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	rc := graphql.GetOperationContext(ctx)
 	ec := executionContext{rc, e, 0, 0, make(chan graphql.DeferredResult)}
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
-		ec.unmarshalInputNewKV,
 		ec.unmarshalInputNewTrack,
 		ec.unmarshalInputNewUser,
 	)
@@ -368,21 +328,6 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
 // region    ***************************** args.gotpl *****************************
 
-func (ec *executionContext) field_Mutation_createKV_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 *model.NewKv
-	if tmp, ok := rawArgs["input"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalONewKV2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐNewKv(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["input"] = arg0
-	return args, nil
-}
-
 func (ec *executionContext) field_Mutation_createTrack_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -428,21 +373,6 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_kv_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["key"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("key"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["key"] = arg0
-	return args, nil
-}
-
 func (ec *executionContext) field___Type_enumValues_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -480,94 +410,6 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 // endregion ************************** directives.gotpl **************************
 
 // region    **************************** field.gotpl *****************************
-
-func (ec *executionContext) _KV_key(ctx context.Context, field graphql.CollectedField, obj *model.Kv) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_KV_key(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Key, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_KV_key(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "KV",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _KV_value(ctx context.Context, field graphql.CollectedField, obj *model.Kv) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_KV_value(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Value, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_KV_value(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "KV",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
 
 func (ec *executionContext) _Mutation_createUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Mutation_createUser(ctx, field)
@@ -614,6 +456,8 @@ func (ec *executionContext) fieldContext_Mutation_createUser(ctx context.Context
 				return ec.fieldContext_User_handle(ctx, field)
 			case "bio":
 				return ec.fieldContext_User_bio(ctx, field)
+			case "address":
+				return ec.fieldContext_User_address(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
@@ -699,67 +543,6 @@ func (ec *executionContext) fieldContext_Mutation_createTrack(ctx context.Contex
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_createKV(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_createKV(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateKv(rctx, fc.Args["input"].(*model.NewKv))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*model.Kv)
-	fc.Result = res
-	return ec.marshalNKV2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐKv(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Mutation_createKV(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "key":
-				return ec.fieldContext_KV_key(ctx, field)
-			case "value":
-				return ec.fieldContext_KV_value(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type KV", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_createKV_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Query_users(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_users(ctx, field)
 	if err != nil {
@@ -805,6 +588,8 @@ func (ec *executionContext) fieldContext_Query_users(ctx context.Context, field 
 				return ec.fieldContext_User_handle(ctx, field)
 			case "bio":
 				return ec.fieldContext_User_bio(ctx, field)
+			case "address":
+				return ec.fieldContext_User_address(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
@@ -864,64 +649,6 @@ func (ec *executionContext) fieldContext_Query_tracks(ctx context.Context, field
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Track", field.Name)
 		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Query_kv(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_kv(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Kv(rctx, fc.Args["key"].(string))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.Kv)
-	fc.Result = res
-	return ec.marshalOKV2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐKv(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Query_kv(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "key":
-				return ec.fieldContext_KV_key(ctx, field)
-			case "value":
-				return ec.fieldContext_KV_value(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type KV", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_kv_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
 	}
 	return fc, nil
 }
@@ -1395,6 +1122,50 @@ func (ec *executionContext) _User_bio(ctx context.Context, field graphql.Collect
 }
 
 func (ec *executionContext) fieldContext_User_bio(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "User",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _User_address(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_User_address(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Address, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_User_address(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "User",
 		Field:      field,
@@ -3180,40 +2951,6 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 
 // region    **************************** input.gotpl *****************************
 
-func (ec *executionContext) unmarshalInputNewKV(ctx context.Context, obj interface{}) (model.NewKv, error) {
-	var it model.NewKv
-	asMap := map[string]interface{}{}
-	for k, v := range obj.(map[string]interface{}) {
-		asMap[k] = v
-	}
-
-	fieldsInOrder := [...]string{"key", "value"}
-	for _, k := range fieldsInOrder {
-		v, ok := asMap[k]
-		if !ok {
-			continue
-		}
-		switch k {
-		case "key":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("key"))
-			data, err := ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Key = data
-		case "value":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("value"))
-			data, err := ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Value = data
-		}
-	}
-
-	return it, nil
-}
-
 func (ec *executionContext) unmarshalInputNewTrack(ctx context.Context, obj interface{}) (model.NewTrack, error) {
 	var it model.NewTrack
 	asMap := map[string]interface{}{}
@@ -3269,7 +3006,7 @@ func (ec *executionContext) unmarshalInputNewUser(ctx context.Context, obj inter
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"handle", "bio"}
+	fieldsInOrder := [...]string{"handle", "bio", "address"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -3290,6 +3027,13 @@ func (ec *executionContext) unmarshalInputNewUser(ctx context.Context, obj inter
 				return it, err
 			}
 			it.Bio = data
+		case "address":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("address"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Address = data
 		}
 	}
 
@@ -3303,50 +3047,6 @@ func (ec *executionContext) unmarshalInputNewUser(ctx context.Context, obj inter
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
-
-var kVImplementors = []string{"KV"}
-
-func (ec *executionContext) _KV(ctx context.Context, sel ast.SelectionSet, obj *model.Kv) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, kVImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := make(map[string]*graphql.FieldSet)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("KV")
-		case "key":
-			out.Values[i] = ec._KV_key(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "value":
-			out.Values[i] = ec._KV_value(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
-
-	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
-			Label:    label,
-			Path:     graphql.GetPath(ctx),
-			FieldSet: dfs,
-			Context:  ctx,
-		})
-	}
-
-	return out
-}
 
 var mutationImplementors = []string{"Mutation"}
 
@@ -3377,13 +3077,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "createTrack":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createTrack(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "createKV":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createKV(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -3465,25 +3158,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx,
-					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "kv":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_kv(ctx, field)
 				return res
 			}
 
@@ -3606,6 +3280,11 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 			}
 		case "bio":
 			out.Values[i] = ec._User_bio(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "address":
+			out.Values[i] = ec._User_address(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -3986,20 +3665,6 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 		}
 	}
 	return res
-}
-
-func (ec *executionContext) marshalNKV2githubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐKv(ctx context.Context, sel ast.SelectionSet, v model.Kv) graphql.Marshaler {
-	return ec._KV(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNKV2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐKv(ctx context.Context, sel ast.SelectionSet, v *model.Kv) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._KV(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNNewTrack2githubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐNewTrack(ctx context.Context, v interface{}) (model.NewTrack, error) {
@@ -4420,21 +4085,6 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	}
 	res := graphql.MarshalBoolean(*v)
 	return res
-}
-
-func (ec *executionContext) marshalOKV2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐKv(ctx context.Context, sel ast.SelectionSet, v *model.Kv) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._KV(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalONewKV2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋportsᚋgraphᚋmodelᚐNewKv(ctx context.Context, v interface{}) (*model.NewKv, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := ec.unmarshalInputNewKV(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v interface{}) (*string, error) {

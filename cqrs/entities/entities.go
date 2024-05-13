@@ -1,30 +1,26 @@
 package entities
 
-import (
-	"github.com/google/uuid"
-)
-
 type UserEntity struct {
-	ID      uuid.UUID
+	ID      string
 	Handle  string
 	Address string
 	Bio     string
 }
 
 type TrackEntity struct {
-	ID          uuid.UUID
+	ID          string
 	Title       string
 	StreamURL   string
 	Description string
-	UserID      uuid.UUID
+	UserID      string
 }
 
 type FollowEntity struct {
-	FollowerID  uuid.UUID
-	FollowingID uuid.UUID
+	FollowerID  string
+	FollowingID string
 }
 
 type RepostEntity struct {
-	ReposterID uuid.UUID
-	TrackID    uuid.UUID
+	ReposterID string
+	TrackID    string
 }

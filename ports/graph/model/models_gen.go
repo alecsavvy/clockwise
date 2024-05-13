@@ -2,17 +2,7 @@
 
 package model
 
-type Kv struct {
-	Key   string `json:"key"`
-	Value string `json:"value"`
-}
-
 type Mutation struct {
-}
-
-type NewKv struct {
-	Key   string `json:"key"`
-	Value string `json:"value"`
 }
 
 type NewTrack struct {
@@ -23,8 +13,9 @@ type NewTrack struct {
 }
 
 type NewUser struct {
-	Handle string `json:"handle"`
-	Bio    string `json:"bio"`
+	Handle  string `json:"handle"`
+	Bio     string `json:"bio"`
+	Address string `json:"address"`
 }
 
 type Query struct {
@@ -39,7 +30,8 @@ type Track struct {
 }
 
 type User struct {
-	ID     string `json:"id"`
-	Handle string `json:"handle"`
-	Bio    string `json:"bio"`
+	ID      string `json:"id"`
+	Handle  string `json:"handle"`
+	Bio     string `json:"bio"`
+	Address string `json:"address"`
 }

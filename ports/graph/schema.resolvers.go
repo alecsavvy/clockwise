@@ -6,9 +6,9 @@ package graph
 
 import (
 	"context"
-	"fmt"
-	"time"
 
+	"github.com/alecsavvy/clockwise/cqrs/commands"
+	"github.com/alecsavvy/clockwise/cqrs/entities"
 	"github.com/alecsavvy/clockwise/ports/graph/model"
 	"github.com/alecsavvy/clockwise/utils"
 	"github.com/google/uuid"
@@ -16,12 +16,28 @@ import (
 
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
-	newUser := &model.User{
-		ID:     uuid.NewString(),
-		Handle: input.Handle,
-		Bio:    input.Bio,
+	us := r.userService
+
+	createUserCmd := &commands.CreateUserCommand{
+		ID:      uuid.NewString(),
+		Bio:     input.Bio,
+		Handle:  input.Handle,
+		Address: input.Address,
 	}
-	r.users = append(r.users, newUser)
+
+	event, err := us.CreateUser(createUserCmd)
+	if err != nil {
+		return nil, err
+	}
+
+	userEntity := event.User
+	newUser := &model.User{
+		ID:      userEntity.ID,
+		Handle:  userEntity.Handle,
+		Bio:     userEntity.Bio,
+		Address: userEntity.Address,
+	}
+
 	return newUser, nil
 }
 
@@ -38,59 +54,29 @@ func (r *mutationResolver) CreateTrack(ctx context.Context, input model.NewTrack
 	return newTrack, nil
 }
 
-// CreateKv is the resolver for the createKV field.
-func (r *mutationResolver) CreateKv(ctx context.Context, input *model.NewKv) (*model.Kv, error) {
-	cc := r.chainClient
-
-	kvPair := fmt.Sprintf("%s=%s", input.Key, input.Value)
-	txBytes := []byte(kvPair)
-
-	result, err := cc.BroadcastTxSync(ctx, txBytes)
-	if err != nil {
-		return nil, utils.AppError("failure to broadcast tx", err)
-	}
-
-	for {
-		_, err := cc.Tx(ctx, result.Hash, true)
-		if err != nil {
-			time.Sleep(100 * time.Millisecond)
-			continue
-		}
-		break
-	}
-
-	qResult, err := cc.ABCIQuery(ctx, "", []byte(input.Key))
-	if err != nil {
-		return nil, utils.AppError("could not query for kv pair", err)
-	}
-
-	key := qResult.Response.Key
-	value := qResult.Response.Value
-
-	return &model.Kv{Key: string(key), Value: string(value)}, nil
-}
-
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
-	return r.users, nil
+	us := r.userService
+
+	users, err := us.GetUsers()
+	if err != nil {
+		return nil, err
+	}
+
+	userModels := utils.Map(users, func(userEntity *entities.UserEntity) *model.User {
+		return &model.User{
+			ID:      userEntity.ID,
+			Handle:  userEntity.Handle,
+			Bio:     userEntity.Bio,
+			Address: userEntity.Address,
+		}
+	})
+	return userModels, nil
 }
 
 // Tracks is the resolver for the tracks field.
 func (r *queryResolver) Tracks(ctx context.Context) ([]*model.Track, error) {
 	return r.tracks, nil
-}
-
-// Kv is the resolver for the kv field.
-func (r *queryResolver) Kv(ctx context.Context, key string) (*model.Kv, error) {
-	cc := r.chainClient
-	qResult, err := cc.ABCIQuery(ctx, "", []byte(key))
-	if err != nil {
-		return nil, utils.AppError("could not query for kv pair", err)
-	}
-
-	value := qResult.Response.Value
-
-	return &model.Kv{Key: key, Value: string(value)}, nil
 }
 
 // Mutation returns MutationResolver implementation.

@@ -14,13 +14,13 @@ func ToTxBytes(tx interface{}) ([]byte, error) {
 	return txBytes, nil
 }
 
-func FromTxBytes(jsonBytes []byte) (interface{}, error) {
-	var result interface{}
+func FromTxBytes[T any](jsonBytes []byte) (*T, error) {
+	var result T
 
 	err := json.Unmarshal(jsonBytes, &result)
 	if err != nil {
 		return nil, err
 	}
 
-	return result, nil
+	return &result, nil
 }

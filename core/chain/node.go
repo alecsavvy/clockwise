@@ -2,28 +2,26 @@ package chain
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"os/signal"
-	"path/filepath"
 	"syscall"
 
+	"github.com/alecsavvy/clockwise/core/db"
 	"github.com/alecsavvy/clockwise/utils"
 	cfg "github.com/cometbft/cometbft/config"
 	nm "github.com/cometbft/cometbft/node"
 	"github.com/cometbft/cometbft/p2p"
 	"github.com/cometbft/cometbft/privval"
 	"github.com/cometbft/cometbft/proxy"
-	"github.com/dgraph-io/badger/v4"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/spf13/viper"
 )
 
 type Node struct {
 	node *nm.Node
-	abci *KVStoreApplication
 }
 
-func New(logger *utils.Logger, homeDir string) (*Node, error) {
+func New(logger *utils.Logger, homeDir string, pool *pgxpool.Pool) (*Node, error) {
 	config := cfg.DefaultConfig()
 	config.SetRoot(homeDir)
 	viper.SetConfigFile(fmt.Sprintf("%s/%s", homeDir, "config/config.toml"))
@@ -38,16 +36,9 @@ func New(logger *utils.Logger, homeDir string) (*Node, error) {
 		return nil, utils.AppError("Chain config validation", err)
 	}
 
-	dbPath := filepath.Join(homeDir, "badger")
-	dbOpts := badger.DefaultOptions(dbPath)
-	dbOpts.Logger = logger
-	db, err := badger.Open(dbOpts)
+	db := db.New(pool)
 
-	if err != nil {
-		return nil, utils.AppError("Opening database", err)
-	}
-
-	app := NewKVStoreApplication(logger, db)
+	app := NewApplication(logger, db, pool)
 
 	pv := privval.LoadFilePV(
 		config.PrivValidatorKeyFile(),
@@ -78,7 +69,6 @@ func New(logger *utils.Logger, homeDir string) (*Node, error) {
 
 	return &Node{
 		node: node,
-		abci: app,
 	}, nil
 }
 
@@ -88,14 +78,10 @@ func (n *Node) RPC() string {
 
 func (n *Node) Run() {
 	node := n.node
-	abci := n.abci
 
 	node.Start()
 
 	defer func() {
-		if err := abci.db.Close(); err != nil {
-			log.Printf("Closing database: %v", err)
-		}
 		node.Stop()
 		node.Wait()
 	}()

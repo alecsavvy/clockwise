@@ -17,6 +17,7 @@ type Command struct {
 
 type CreateUserCommand struct {
 	Command
+	ID      string
 	Handle  string
 	Address string
 	Bio     string

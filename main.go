@@ -8,7 +8,9 @@ import (
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/alecsavvy/clockwise/core/adapters"
 	"github.com/alecsavvy/clockwise/core/chain"
+	chainclient "github.com/alecsavvy/clockwise/core/chain_client"
 	"github.com/alecsavvy/clockwise/core/db"
 	"github.com/alecsavvy/clockwise/ports/graph"
 	"github.com/alecsavvy/clockwise/utils"
@@ -39,12 +41,12 @@ func run() error {
 	if err != nil {
 		return utils.AppError("failure to create db pool", err)
 	}
-
 	defer pool.Close()
-	_ = db.New(pool)
+
+	db := db.New(pool)
 
 	// chain setup
-	node, err := chain.New(logger, homeDir)
+	node, err := chain.New(logger, homeDir, pool)
 	if err != nil {
 		return utils.AppError("failure to init chain", err)
 	}
@@ -56,9 +58,13 @@ func run() error {
 		return utils.AppError("failure to init chain rpc", err)
 	}
 	client.SetLogger(logger)
+	chainClient := chainclient.New(logger, client)
+
+	// user repo setup
+	userRepo := adapters.NewUserRepo(logger, chainClient, db)
 
 	// graphql setup
-	gqlResolver := graph.NewResolver(logger, client)
+	gqlResolver := graph.NewResolver(logger, userRepo)
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: gqlResolver}))
 	queryHandler := func(c echo.Context) error {
 		srv.ServeHTTP(c.Response(), c.Request())

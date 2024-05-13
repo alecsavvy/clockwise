@@ -10,13 +10,20 @@ import (
 	"github.com/alecsavvy/clockwise/cqrs/events"
 	"github.com/alecsavvy/clockwise/cqrs/services"
 	"github.com/alecsavvy/clockwise/utils"
-	"github.com/google/uuid"
 )
 
 type UserRepository struct {
 	logger *utils.Logger
 	cc     *chainclient.ChainClient
 	db     *db.Queries
+}
+
+func NewUserRepo(logger *utils.Logger, cc *chainclient.ChainClient, db *db.Queries) *UserRepository {
+	return &UserRepository{
+		logger: logger,
+		cc:     cc,
+		db:     db,
+	}
 }
 
 func (ur *UserRepository) CreateUser(cmd *commands.CreateUserCommand) (*events.UserCreatedEvent, error) {
@@ -41,9 +48,9 @@ func (ur *UserRepository) CreateUser(cmd *commands.CreateUserCommand) (*events.U
 	}
 
 	userEntity := &entities.UserEntity{
-		ID:      uuid.UUID(user.ID.Bytes),
+		ID:      user.ID,
 		Handle:  user.Handle,
-		Bio:     user.Bio.String,
+		Bio:     user.Bio,
 		Address: user.Address,
 	}
 
@@ -62,22 +69,14 @@ func (ur *UserRepository) GetUsers() ([]*entities.UserEntity, error) {
 
 	userEntities := utils.Map(users, func(user db.User) *entities.UserEntity {
 		return &entities.UserEntity{
-			ID:      uuid.UUID(user.ID.Bytes),
+			ID:      user.ID,
 			Handle:  user.Handle,
-			Bio:     user.Bio.String,
+			Bio:     user.Bio,
 			Address: user.Address,
 		}
 	})
 
 	return userEntities, nil
-}
-
-func NewUserRepo(logger *utils.Logger, cc *chainclient.ChainClient, db *db.Queries) *UserRepository {
-	return &UserRepository{
-		logger: logger,
-		cc:     cc,
-		db:     db,
-	}
 }
 
 var _ services.UserService = (*UserRepository)(nil)

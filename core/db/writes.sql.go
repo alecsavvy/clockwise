@@ -7,8 +7,6 @@ package db
 
 import (
 	"context"
-
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createTrack = `-- name: CreateTrack :exec
@@ -17,11 +15,11 @@ values ($1, $2, $3, $4, $5)
 `
 
 type CreateTrackParams struct {
-	ID          pgtype.UUID
+	ID          string
 	Title       string
 	StreamUrl   string
-	Description pgtype.Text
-	UserID      pgtype.UUID
+	Description string
+	UserID      string
 }
 
 func (q *Queries) CreateTrack(ctx context.Context, arg CreateTrackParams) error {
@@ -36,17 +34,23 @@ func (q *Queries) CreateTrack(ctx context.Context, arg CreateTrackParams) error 
 }
 
 const createUser = `-- name: CreateUser :exec
-insert into users (id, handle, bio)
-values ($1, $2, $3)
+insert into users (id, handle, address, bio)
+values ($1, $2, $3, $4)
 `
 
 type CreateUserParams struct {
-	ID     pgtype.UUID
-	Handle string
-	Bio    pgtype.Text
+	ID      string
+	Handle  string
+	Address string
+	Bio     string
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) error {
-	_, err := q.db.Exec(ctx, createUser, arg.ID, arg.Handle, arg.Bio)
+	_, err := q.db.Exec(ctx, createUser,
+		arg.ID,
+		arg.Handle,
+		arg.Address,
+		arg.Bio,
+	)
 	return err
 }

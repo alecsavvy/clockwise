@@ -4,31 +4,27 @@
 
 package db
 
-import (
-	"github.com/jackc/pgx/v5/pgtype"
-)
-
 type Follow struct {
-	FollowerID  pgtype.UUID
-	FollowingID pgtype.UUID
+	FollowerID  string
+	FollowingID string
 }
 
 type Repost struct {
-	ReposterID pgtype.UUID
-	TrackID    pgtype.UUID
+	ReposterID string
+	TrackID    string
 }
 
 type Track struct {
-	ID          pgtype.UUID
+	ID          string
 	Title       string
 	StreamUrl   string
-	Description pgtype.Text
-	UserID      pgtype.UUID
+	Description string
+	UserID      string
 }
 
 type User struct {
-	ID      pgtype.UUID
+	ID      string
 	Handle  string
 	Address string
-	Bio     pgtype.Text
+	Bio     string
 }
