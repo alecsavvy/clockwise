@@ -42,7 +42,7 @@ func (ur *UserRepository) CreateUser(cmd *commands.CreateUserCommand) (*events.U
 	event.BlockHeight = uint64(res.Height)
 	event.TransactionHash = string(res.Hash)
 
-	user, err := db.GetUserByHandle(ctx, cmd.Handle)
+	user, err := db.GetUserByHandle(ctx, cmd.Data.Handle)
 	if err != nil {
 		return nil, err
 	}

@@ -13,6 +13,7 @@ import (
 
 // Prepares a new block proposal for the network
 func (a *Application) PrepareProposal(_ context.Context, proposal *abcitypes.RequestPrepareProposal) (*abcitypes.ResponsePrepareProposal, error) {
+	// TODO: reorder transactions in here
 	return &abcitypes.ResponsePrepareProposal{Txs: proposal.Txs}, nil
 }
 

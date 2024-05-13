@@ -19,12 +19,12 @@ import (
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
 	us := r.userService
 
-	createUserCmd := &commands.CreateUserCommand{
+	createUserCmd := commands.NewCommand(commands.USER, commands.CREATE, commands.CreateUser{
 		ID:      uuid.NewString(),
 		Bio:     input.Bio,
 		Handle:  input.Handle,
 		Address: input.Address,
-	}
+	})
 
 	event, err := us.CreateUser(createUserCmd)
 	if err != nil {
