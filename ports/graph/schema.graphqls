@@ -13,9 +13,16 @@ type Track {
   userId: String!
 }
 
-type Query {
-  users: [User!]!
-  tracks: [Track!]!
+type Follow {
+  id: ID!
+  followerId: String!
+  followingId: String!
+}
+
+type Repost {
+  id: ID!
+  reposterId: String!
+  trackId: String!
 }
 
 input NewTrack {
@@ -31,12 +38,34 @@ input NewUser {
   address: String!
 }
 
+input UpdateUser {
+  bio: String
+  address: String
+}
+
+input UpdateTrack {
+  streamUrl: String
+  description: String
+}
+
+type Query {
+  users: [User!]!
+  tracks: [Track!]!
+  follows: [Follow]!
+  reposts: [Repost]!
+}
+
 type Mutation {
   createUser(input: NewUser!): User!
   createTrack(input: NewTrack!): Track!
+  updateUser(input: UpdateUser!): User!
+  updateTrack(input: UpdateTrack!): Track!
 }
 
+union UserEvents = User | Track | Follow | Repost
+union TrackEvents = Track | Repost
+
 type Subscription {
-  newUser: User!
-  newTrack: Track!
+  userEvents(userId: String!): UserEvents!
+  trackEvents(trackId: String!): TrackEvents!
 }

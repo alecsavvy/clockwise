@@ -2,6 +2,22 @@
 
 package model
 
+type TrackEvents interface {
+	IsTrackEvents()
+}
+
+type UserEvents interface {
+	IsUserEvents()
+}
+
+type Follow struct {
+	ID          string `json:"id"`
+	FollowerID  string `json:"followerId"`
+	FollowingID string `json:"followingId"`
+}
+
+func (Follow) IsUserEvents() {}
+
 type Mutation struct {
 }
 
@@ -21,6 +37,16 @@ type NewUser struct {
 type Query struct {
 }
 
+type Repost struct {
+	ID         string `json:"id"`
+	ReposterID string `json:"reposterId"`
+	TrackID    string `json:"trackId"`
+}
+
+func (Repost) IsUserEvents() {}
+
+func (Repost) IsTrackEvents() {}
+
 type Subscription struct {
 }
 
@@ -32,9 +58,25 @@ type Track struct {
 	UserID      string `json:"userId"`
 }
 
+func (Track) IsUserEvents() {}
+
+func (Track) IsTrackEvents() {}
+
+type UpdateTrack struct {
+	StreamURL   *string `json:"streamUrl,omitempty"`
+	Description *string `json:"description,omitempty"`
+}
+
+type UpdateUser struct {
+	Bio     *string `json:"bio,omitempty"`
+	Address *string `json:"address,omitempty"`
+}
+
 type User struct {
 	ID      string `json:"id"`
 	Handle  string `json:"handle"`
 	Bio     string `json:"bio"`
 	Address string `json:"address"`
 }
+
+func (User) IsUserEvents() {}

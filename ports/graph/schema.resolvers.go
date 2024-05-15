@@ -55,6 +55,16 @@ func (r *mutationResolver) CreateTrack(ctx context.Context, input model.NewTrack
 	return newTrack, nil
 }
 
+// UpdateUser is the resolver for the updateUser field.
+func (r *mutationResolver) UpdateUser(ctx context.Context, input model.UpdateUser) (*model.User, error) {
+	panic(fmt.Errorf("not implemented: UpdateUser - updateUser"))
+}
+
+// UpdateTrack is the resolver for the updateTrack field.
+func (r *mutationResolver) UpdateTrack(ctx context.Context, input model.UpdateTrack) (*model.Track, error) {
+	panic(fmt.Errorf("not implemented: UpdateTrack - updateTrack"))
+}
+
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 	us := r.userService
@@ -80,14 +90,24 @@ func (r *queryResolver) Tracks(ctx context.Context) ([]*model.Track, error) {
 	return r.tracks, nil
 }
 
-// NewUser is the resolver for the newUser field.
-func (r *subscriptionResolver) NewUser(ctx context.Context) (<-chan *model.User, error) {
-	panic(fmt.Errorf("not implemented: NewUser - newUser"))
+// Follows is the resolver for the follows field.
+func (r *queryResolver) Follows(ctx context.Context) ([]*model.Follow, error) {
+	panic(fmt.Errorf("not implemented: Follows - follows"))
 }
 
-// NewTrack is the resolver for the newTrack field.
-func (r *subscriptionResolver) NewTrack(ctx context.Context) (<-chan *model.Track, error) {
-	panic(fmt.Errorf("not implemented: NewTrack - newTrack"))
+// Reposts is the resolver for the reposts field.
+func (r *queryResolver) Reposts(ctx context.Context) ([]*model.Repost, error) {
+	panic(fmt.Errorf("not implemented: Reposts - reposts"))
+}
+
+// UserEvents is the resolver for the userEvents field.
+func (r *subscriptionResolver) UserEvents(ctx context.Context, userID string) (<-chan model.UserEvents, error) {
+	panic(fmt.Errorf("not implemented: UserEvents - userEvents"))
+}
+
+// TrackEvents is the resolver for the trackEvents field.
+func (r *subscriptionResolver) TrackEvents(ctx context.Context, trackID string) (<-chan model.TrackEvents, error) {
+	panic(fmt.Errorf("not implemented: TrackEvents - trackEvents"))
 }
 
 // Mutation returns MutationResolver implementation.
@@ -102,3 +122,16 @@ func (r *Resolver) Subscription() SubscriptionResolver { return &subscriptionRes
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
 type subscriptionResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//     it when you're done.
+//   - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *subscriptionResolver) NewUser(ctx context.Context) (<-chan *model.User, error) {
+	panic(fmt.Errorf("not implemented: NewUser - newUser"))
+}
+func (r *subscriptionResolver) NewTrack(ctx context.Context) (<-chan *model.Track, error) {
+	panic(fmt.Errorf("not implemented: NewTrack - newTrack"))
+}
