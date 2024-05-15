@@ -21,6 +21,16 @@ func (Follow) IsUserEvents() {}
 type Mutation struct {
 }
 
+type NewFollow struct {
+	FollowerID  string `json:"followerId"`
+	FollowingID string `json:"followingId"`
+}
+
+type NewRepost struct {
+	ReposterID string `json:"reposterId"`
+	TrackID    string `json:"trackId"`
+}
+
 type NewTrack struct {
 	Title       string `json:"title"`
 	StreamURL   string `json:"streamUrl"`

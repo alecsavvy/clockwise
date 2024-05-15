@@ -65,6 +65,26 @@ func (r *mutationResolver) UpdateTrack(ctx context.Context, input model.UpdateTr
 	panic(fmt.Errorf("not implemented: UpdateTrack - updateTrack"))
 }
 
+// Follow is the resolver for the follow field.
+func (r *mutationResolver) Follow(ctx context.Context, input model.NewFollow) (*model.Follow, error) {
+	panic(fmt.Errorf("not implemented: Follow - follow"))
+}
+
+// Repost is the resolver for the repost field.
+func (r *mutationResolver) Repost(ctx context.Context, input model.NewRepost) (*model.Repost, error) {
+	panic(fmt.Errorf("not implemented: Repost - repost"))
+}
+
+// Unfollow is the resolver for the unfollow field.
+func (r *mutationResolver) Unfollow(ctx context.Context, followID string) (string, error) {
+	panic(fmt.Errorf("not implemented: Unfollow - unfollow"))
+}
+
+// Unrepost is the resolver for the unrepost field.
+func (r *mutationResolver) Unrepost(ctx context.Context, repostID string) (string, error) {
+	panic(fmt.Errorf("not implemented: Unrepost - unrepost"))
+}
+
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 	us := r.userService

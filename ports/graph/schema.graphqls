@@ -48,6 +48,16 @@ input UpdateTrack {
   description: String
 }
 
+input NewFollow {
+  followerId: String!
+  followingId: String!
+}
+
+input NewRepost {
+  reposterId: String!
+  trackId: String!
+}
+
 type Query {
   users: [User!]!
   tracks: [Track!]!
@@ -63,6 +73,10 @@ type Mutation {
   createTrack(input: NewTrack!): Track!
   updateUser(input: UpdateUser!): User!
   updateTrack(input: UpdateTrack!): Track!
+  follow(input: NewFollow!): Follow!
+  repost(input: NewRepost!): Repost!
+  unfollow(followId: String!): ID!
+  unrepost(repostId: String!): ID!
 }
 
 union UserEvents = User | Track | Follow | Repost
