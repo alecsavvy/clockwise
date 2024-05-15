@@ -4,14 +4,24 @@
 
 package db
 
+type Block struct {
+	ID          string
+	Blocknumber int32
+	Blockhash   string
+}
+
 type Follow struct {
+	ID          string
 	FollowerID  string
 	FollowingID string
+	CreatedAt   int32
 }
 
 type Repost struct {
+	ID         string
 	ReposterID string
 	TrackID    string
+	CreatedAt  int32
 }
 
 type Track struct {
@@ -20,11 +30,13 @@ type Track struct {
 	StreamUrl   string
 	Description string
 	UserID      string
+	CreatedAt   int32
 }
 
 type User struct {
-	ID      string
-	Handle  string
-	Address string
-	Bio     string
+	ID        string
+	Handle    string
+	Address   string
+	Bio       string
+	CreatedAt int32
 }

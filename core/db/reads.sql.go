@@ -9,28 +9,91 @@ import (
 	"context"
 )
 
-const getFollowersByHandle = `-- name: GetFollowersByHandle :many
-select u2.id, u2.handle, u2.address, u2.bio
-from users u1
-    join follows f on u1.id = f.following_id
-    join users u2 on f.follower_id = u2.id
-where u1.handle = $1
+const getFollowers = `-- name: GetFollowers :many
+select id, follower_id, following_id, created_at
+from follows
+where follower_id = $1
+order by created_at
 `
 
-func (q *Queries) GetFollowersByHandle(ctx context.Context, handle string) ([]User, error) {
-	rows, err := q.db.Query(ctx, getFollowersByHandle, handle)
+func (q *Queries) GetFollowers(ctx context.Context, followerID string) ([]Follow, error) {
+	rows, err := q.db.Query(ctx, getFollowers, followerID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []User
+	var items []Follow
 	for rows.Next() {
-		var i User
+		var i Follow
 		if err := rows.Scan(
 			&i.ID,
-			&i.Handle,
-			&i.Address,
-			&i.Bio,
+			&i.FollowerID,
+			&i.FollowingID,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getFollowing = `-- name: GetFollowing :many
+select id, follower_id, following_id, created_at
+from follows
+where following_id = $1
+order by created_at
+`
+
+func (q *Queries) GetFollowing(ctx context.Context, followingID string) ([]Follow, error) {
+	rows, err := q.db.Query(ctx, getFollowing, followingID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Follow
+	for rows.Next() {
+		var i Follow
+		if err := rows.Scan(
+			&i.ID,
+			&i.FollowerID,
+			&i.FollowingID,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getTrackReposts = `-- name: GetTrackReposts :many
+select id, reposter_id, track_id, created_at
+from reposts
+where track_id = $1
+order by created_at
+`
+
+func (q *Queries) GetTrackReposts(ctx context.Context, trackID string) ([]Repost, error) {
+	rows, err := q.db.Query(ctx, getTrackReposts, trackID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Repost
+	for rows.Next() {
+		var i Repost
+		if err := rows.Scan(
+			&i.ID,
+			&i.ReposterID,
+			&i.TrackID,
+			&i.CreatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -43,9 +106,9 @@ func (q *Queries) GetFollowersByHandle(ctx context.Context, handle string) ([]Us
 }
 
 const getTracks = `-- name: GetTracks :many
-select id, title, stream_url, description, user_id
+select id, title, stream_url, description, user_id, created_at
 from tracks
-order by title
+order by created_at
 `
 
 func (q *Queries) GetTracks(ctx context.Context) ([]Track, error) {
@@ -63,6 +126,7 @@ func (q *Queries) GetTracks(ctx context.Context) ([]Track, error) {
 			&i.StreamUrl,
 			&i.Description,
 			&i.UserID,
+			&i.CreatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -75,7 +139,7 @@ func (q *Queries) GetTracks(ctx context.Context) ([]Track, error) {
 }
 
 const getUserByHandle = `-- name: GetUserByHandle :one
-select id, handle, address, bio
+select id, handle, address, bio, created_at
 from users
 where handle = $1
 limit 1
@@ -89,14 +153,15 @@ func (q *Queries) GetUserByHandle(ctx context.Context, handle string) (User, err
 		&i.Handle,
 		&i.Address,
 		&i.Bio,
+		&i.CreatedAt,
 	)
 	return i, err
 }
 
 const getUsers = `-- name: GetUsers :many
-select id, handle, address, bio
+select id, handle, address, bio, created_at
 from users
-order by handle
+order by created_at
 `
 
 func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
@@ -113,6 +178,7 @@ func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
 			&i.Handle,
 			&i.Address,
 			&i.Bio,
+			&i.CreatedAt,
 		); err != nil {
 			return nil, err
 		}

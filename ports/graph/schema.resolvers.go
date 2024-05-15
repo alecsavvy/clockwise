@@ -90,13 +90,28 @@ func (r *queryResolver) Tracks(ctx context.Context) ([]*model.Track, error) {
 	return r.tracks, nil
 }
 
-// Follows is the resolver for the follows field.
-func (r *queryResolver) Follows(ctx context.Context) ([]*model.Follow, error) {
-	panic(fmt.Errorf("not implemented: Follows - follows"))
+// User is the resolver for the user field.
+func (r *queryResolver) User(ctx context.Context, userID string) (*model.User, error) {
+	panic(fmt.Errorf("not implemented: User - user"))
+}
+
+// Track is the resolver for the track field.
+func (r *queryResolver) Track(ctx context.Context, trackID string) (*model.Track, error) {
+	panic(fmt.Errorf("not implemented: Track - track"))
+}
+
+// Followers is the resolver for the followers field.
+func (r *queryResolver) Followers(ctx context.Context, userID string) ([]*model.Follow, error) {
+	panic(fmt.Errorf("not implemented: Followers - followers"))
+}
+
+// Following is the resolver for the following field.
+func (r *queryResolver) Following(ctx context.Context, userID string) ([]*model.Follow, error) {
+	panic(fmt.Errorf("not implemented: Following - following"))
 }
 
 // Reposts is the resolver for the reposts field.
-func (r *queryResolver) Reposts(ctx context.Context) ([]*model.Repost, error) {
+func (r *queryResolver) Reposts(ctx context.Context, trackID string) ([]*model.Repost, error) {
 	panic(fmt.Errorf("not implemented: Reposts - reposts"))
 }
 
@@ -129,6 +144,9 @@ type subscriptionResolver struct{ *Resolver }
 //   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //     it when you're done.
 //   - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *queryResolver) Follows(ctx context.Context) ([]*model.Follow, error) {
+	panic(fmt.Errorf("not implemented: Follows - follows"))
+}
 func (r *subscriptionResolver) NewUser(ctx context.Context) (<-chan *model.User, error) {
 	panic(fmt.Errorf("not implemented: NewUser - newUser"))
 }

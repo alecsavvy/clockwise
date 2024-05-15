@@ -9,6 +9,38 @@ import (
 	"context"
 )
 
+const createFollow = `-- name: CreateFollow :exec
+insert into follows (id, follower_id, following_id)
+values ($1, $2, $3)
+`
+
+type CreateFollowParams struct {
+	ID          string
+	FollowerID  string
+	FollowingID string
+}
+
+func (q *Queries) CreateFollow(ctx context.Context, arg CreateFollowParams) error {
+	_, err := q.db.Exec(ctx, createFollow, arg.ID, arg.FollowerID, arg.FollowingID)
+	return err
+}
+
+const createRepost = `-- name: CreateRepost :exec
+insert into reposts (id, reposter_id, track_id)
+values ($1, $2, $3)
+`
+
+type CreateRepostParams struct {
+	ID         string
+	ReposterID string
+	TrackID    string
+}
+
+func (q *Queries) CreateRepost(ctx context.Context, arg CreateRepostParams) error {
+	_, err := q.db.Exec(ctx, createRepost, arg.ID, arg.ReposterID, arg.TrackID)
+	return err
+}
+
 const createTrack = `-- name: CreateTrack :exec
 insert into tracks (id, title, stream_url, description, user_id)
 values ($1, $2, $3, $4, $5)
@@ -52,5 +84,25 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) error {
 		arg.Address,
 		arg.Bio,
 	)
+	return err
+}
+
+const deleteFollow = `-- name: DeleteFollow :exec
+delete from follows
+where id = $1
+`
+
+func (q *Queries) DeleteFollow(ctx context.Context, id string) error {
+	_, err := q.db.Exec(ctx, deleteFollow, id)
+	return err
+}
+
+const deleteRepost = `-- name: DeleteRepost :exec
+delete from reposts
+where id = $1
+`
+
+func (q *Queries) DeleteRepost(ctx context.Context, id string) error {
+	_, err := q.db.Exec(ctx, deleteRepost, id)
 	return err
 }

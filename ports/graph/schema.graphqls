@@ -51,8 +51,11 @@ input UpdateTrack {
 type Query {
   users: [User!]!
   tracks: [Track!]!
-  follows: [Follow]!
-  reposts: [Repost]!
+  user(userId: String!): User!
+  track(trackId: String!): Track!
+  followers(userId: String!): [Follow]!
+  following(userId: String!): [Follow]!
+  reposts(trackId: String!): [Repost]!
 }
 
 type Mutation {
