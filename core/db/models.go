@@ -29,6 +29,7 @@ type Track struct {
 	Title       string
 	StreamUrl   string
 	Description string
+	Genre       string
 	UserID      string
 	CreatedAt   int32
 }

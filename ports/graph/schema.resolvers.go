@@ -145,6 +145,11 @@ func (r *subscriptionResolver) TrackEvents(ctx context.Context, trackID string) 
 	panic(fmt.Errorf("not implemented: TrackEvents - trackEvents"))
 }
 
+// GenreEvents is the resolver for the genreEvents field.
+func (r *subscriptionResolver) GenreEvents(ctx context.Context, genre string) (<-chan model.TrackEvents, error) {
+	panic(fmt.Errorf("not implemented: GenreEvents - genreEvents"))
+}
+
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 

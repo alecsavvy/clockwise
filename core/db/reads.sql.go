@@ -106,7 +106,7 @@ func (q *Queries) GetTrackReposts(ctx context.Context, trackID string) ([]Repost
 }
 
 const getTracks = `-- name: GetTracks :many
-select id, title, stream_url, description, user_id, created_at
+select id, title, stream_url, description, genre, user_id, created_at
 from tracks
 order by created_at
 `
@@ -125,6 +125,7 @@ func (q *Queries) GetTracks(ctx context.Context) ([]Track, error) {
 			&i.Title,
 			&i.StreamUrl,
 			&i.Description,
+			&i.Genre,
 			&i.UserID,
 			&i.CreatedAt,
 		); err != nil {

@@ -13,6 +13,7 @@ create table tracks (
     title text not null,
     stream_url text not null,
     description text not null,
+    genre text not null,
     user_id text not null,
     foreign key (user_id) references users (id) on delete cascade,
     created_at int not null,

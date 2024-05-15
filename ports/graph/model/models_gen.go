@@ -63,6 +63,7 @@ type Subscription struct {
 type Track struct {
 	ID          string `json:"id"`
 	Title       string `json:"title"`
+	Genre       string `json:"genre"`
 	StreamURL   string `json:"streamUrl"`
 	Description string `json:"description"`
 	UserID      string `json:"userId"`

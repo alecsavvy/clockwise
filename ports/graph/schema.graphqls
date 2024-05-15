@@ -8,6 +8,7 @@ type User {
 type Track {
   id: ID!
   title: String!
+  genre: String!
   streamUrl: String!
   description: String!
   userId: String!
@@ -85,4 +86,5 @@ union TrackEvents = Track | Repost
 type Subscription {
   userEvents(userId: String!): UserEvents!
   trackEvents(trackId: String!): TrackEvents!
+  genreEvents(genre: String!): TrackEvents!
 }
