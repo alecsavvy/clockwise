@@ -18,6 +18,31 @@ type UserRepository struct {
 	db     *db.Queries
 }
 
+// FollowUser implements services.UserService.
+func (ur *UserRepository) FollowUser(*commands.Command[commands.CreateFollow]) (*events.FollowCreatedEvent, error) {
+	panic("unimplemented")
+}
+
+// GetUserFollowers implements services.UserService.
+func (ur *UserRepository) GetUserFollowers(userId string) ([]*entities.FollowEntity, error) {
+	panic("unimplemented")
+}
+
+// GetUserFollowing implements services.UserService.
+func (ur *UserRepository) GetUserFollowing(userId string) ([]*entities.FollowEntity, error) {
+	panic("unimplemented")
+}
+
+// GetUserReposts implements services.UserService.
+func (ur *UserRepository) GetUserReposts(userId string) ([]*entities.RepostEntity, error) {
+	panic("unimplemented")
+}
+
+// UnfollowUser implements services.UserService.
+func (ur *UserRepository) UnfollowUser(followId string) (string, error) {
+	panic("unimplemented")
+}
+
 func NewUserRepo(logger *utils.Logger, cc *chainclient.ChainClient, db *db.Queries) *UserRepository {
 	return &UserRepository{
 		logger: logger,
@@ -67,16 +92,7 @@ func (ur *UserRepository) GetUsers() ([]*entities.UserEntity, error) {
 		return nil, err
 	}
 
-	userEntities := utils.Map(users, func(user db.User) *entities.UserEntity {
-		return &entities.UserEntity{
-			ID:      user.ID,
-			Handle:  user.Handle,
-			Bio:     user.Bio,
-			Address: user.Address,
-		}
-	})
-
-	return userEntities, nil
+	return userModelsToEntities(users), nil
 }
 
 var _ services.UserService = (*UserRepository)(nil)

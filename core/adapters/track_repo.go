@@ -18,6 +18,24 @@ type TrackRepository struct {
 	db     *db.Queries
 }
 
+// GetTrackReposts implements services.TrackService.
+func (t *TrackRepository) GetTrackReposts(trackId string) ([]*entities.RepostEntity, error) {
+	ctx := context.Background()
+	db := t.db
+
+	reposts, err := db.GetTrackReposts(ctx, trackId)
+	if err != nil {
+		return nil, utils.AppError("could not get track reposts", err)
+	}
+
+	return repostModelsToEntities(reposts), nil
+}
+
+// RepostTrack implements services.TrackService.
+func (t *TrackRepository) RepostTrack(*commands.Command[commands.CreateRepost]) (*events.RepostCreatedEvent, error) {
+	panic("unimplemented")
+}
+
 // CreateTrack implements services.TrackService.
 func (t *TrackRepository) CreateTrack(*commands.CreateTrackCommand) (*events.TrackCreatedEvent, error) {
 	panic("unimplemented")
@@ -32,17 +50,7 @@ func (t *TrackRepository) GetTracks() ([]*entities.TrackEntity, error) {
 		return nil, err
 	}
 
-	trackEntities := utils.Map(tracks, func(track db.Track) *entities.TrackEntity {
-		return &entities.TrackEntity{
-			ID:          track.ID,
-			Title:       track.Title,
-			StreamURL:   track.StreamUrl,
-			Description: track.Description,
-			UserID:      track.UserID,
-		}
-	})
-
-	return trackEntities, nil
+	return trackModelsToEntities(tracks), nil
 }
 
 var _ services.TrackService = (*TrackRepository)(nil)

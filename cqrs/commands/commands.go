@@ -8,6 +8,7 @@ type CommandType = string
 var (
 	CREATE = "Create"
 	UPDATE = "Update"
+	DELETE = "Delete"
 )
 
 // command entities
