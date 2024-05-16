@@ -37,3 +37,9 @@ select *
 from reposts
 where reposter_id = $1
 order by created_at;
+
+-- name: GetTrackByTitle :one
+select *
+from tracks
+where title = $1
+limit 1;

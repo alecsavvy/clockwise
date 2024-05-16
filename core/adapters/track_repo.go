@@ -37,8 +37,39 @@ func (t *TrackRepository) RepostTrack(*commands.Command[commands.CreateRepost]) 
 }
 
 // CreateTrack implements services.TrackService.
-func (t *TrackRepository) CreateTrack(*commands.CreateTrackCommand) (*events.TrackCreatedEvent, error) {
-	panic("unimplemented")
+func (t *TrackRepository) CreateTrack(cmd *commands.CreateTrackCommand) (*events.TrackCreatedEvent, error) {
+	ctx := context.Background()
+	cc := t.cc
+	db := t.db
+
+	// submit command to chain
+	res, err := cc.Send(cmd)
+	if err != nil {
+		return nil, err
+	}
+
+	// construct event
+	var event events.TrackCreatedEvent
+	event.BlockHeight = uint64(res.Height)
+	event.TransactionHash = string(res.Hash)
+
+	track, err := db.GetTrackByTitle(ctx, cmd.Data.Title)
+	if err != nil {
+		return nil, err
+	}
+
+	trackEntity := &entities.TrackEntity{
+		ID:          track.ID,
+		Title:       track.Title,
+		UserID:      track.UserID,
+		Description: track.Description,
+		Genre:       track.Genre,
+		StreamURL:   track.StreamUrl,
+	}
+
+	event.Track = *trackEntity
+
+	return &event, nil
 }
 
 // GetTracks implements services.TrackService.
