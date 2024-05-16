@@ -39,3 +39,13 @@ func userModelsToEntities(models []db.User) []*entities.UserEntity {
 		}
 	})
 }
+
+func followModelsToEntities(models []db.Follow) []*entities.FollowEntity {
+	return utils.Map(models, func(follow db.Follow) *entities.FollowEntity {
+		return &entities.FollowEntity{
+			ID:          follow.ID,
+			FollowerID:  follow.FollowerID,
+			FollowingID: follow.FollowingID,
+		}
+	})
+}

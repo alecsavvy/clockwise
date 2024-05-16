@@ -31,3 +31,9 @@ select *
 from reposts
 where track_id = $1
 order by created_at;
+
+-- name: GetUserReposts :many
+select *
+from reposts
+where reposter_id = $1
+order by created_at;

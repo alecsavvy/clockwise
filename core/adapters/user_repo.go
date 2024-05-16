@@ -25,17 +25,42 @@ func (ur *UserRepository) FollowUser(*commands.Command[commands.CreateFollow]) (
 
 // GetUserFollowers implements services.UserService.
 func (ur *UserRepository) GetUserFollowers(userId string) ([]*entities.FollowEntity, error) {
-	panic("unimplemented")
+	ctx := context.Background()
+	db := ur.db
+
+	follows, err := db.GetFollowers(ctx, userId)
+	if err != nil {
+		return nil, err
+	}
+
+	return followModelsToEntities(follows), nil
 }
 
 // GetUserFollowing implements services.UserService.
 func (ur *UserRepository) GetUserFollowing(userId string) ([]*entities.FollowEntity, error) {
-	panic("unimplemented")
+	ctx := context.Background()
+	db := ur.db
+
+	follows, err := db.GetFollowing(ctx, userId)
+	if err != nil {
+		return nil, err
+	}
+
+	return followModelsToEntities(follows), nil
 }
 
 // GetUserReposts implements services.UserService.
 func (ur *UserRepository) GetUserReposts(userId string) ([]*entities.RepostEntity, error) {
-	panic("unimplemented")
+	ctx := context.Background()
+	db := ur.db
+
+	reposts, err := db.GetUserReposts(ctx, userId)
+	if err != nil {
+		return nil, err
+	}
+
+	return repostModelsToEntities(reposts), nil
+
 }
 
 // UnfollowUser implements services.UserService.
