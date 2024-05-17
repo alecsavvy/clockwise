@@ -10,24 +10,23 @@ import (
 )
 
 const createBlock = `-- name: CreateBlock :exec
-insert into blocks (id, blocknumber, blockhash)
-values ($1, $2, $3)
+insert into blocks (blocknumber, blockhash)
+values ($1, $2)
 `
 
 type CreateBlockParams struct {
-	ID          string
 	Blocknumber int32
-	Blockhash   string
+	Blockhash   []byte
 }
 
 func (q *Queries) CreateBlock(ctx context.Context, arg CreateBlockParams) error {
-	_, err := q.db.Exec(ctx, createBlock, arg.ID, arg.Blocknumber, arg.Blockhash)
+	_, err := q.db.Exec(ctx, createBlock, arg.Blocknumber, arg.Blockhash)
 	return err
 }
 
 const createFollow = `-- name: CreateFollow :exec
-insert into follows (id, follower_id, following_id)
-values ($1, $2, $3)
+insert into follows (id, follower_id, following_id, created_at)
+values ($1, $2, $3, & 4)
 `
 
 type CreateFollowParams struct {
@@ -42,18 +41,24 @@ func (q *Queries) CreateFollow(ctx context.Context, arg CreateFollowParams) erro
 }
 
 const createRepost = `-- name: CreateRepost :exec
-insert into reposts (id, reposter_id, track_id)
-values ($1, $2, $3)
+insert into reposts (id, reposter_id, track_id, created_at)
+values ($1, $2, $3, $4)
 `
 
 type CreateRepostParams struct {
 	ID         string
 	ReposterID string
 	TrackID    string
+	CreatedAt  int32
 }
 
 func (q *Queries) CreateRepost(ctx context.Context, arg CreateRepostParams) error {
-	_, err := q.db.Exec(ctx, createRepost, arg.ID, arg.ReposterID, arg.TrackID)
+	_, err := q.db.Exec(ctx, createRepost,
+		arg.ID,
+		arg.ReposterID,
+		arg.TrackID,
+		arg.CreatedAt,
+	)
 	return err
 }
 
@@ -64,9 +69,10 @@ insert into tracks (
         genre,
         stream_url,
         description,
-        user_id
+        user_id,
+        created_at
     )
-values ($1, $2, $3, $4, $5, $6)
+values ($1, $2, $3, $4, $5, $6, $7)
 `
 
 type CreateTrackParams struct {
@@ -76,6 +82,7 @@ type CreateTrackParams struct {
 	StreamUrl   string
 	Description string
 	UserID      string
+	CreatedAt   int32
 }
 
 func (q *Queries) CreateTrack(ctx context.Context, arg CreateTrackParams) error {
@@ -86,20 +93,22 @@ func (q *Queries) CreateTrack(ctx context.Context, arg CreateTrackParams) error 
 		arg.StreamUrl,
 		arg.Description,
 		arg.UserID,
+		arg.CreatedAt,
 	)
 	return err
 }
 
 const createUser = `-- name: CreateUser :exec
-insert into users (id, handle, address, bio)
-values ($1, $2, $3, $4)
+insert into users (id, handle, address, bio, created_at)
+values ($1, $2, $3, $4, $5)
 `
 
 type CreateUserParams struct {
-	ID      string
-	Handle  string
-	Address string
-	Bio     string
+	ID        string
+	Handle    string
+	Address   string
+	Bio       string
+	CreatedAt int32
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) error {
@@ -108,6 +117,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) error {
 		arg.Handle,
 		arg.Address,
 		arg.Bio,
+		arg.CreatedAt,
 	)
 	return err
 }

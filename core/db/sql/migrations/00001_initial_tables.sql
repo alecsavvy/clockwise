@@ -1,8 +1,7 @@
 -- +migrate Up
 create table blocks (
-    id text primary key,
     blocknumber int not null unique,
-    blockhash text not null unique
+    blockhash bytea not null unique
 );
 
 create table users (

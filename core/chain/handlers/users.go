@@ -11,7 +11,7 @@ import (
 	abcitypes "github.com/cometbft/cometbft/abci/types"
 )
 
-func HandleCreateUser(qtx *db.Queries, b []byte) (*abcitypes.ExecTxResult, error) {
+func HandleCreateUser(qtx *db.Queries, createdAt int32, b []byte) (*abcitypes.ExecTxResult, error) {
 	ctx := context.Background()
 
 	cmd, err := chainutils.FromTxBytes[commands.CreateUserCommand](b)
@@ -22,10 +22,11 @@ func HandleCreateUser(qtx *db.Queries, b []byte) (*abcitypes.ExecTxResult, error
 	user := cmd.Data
 
 	err = qtx.CreateUser(ctx, db.CreateUserParams{
-		ID:      user.ID,
-		Handle:  user.Handle,
-		Bio:     user.Bio,
-		Address: user.Address,
+		ID:        user.ID,
+		Handle:    user.Handle,
+		Bio:       user.Bio,
+		Address:   user.Address,
+		CreatedAt: createdAt,
 	})
 
 	if err != nil {

@@ -5,9 +5,8 @@
 package db
 
 type Block struct {
-	ID          string
 	Blocknumber int32
-	Blockhash   string
+	Blockhash   []byte
 }
 
 type Follow struct {

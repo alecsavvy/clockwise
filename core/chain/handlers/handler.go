@@ -10,7 +10,7 @@ import (
 
 // handles safe processing of cqrs commands and emits events on successful processing
 // if a transaction gets here and fails it will be dropped instead of erroring
-func RootHandler(qtx *db.Queries, txs [][]byte) ([]*abcitypes.ExecTxResult, error) {
+func RootHandler(qtx *db.Queries, createdAt int32, txs [][]byte) ([]*abcitypes.ExecTxResult, error) {
 	var txResults = make([]*abcitypes.ExecTxResult, len(txs))
 
 	if len(txs) <= 0 {
@@ -28,7 +28,7 @@ func RootHandler(qtx *db.Queries, txs [][]byte) ([]*abcitypes.ExecTxResult, erro
 
 		switch operation {
 		case commands.Operation{Action: commands.CREATE, Entity: commands.USER}:
-			txResult, err := HandleCreateUser(qtx, tx)
+			txResult, err := HandleCreateUser(qtx, createdAt, tx)
 			if err != nil {
 				return nil, utils.AppError("cannot handle create user", err)
 			}
