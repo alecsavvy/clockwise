@@ -15,7 +15,7 @@ values ($1, $2)
 `
 
 type CreateBlockParams struct {
-	Blocknumber int32
+	Blocknumber int64
 	Blockhash   []byte
 }
 
@@ -49,7 +49,7 @@ type CreateRepostParams struct {
 	ID         string
 	ReposterID string
 	TrackID    string
-	CreatedAt  int32
+	CreatedAt  int64
 }
 
 func (q *Queries) CreateRepost(ctx context.Context, arg CreateRepostParams) error {
@@ -82,7 +82,7 @@ type CreateTrackParams struct {
 	StreamUrl   string
 	Description string
 	UserID      string
-	CreatedAt   int32
+	CreatedAt   int64
 }
 
 func (q *Queries) CreateTrack(ctx context.Context, arg CreateTrackParams) error {
@@ -108,7 +108,7 @@ type CreateUserParams struct {
 	Handle    string
 	Address   string
 	Bio       string
-	CreatedAt int32
+	CreatedAt int64
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) error {

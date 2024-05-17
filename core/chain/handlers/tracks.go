@@ -10,7 +10,7 @@ import (
 	abcitypes "github.com/cometbft/cometbft/abci/types"
 )
 
-func HandleCreateTrack(qtx *db.Queries, createdAt int32, b []byte) (*abcitypes.ExecTxResult, error) {
+func HandleCreateTrack(qtx *db.Queries, createdAt int64, b []byte) (*abcitypes.ExecTxResult, error) {
 	ctx := context.Background()
 
 	cmd, err := chainutils.FromTxBytes[commands.CreateTrackCommand](b)

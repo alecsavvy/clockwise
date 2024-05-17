@@ -8,6 +8,10 @@ sql:
         package: "db"
         out: "./"
         sql_package: "pgx/v5"
+        overrides:
+          - db_type: "bigint"
+            go_type:
+              type: "uint64"
 
   - engine: "postgresql"
     queries: "sql/writes.sql"
@@ -17,3 +21,7 @@ sql:
         package: "db"
         out: "./"
         sql_package: "pgx/v5"
+        overrides:
+          - db_type: "bigint"
+            go_type:
+              type: "uint64"

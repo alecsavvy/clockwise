@@ -10,7 +10,9 @@ import (
 
 // handles safe processing of cqrs commands and emits events on successful processing
 // if a transaction gets here and fails it will be dropped instead of erroring
-func RootHandler(qtx *db.Queries, createdAt int32, txs [][]byte) ([]*abcitypes.ExecTxResult, error) {
+func RootHandler(qtx *db.Queries, rfb *abcitypes.RequestFinalizeBlock) ([]*abcitypes.ExecTxResult, error) {
+	createdAt := rfb.Height
+	txs := rfb.Txs
 	var txResults = make([]*abcitypes.ExecTxResult, len(txs))
 
 	if len(txs) <= 0 {

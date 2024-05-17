@@ -1,6 +1,6 @@
 -- +migrate Up
 create table blocks (
-    blocknumber int not null unique,
+    blocknumber bigint not null unique,
     blockhash bytea not null unique
 );
 
@@ -9,7 +9,7 @@ create table users (
     handle text not null,
     address text not null,
     bio text not null,
-    created_at int not null,
+    created_at bigint not null,
     foreign key (created_at) references blocks (blocknumber) on delete cascade
 );
 
@@ -20,7 +20,7 @@ create table tracks (
     description text not null,
     genre text not null,
     user_id text not null,
-    created_at int not null,
+    created_at bigint not null,
     foreign key (user_id) references users (id) on delete cascade,
     foreign key (created_at) references blocks (blocknumber) on delete cascade
 );
@@ -29,7 +29,7 @@ create table follows (
     id text primary key,
     follower_id text not null,
     following_id text not null,
-    created_at int not null,
+    created_at bigint not null,
     unique (follower_id, following_id),
     check (follower_id <> following_id),
     foreign key (follower_id) references users (id) on delete cascade,
@@ -41,7 +41,7 @@ create table reposts (
     id text primary key,
     reposter_id text not null,
     track_id text not null,
-    created_at int not null,
+    created_at bigint not null,
     unique (reposter_id, track_id),
     foreign key (reposter_id) references users(id) on delete cascade,
     foreign key (track_id) references tracks (id) on delete cascade,

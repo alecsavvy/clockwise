@@ -26,14 +26,14 @@ func (a *Application) FinalizeBlock(ctx context.Context, rfb *abcitypes.RequestF
 
 	// insert block as first tx
 	err = qtx.CreateBlock(ctx, db.CreateBlockParams{
-		Blocknumber: int32(rfb.Height),
+		Blocknumber: rfb.Height,
 		Blockhash:   rfb.Hash,
 	})
 	if err != nil {
 		return nil, utils.AppError("error inserting current block", err)
 	}
 
-	results, err := handlers.RootHandler(qtx, int32(rfb.Height), rfb.Txs)
+	results, err := handlers.RootHandler(qtx, rfb)
 	if err != nil {
 		return nil, utils.AppError("error in root handler", err)
 	}

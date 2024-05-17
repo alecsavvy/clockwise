@@ -5,7 +5,7 @@
 package db
 
 type Block struct {
-	Blocknumber int32
+	Blocknumber int64
 	Blockhash   []byte
 }
 
@@ -13,14 +13,14 @@ type Follow struct {
 	ID          string
 	FollowerID  string
 	FollowingID string
-	CreatedAt   int32
+	CreatedAt   int64
 }
 
 type Repost struct {
 	ID         string
 	ReposterID string
 	TrackID    string
-	CreatedAt  int32
+	CreatedAt  int64
 }
 
 type Track struct {
@@ -30,7 +30,7 @@ type Track struct {
 	Description string
 	Genre       string
 	UserID      string
-	CreatedAt   int32
+	CreatedAt   int64
 }
 
 type User struct {
@@ -38,5 +38,5 @@ type User struct {
 	Handle    string
 	Address   string
 	Bio       string
-	CreatedAt int32
+	CreatedAt int64
 }
