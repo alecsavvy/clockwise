@@ -3,10 +3,13 @@ package main
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"os"
 	"sync"
+	"time"
 
 	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/alecsavvy/clockwise/core/adapters"
 	"github.com/alecsavvy/clockwise/core/chain"
@@ -15,6 +18,7 @@ import (
 	"github.com/alecsavvy/clockwise/ports/graph"
 	"github.com/alecsavvy/clockwise/utils"
 	rpchttp "github.com/cometbft/cometbft/rpc/client/http"
+	"github.com/gorilla/websocket"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -72,6 +76,19 @@ func run() error {
 		return nil
 	}
 
+	// Add WebSocket support for subscriptions
+	srv.AddTransport(transport.Websocket{
+		Upgrader: websocket.Upgrader{
+			CheckOrigin: func(r *http.Request) bool {
+				return true
+			},
+		},
+		KeepAlivePingInterval: 10 * time.Second,
+	})
+
+	// HTTP transport for queries and mutations
+	srv.AddTransport(transport.POST{})
+
 	gqlPlayground := playground.Handler("GraphQL playground", "/query")
 	graphiqlHandler := func(c echo.Context) error {
 		gqlPlayground.ServeHTTP(c.Response(), c.Request())
@@ -86,7 +103,7 @@ func run() error {
 	e.Use(middleware.Recover())
 
 	e.GET("/graphiql", graphiqlHandler)
-	e.POST("/query", queryHandler)
+	e.Any("/query", queryHandler)
 
 	// run all the processes
 	var wg sync.WaitGroup

@@ -173,7 +173,36 @@ func (r *queryResolver) Reposts(ctx context.Context, trackID string) ([]*model.R
 
 // UserEvents is the resolver for the userEvents field.
 func (r *subscriptionResolver) UserEvents(ctx context.Context, userID string) (<-chan model.UserEvents, error) {
-	panic(fmt.Errorf("not implemented: UserEvents - userEvents"))
+	events, err := r.userService.CreateUserEvents()
+	if err != nil {
+		return nil, utils.AppError("channel error with user events", err)
+	}
+
+	eventChan := make(chan model.UserEvents)
+
+	go func() {
+		defer close(eventChan)
+
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case userEntity, ok := <-events:
+				if !ok {
+					return
+				}
+				msg := model.User{
+					ID:      userEntity.ID,
+					Handle:  userEntity.Handle,
+					Bio:     userEntity.Bio,
+					Address: userEntity.Address,
+				}
+				eventChan <- msg
+			}
+		}
+	}()
+
+	return eventChan, nil
 }
 
 // TrackEvents is the resolver for the trackEvents field.

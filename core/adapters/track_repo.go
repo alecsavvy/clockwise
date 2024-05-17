@@ -18,6 +18,11 @@ type TrackRepository struct {
 	db     *db.Queries
 }
 
+// CreateTrackEvents implements services.TrackService.
+func (t *TrackRepository) CreateTrackEvents() (<-chan *entities.TrackEntity, error) {
+	panic("unimplemented")
+}
+
 // GetTrackReposts implements services.TrackService.
 func (t *TrackRepository) GetTrackReposts(trackId string) ([]*entities.RepostEntity, error) {
 	ctx := context.Background()

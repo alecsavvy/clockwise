@@ -16,6 +16,14 @@ type UserRepository struct {
 	logger *utils.Logger
 	cc     *chainclient.ChainClient
 	db     *db.Queries
+
+	/* subscription channels */
+	newUserPipe chan *entities.UserEntity
+}
+
+// CreateUserEvents implements services.UserService.
+func (ur *UserRepository) CreateUserEvents() (<-chan *entities.UserEntity, error) {
+	return ur.newUserPipe, nil
 }
 
 // FollowUser implements services.UserService.
@@ -68,14 +76,6 @@ func (ur *UserRepository) UnfollowUser(followId string) (string, error) {
 	panic("unimplemented")
 }
 
-func NewUserRepo(logger *utils.Logger, cc *chainclient.ChainClient, db *db.Queries) *UserRepository {
-	return &UserRepository{
-		logger: logger,
-		cc:     cc,
-		db:     db,
-	}
-}
-
 func (ur *UserRepository) CreateUser(cmd *commands.CreateUserCommand) (*events.UserCreatedEvent, error) {
 	ctx := context.Background()
 	cc := ur.cc
@@ -118,6 +118,15 @@ func (ur *UserRepository) GetUsers() ([]*entities.UserEntity, error) {
 	}
 
 	return userModelsToEntities(users), nil
+}
+
+func NewUserRepo(logger *utils.Logger, cc *chainclient.ChainClient, db *db.Queries) *UserRepository {
+	return &UserRepository{
+		logger:      logger,
+		cc:          cc,
+		db:          db,
+		newUserPipe: make(chan *entities.UserEntity),
+	}
 }
 
 var _ services.UserService = (*UserRepository)(nil)

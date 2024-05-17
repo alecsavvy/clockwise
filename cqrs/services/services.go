@@ -22,6 +22,9 @@ type UserService interface {
 	GetUserFollowing(userId string) ([]*entities.FollowEntity, error)
 	GetUserFollowers(userId string) ([]*entities.FollowEntity, error)
 	GetUserReposts(userId string) ([]*entities.RepostEntity, error)
+
+	/** subscriptions */
+	CreateUserEvents() (<-chan *entities.UserEntity, error)
 }
 
 type TrackService interface {
@@ -32,4 +35,7 @@ type TrackService interface {
 	/** reads */
 	GetTracks() ([]*entities.TrackEntity, error)
 	GetTrackReposts(trackId string) ([]*entities.RepostEntity, error)
+
+	/** subscriptions */
+	CreateTrackEvents() (<-chan *entities.TrackEntity, error)
 }
