@@ -51,5 +51,6 @@ func (a *Application) Commit(ctx context.Context, req *abcitypes.RequestCommit) 
 			return nil, err
 		}
 	}
+	a.currentTx = nil
 	return &abcitypes.ResponseCommit{}, nil
 }
