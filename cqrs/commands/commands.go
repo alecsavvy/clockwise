@@ -1,7 +1,5 @@
 package commands
 
-import "github.com/google/uuid"
-
 type CommandType = string
 
 // command actions
@@ -52,18 +50,22 @@ type CreateUser struct {
 }
 
 type CreateTrack struct {
+	ID          string
 	Title       string
+	Genre       string
 	StreamURL   string
 	Description string
-	UserID      uuid.UUID
+	UserID      string
 }
 
 type CreateFollow struct {
-	FollowerID  uuid.UUID
-	FollowingID uuid.UUID
+	ID          string
+	FollowerID  string
+	FollowingID string
 }
 
 type CreateRepost struct {
-	ReposterID uuid.UUID
-	TrackID    uuid.UUID
+	ID         string
+	ReposterID string
+	TrackID    string
 }

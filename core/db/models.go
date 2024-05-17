@@ -38,7 +38,6 @@ type User struct {
 	ID        string
 	Handle    string
 	Address   string
-	Genre     string
 	Bio       string
 	CreatedAt int32
 }

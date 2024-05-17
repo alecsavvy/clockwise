@@ -33,6 +33,16 @@ func RootHandler(qtx *db.Queries, txs [][]byte) ([]*abcitypes.ExecTxResult, erro
 				return nil, utils.AppError("cannot handle create user", err)
 			}
 			txResults[i] = txResult
+		case commands.Operation{Action: commands.CREATE, Entity: commands.TRACK}:
+			txResult, err := HandleCreateTrack(qtx, tx)
+			if err != nil {
+				return nil, utils.AppError("cannot handle create track", err)
+			}
+			txResults[i] = txResult
+		case commands.Operation{Action: commands.CREATE, Entity: commands.FOLLOW}:
+		case commands.Operation{Action: commands.CREATE, Entity: commands.REPOST}:
+		case commands.Operation{Action: commands.DELETE, Entity: commands.FOLLOW}:
+		case commands.Operation{Action: commands.DELETE, Entity: commands.REPOST}:
 		default:
 			return nil, utils.AppError("found transaction with invalid operation", nil)
 		}

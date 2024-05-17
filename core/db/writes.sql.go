@@ -9,6 +9,22 @@ import (
 	"context"
 )
 
+const createBlock = `-- name: CreateBlock :exec
+insert into blocks (id, blocknumber, blockhash)
+values ($1, $2, $3)
+`
+
+type CreateBlockParams struct {
+	ID          string
+	Blocknumber int32
+	Blockhash   string
+}
+
+func (q *Queries) CreateBlock(ctx context.Context, arg CreateBlockParams) error {
+	_, err := q.db.Exec(ctx, createBlock, arg.ID, arg.Blocknumber, arg.Blockhash)
+	return err
+}
+
 const createFollow = `-- name: CreateFollow :exec
 insert into follows (id, follower_id, following_id)
 values ($1, $2, $3)
@@ -42,13 +58,21 @@ func (q *Queries) CreateRepost(ctx context.Context, arg CreateRepostParams) erro
 }
 
 const createTrack = `-- name: CreateTrack :exec
-insert into tracks (id, title, stream_url, description, user_id)
-values ($1, $2, $3, $4, $5)
+insert into tracks (
+        id,
+        title,
+        genre,
+        stream_url,
+        description,
+        user_id
+    )
+values ($1, $2, $3, $4, $5, $6)
 `
 
 type CreateTrackParams struct {
 	ID          string
 	Title       string
+	Genre       string
 	StreamUrl   string
 	Description string
 	UserID      string
@@ -58,6 +82,7 @@ func (q *Queries) CreateTrack(ctx context.Context, arg CreateTrackParams) error 
 	_, err := q.db.Exec(ctx, createTrack,
 		arg.ID,
 		arg.Title,
+		arg.Genre,
 		arg.StreamUrl,
 		arg.Description,
 		arg.UserID,

@@ -162,7 +162,7 @@ func (q *Queries) GetTracks(ctx context.Context) ([]Track, error) {
 }
 
 const getUserByHandle = `-- name: GetUserByHandle :one
-select id, handle, address, genre, bio, created_at
+select id, handle, address, bio, created_at
 from users
 where handle = $1
 limit 1
@@ -175,7 +175,6 @@ func (q *Queries) GetUserByHandle(ctx context.Context, handle string) (User, err
 		&i.ID,
 		&i.Handle,
 		&i.Address,
-		&i.Genre,
 		&i.Bio,
 		&i.CreatedAt,
 	)
@@ -215,7 +214,7 @@ func (q *Queries) GetUserReposts(ctx context.Context, reposterID string) ([]Repo
 }
 
 const getUsers = `-- name: GetUsers :many
-select id, handle, address, genre, bio, created_at
+select id, handle, address, bio, created_at
 from users
 order by created_at
 `
@@ -233,7 +232,6 @@ func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
 			&i.ID,
 			&i.Handle,
 			&i.Address,
-			&i.Genre,
 			&i.Bio,
 			&i.CreatedAt,
 		); err != nil {

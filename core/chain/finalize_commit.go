@@ -7,8 +7,10 @@ package chain
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/alecsavvy/clockwise/core/chain/handlers"
+	"github.com/alecsavvy/clockwise/core/db"
 	abcitypes "github.com/cometbft/cometbft/abci/types"
 )
 
@@ -21,6 +23,14 @@ func (a *Application) FinalizeBlock(ctx context.Context, rfb *abcitypes.RequestF
 	}
 
 	qtx := a.queries.WithTx(dbTx)
+
+	// insert block as first tx
+	err = qtx.CreateBlock(ctx, db.CreateBlockParams{
+		// todo: unique id?
+		ID:          fmt.Sprintf("%d", rfb.Height),
+		Blocknumber: int32(rfb.Height),
+		Blockhash:   string(rfb.Hash),
+	})
 
 	results, err := handlers.RootHandler(qtx, rfb.Txs)
 
