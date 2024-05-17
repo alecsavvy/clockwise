@@ -30,6 +30,7 @@ input NewTrack {
   title: String!
   streamUrl: String!
   description: String!
+  genre: String!
   userId: String!
 }
 

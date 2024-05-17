@@ -4734,7 +4734,7 @@ func (ec *executionContext) unmarshalInputNewTrack(ctx context.Context, obj inte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"title", "streamUrl", "description", "userId"}
+	fieldsInOrder := [...]string{"title", "streamUrl", "description", "genre", "userId"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -4762,6 +4762,13 @@ func (ec *executionContext) unmarshalInputNewTrack(ctx context.Context, obj inte
 				return it, err
 			}
 			it.Description = data
+		case "genre":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("genre"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Genre = data
 		case "userId":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
 			data, err := ec.unmarshalNString2string(ctx, v)

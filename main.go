@@ -60,11 +60,12 @@ func run() error {
 	client.SetLogger(logger)
 	chainClient := chainclient.New(logger, client)
 
-	// user repo setup
+	// repository setup
 	userRepo := adapters.NewUserRepo(logger, chainClient, db)
+	trackRepo := adapters.NewTrackRepo(logger, chainClient, db)
 
 	// graphql setup
-	gqlResolver := graph.NewResolver(logger, userRepo)
+	gqlResolver := graph.NewResolver(logger, userRepo, trackRepo)
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: gqlResolver}))
 	queryHandler := func(c echo.Context) error {
 		srv.ServeHTTP(c.Response(), c.Request())

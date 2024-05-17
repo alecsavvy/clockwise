@@ -11,14 +11,15 @@ import (
 type TrackDB = []*model.Track
 
 type Resolver struct {
-	tracks      TrackDB
-	userService services.UserService
-	logger      *utils.Logger
+	trackService services.TrackService
+	userService  services.UserService
+	logger       *utils.Logger
 }
 
-func NewResolver(logger *utils.Logger, userService services.UserService) *Resolver {
+func NewResolver(logger *utils.Logger, userService services.UserService, trackService services.TrackService) *Resolver {
 	return &Resolver{
-		userService: userService,
-		logger:      logger,
+		trackService: trackService,
+		userService:  userService,
+		logger:       logger,
 	}
 }

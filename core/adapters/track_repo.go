@@ -84,4 +84,12 @@ func (t *TrackRepository) GetTracks() ([]*entities.TrackEntity, error) {
 	return trackModelsToEntities(tracks), nil
 }
 
+func NewTrackRepo(logger *utils.Logger, cc *chainclient.ChainClient, db *db.Queries) *TrackRepository {
+	return &TrackRepository{
+		logger: logger,
+		cc:     cc,
+		db:     db,
+	}
+}
+
 var _ services.TrackService = (*TrackRepository)(nil)

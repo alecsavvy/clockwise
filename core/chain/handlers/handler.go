@@ -34,7 +34,7 @@ func RootHandler(qtx *db.Queries, createdAt int32, txs [][]byte) ([]*abcitypes.E
 			}
 			txResults[i] = txResult
 		case commands.Operation{Action: commands.CREATE, Entity: commands.TRACK}:
-			txResult, err := HandleCreateTrack(qtx, tx)
+			txResult, err := HandleCreateTrack(qtx, createdAt, tx)
 			if err != nil {
 				return nil, utils.AppError("cannot handle create track", err)
 			}

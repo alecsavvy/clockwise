@@ -35,6 +35,7 @@ type NewTrack struct {
 	Title       string `json:"title"`
 	StreamURL   string `json:"streamUrl"`
 	Description string `json:"description"`
+	Genre       string `json:"genre"`
 	UserID      string `json:"userId"`
 }
 

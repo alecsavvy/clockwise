@@ -44,14 +44,32 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 
 // CreateTrack is the resolver for the createTrack field.
 func (r *mutationResolver) CreateTrack(ctx context.Context, input model.NewTrack) (*model.Track, error) {
-	newTrack := &model.Track{
+	ts := r.trackService
+
+	createTrackCmd := commands.NewCommand(commands.TRACK, commands.CREATE, commands.CreateTrack{
 		ID:          uuid.NewString(),
 		Title:       input.Title,
 		Description: input.Description,
 		StreamURL:   input.StreamURL,
+		Genre:       input.Genre,
 		UserID:      input.UserID,
+	})
+
+	event, err := ts.CreateTrack(createTrackCmd)
+	if err != nil {
+		return nil, err
 	}
-	r.tracks = append(r.tracks, newTrack)
+
+	trackEntity := event.Track
+	newTrack := &model.Track{
+		ID:          trackEntity.ID,
+		Title:       trackEntity.Title,
+		Description: trackEntity.Description,
+		StreamURL:   trackEntity.StreamURL,
+		Genre:       trackEntity.Genre,
+		UserID:      trackEntity.UserID,
+	}
+
 	return newTrack, nil
 }
 
@@ -107,7 +125,25 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 
 // Tracks is the resolver for the tracks field.
 func (r *queryResolver) Tracks(ctx context.Context) ([]*model.Track, error) {
-	return r.tracks, nil
+	ts := r.trackService
+
+	tracks, err := ts.GetTracks()
+	if err != nil {
+		return nil, err
+	}
+
+	trackModels := utils.Map(tracks, func(trackEntity *entities.TrackEntity) *model.Track {
+		return &model.Track{
+			ID:          trackEntity.ID,
+			Title:       trackEntity.Title,
+			Description: trackEntity.Description,
+			StreamURL:   trackEntity.StreamURL,
+			Genre:       trackEntity.Genre,
+			UserID:      trackEntity.UserID,
+		}
+	})
+
+	return trackModels, nil
 }
 
 // User is the resolver for the user field.
