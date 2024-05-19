@@ -21,10 +21,16 @@ type UserRepository struct {
 	newUserPipe chan *entities.UserEntity
 }
 
-// CreateUserEvents implements services.UserService.
-func (ur *UserRepository) CreateUserEvents() (<-chan *entities.UserEntity, error) {
-	return ur.newUserPipe, nil
+func NewUserRepo(logger *utils.Logger, cc *chainclient.ChainClient, db *db.Queries) *UserRepository {
+	return &UserRepository{
+		logger:      logger,
+		cc:          cc,
+		db:          db,
+		newUserPipe: make(chan *entities.UserEntity),
+	}
 }
+
+var _ services.UserService = (*UserRepository)(nil)
 
 // FollowUser implements services.UserService.
 func (ur *UserRepository) FollowUser(*commands.Command[commands.CreateFollow]) (*events.FollowCreatedEvent, error) {
@@ -119,14 +125,3 @@ func (ur *UserRepository) GetUsers() ([]*entities.UserEntity, error) {
 
 	return userModelsToEntities(users), nil
 }
-
-func NewUserRepo(logger *utils.Logger, cc *chainclient.ChainClient, db *db.Queries) *UserRepository {
-	return &UserRepository{
-		logger:      logger,
-		cc:          cc,
-		db:          db,
-		newUserPipe: make(chan *entities.UserEntity),
-	}
-}
-
-var _ services.UserService = (*UserRepository)(nil)

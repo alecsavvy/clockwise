@@ -18,10 +18,15 @@ type TrackRepository struct {
 	db     *db.Queries
 }
 
-// CreateTrackEvents implements services.TrackService.
-func (t *TrackRepository) CreateTrackEvents() (<-chan *entities.TrackEntity, error) {
-	panic("unimplemented")
+func NewTrackRepo(logger *utils.Logger, cc *chainclient.ChainClient, db *db.Queries) *TrackRepository {
+	return &TrackRepository{
+		logger: logger,
+		cc:     cc,
+		db:     db,
+	}
 }
+
+var _ services.TrackService = (*TrackRepository)(nil)
 
 // GetTrackReposts implements services.TrackService.
 func (t *TrackRepository) GetTrackReposts(trackId string) ([]*entities.RepostEntity, error) {
@@ -88,13 +93,3 @@ func (t *TrackRepository) GetTracks() ([]*entities.TrackEntity, error) {
 
 	return trackModelsToEntities(tracks), nil
 }
-
-func NewTrackRepo(logger *utils.Logger, cc *chainclient.ChainClient, db *db.Queries) *TrackRepository {
-	return &TrackRepository{
-		logger: logger,
-		cc:     cc,
-		db:     db,
-	}
-}
-
-var _ services.TrackService = (*TrackRepository)(nil)
