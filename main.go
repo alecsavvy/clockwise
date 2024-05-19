@@ -64,12 +64,13 @@ func run() error {
 	client.SetLogger(logger)
 	chainClient := chainclient.New(logger, client)
 
-	// repository setup
+	// adapters
 	userRepo := adapters.NewUserRepo(logger, chainClient, db)
 	trackRepo := adapters.NewTrackRepo(logger, chainClient, db)
+	pubsub := adapters.NewPubsubAdapter(chainClient, db)
 
 	// graphql setup
-	gqlResolver := graph.NewResolver(logger, userRepo, trackRepo)
+	gqlResolver := graph.NewResolver(logger, userRepo, trackRepo, pubsub.UserPubsub, pubsub.TrackPubsub)
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: gqlResolver}))
 	queryHandler := func(c echo.Context) error {
 		srv.ServeHTTP(c.Response(), c.Request())
@@ -108,18 +109,29 @@ func run() error {
 	// run all the processes
 	var wg sync.WaitGroup
 
-	wg.Add(2)
+	wg.Add(3)
 
+	// run chain
 	go func() {
 		defer wg.Done()
 		node.Run()
 	}()
 
+	// run web server
 	go func() {
 		defer wg.Done()
 		err = e.Start(":26659")
 		if err != nil {
 			logger.Error("web server crashed", err)
+		}
+	}()
+
+	// run pubsub listener
+	go func() {
+		time.Sleep(5 * time.Second)
+		defer wg.Done()
+		if err := pubsub.Run(); err != nil {
+			logger.Error("pubsub crashed", err)
 		}
 	}()
 

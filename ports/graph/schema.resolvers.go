@@ -173,41 +173,58 @@ func (r *queryResolver) Reposts(ctx context.Context, trackID string) ([]*model.R
 
 // UserEvents is the resolver for the userEvents field.
 func (r *subscriptionResolver) UserEvents(ctx context.Context, userID string) (<-chan model.UserEvents, error) {
-	events, err := r.userService.CreateUserEvents()
-	if err != nil {
-		return nil, utils.AppError("channel error with user events", err)
-	}
-
-	eventChan := make(chan model.UserEvents)
-
+	ues := make(chan model.UserEvents)
 	go func() {
-		defer close(eventChan)
-
+		defer close(ues)
+		userEvents := r.userPubsub.Subscribe()
 		for {
 			select {
-			case <-ctx.Done():
-				return
-			case userEntity, ok := <-events:
+			case entity, ok := <-userEvents:
 				if !ok {
 					return
 				}
-				msg := model.User{
-					ID:      userEntity.ID,
-					Handle:  userEntity.Handle,
-					Bio:     userEntity.Bio,
-					Address: userEntity.Address,
+				user := model.User{
+					ID:      entity.ID,
+					Handle:  entity.Handle,
+					Address: entity.Address,
+					Bio:     entity.Bio,
 				}
-				eventChan <- msg
+				ues <- user
+			case <-ctx.Done():
+				return // Exit the goroutine if context is canceled
 			}
 		}
 	}()
-
-	return eventChan, nil
+	return ues, nil
 }
 
 // TrackEvents is the resolver for the trackEvents field.
 func (r *subscriptionResolver) TrackEvents(ctx context.Context, trackID string) (<-chan model.TrackEvents, error) {
-	panic(fmt.Errorf("not implemented: TrackEvents - trackEvents"))
+	tes := make(chan model.TrackEvents)
+	go func() {
+		defer close(tes)
+		trackEvents := r.trackPubsub.Subscribe()
+		for {
+			select {
+			case entity, ok := <-trackEvents:
+				if !ok {
+					return
+				}
+				track := model.Track{
+					ID:          entity.ID,
+					Title:       entity.Title,
+					Description: entity.Description,
+					Genre:       entity.Genre,
+					StreamURL:   entity.StreamURL,
+					UserID:      entity.UserID,
+				}
+				tes <- track
+			case <-ctx.Done():
+				return // Exit the goroutine if context is canceled
+			}
+		}
+	}()
+	return tes, nil
 }
 
 // GenreEvents is the resolver for the genreEvents field.

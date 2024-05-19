@@ -45,3 +45,7 @@ func (cc *ChainClient) Send(tx interface{}) (*ctypes.ResultTx, error) {
 		return tx, nil
 	}
 }
+
+func (cc *ChainClient) GetRpc() *rpchttp.HTTP {
+	return cc.rpc
+}

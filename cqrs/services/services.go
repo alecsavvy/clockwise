@@ -9,7 +9,13 @@ import (
 	"github.com/alecsavvy/clockwise/cqrs/commands"
 	"github.com/alecsavvy/clockwise/cqrs/entities"
 	"github.com/alecsavvy/clockwise/cqrs/events"
+	"github.com/alecsavvy/clockwise/pubsub"
 )
+
+type UserPubsub = pubsub.Pubsub[*entities.UserEntity]
+type TrackPubsub = pubsub.Pubsub[*entities.TrackEntity]
+type FollowPubsub = pubsub.Pubsub[*entities.FollowEntity]
+type RepostPubsub = pubsub.Pubsub[*entities.RepostEntity]
 
 type UserService interface {
 	/** writes */
@@ -22,9 +28,6 @@ type UserService interface {
 	GetUserFollowing(userId string) ([]*entities.FollowEntity, error)
 	GetUserFollowers(userId string) ([]*entities.FollowEntity, error)
 	GetUserReposts(userId string) ([]*entities.RepostEntity, error)
-
-	/** subscriptions */
-	CreateUserEvents() (<-chan *entities.UserEntity, error)
 }
 
 type TrackService interface {
@@ -35,7 +38,4 @@ type TrackService interface {
 	/** reads */
 	GetTracks() ([]*entities.TrackEntity, error)
 	GetTrackReposts(trackId string) ([]*entities.RepostEntity, error)
-
-	/** subscriptions */
-	CreateTrackEvents() (<-chan *entities.TrackEntity, error)
 }

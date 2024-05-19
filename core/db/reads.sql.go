@@ -73,6 +73,28 @@ func (q *Queries) GetFollowing(ctx context.Context, followingID string) ([]Follo
 	return items, nil
 }
 
+const getTrackByID = `-- name: GetTrackByID :one
+select id, title, stream_url, description, genre, user_id, created_at
+from tracks
+where id = $1
+limit 1
+`
+
+func (q *Queries) GetTrackByID(ctx context.Context, id string) (Track, error) {
+	row := q.db.QueryRow(ctx, getTrackByID, id)
+	var i Track
+	err := row.Scan(
+		&i.ID,
+		&i.Title,
+		&i.StreamUrl,
+		&i.Description,
+		&i.Genre,
+		&i.UserID,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
 const getTrackByTitle = `-- name: GetTrackByTitle :one
 select id, title, stream_url, description, genre, user_id, created_at
 from tracks
@@ -170,6 +192,26 @@ limit 1
 
 func (q *Queries) GetUserByHandle(ctx context.Context, handle string) (User, error) {
 	row := q.db.QueryRow(ctx, getUserByHandle, handle)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Handle,
+		&i.Address,
+		&i.Bio,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const getUserByID = `-- name: GetUserByID :one
+select id, handle, address, bio, created_at
+from users
+where id = $1
+limit 1
+`
+
+func (q *Queries) GetUserByID(ctx context.Context, id string) (User, error) {
+	row := q.db.QueryRow(ctx, getUserByID, id)
 	var i User
 	err := row.Scan(
 		&i.ID,
