@@ -10,6 +10,14 @@ import (
 	abcitypes "github.com/cometbft/cometbft/abci/types"
 )
 
+func (c *Core) checkCreateTrack(cmd *commands.CreateTrackCommand) error {
+	_, err := c.db.GetUserByID(context.Background(), cmd.Data.UserID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (c *Core) CreateTrack(cmd *commands.CreateTrackCommand) (*entities.TrackEntity, error) {
 	ctx := context.Background()
 	db := c.db
