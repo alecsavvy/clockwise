@@ -171,60 +171,58 @@ func (r *queryResolver) Reposts(ctx context.Context, trackID string) ([]*model.R
 
 // UserEvents is the resolver for the userEvents field.
 func (r *subscriptionResolver) UserEvents(ctx context.Context, userID string) (<-chan model.UserEvents, error) {
-	panic("not implemented")
-	// ues := make(chan model.UserEvents)
-	// go func() {
-	// 	defer close(ues)
-	// 	userEvents := r.userPubsub.Subscribe()
-	// 	for {
-	// 		select {
-	// 		case entity, ok := <-userEvents:
-	// 			if !ok {
-	// 				return
-	// 			}
-	// 			user := model.User{
-	// 				ID:      entity.ID,
-	// 				Handle:  entity.Handle,
-	// 				Address: entity.Address,
-	// 				Bio:     entity.Bio,
-	// 			}
-	// 			ues <- user
-	// 		case <-ctx.Done():
-	// 			return // Exit the goroutine if context is canceled
-	// 		}
-	// 	}
-	// }()
-	// return ues, nil
+	ues := make(chan model.UserEvents)
+	go func() {
+		defer close(ues)
+		userEvents := r.core.Pubsub().UserPubsub.Subscribe()
+		for {
+			select {
+			case entity, ok := <-userEvents:
+				if !ok {
+					return
+				}
+				user := model.User{
+					ID:      entity.ID,
+					Handle:  entity.Handle,
+					Address: entity.Address,
+					Bio:     entity.Bio,
+				}
+				ues <- user
+			case <-ctx.Done():
+				return // Exit the goroutine if context is canceled
+			}
+		}
+	}()
+	return ues, nil
 }
 
 // TrackEvents is the resolver for the trackEvents field.
 func (r *subscriptionResolver) TrackEvents(ctx context.Context, trackID string) (<-chan model.TrackEvents, error) {
-	panic("not implemented")
-	// tes := make(chan model.TrackEvents)
-	// go func() {
-	// 	defer close(tes)
-	// 	trackEvents := r.trackPubsub.Subscribe()
-	// 	for {
-	// 		select {
-	// 		case entity, ok := <-trackEvents:
-	// 			if !ok {
-	// 				return
-	// 			}
-	// 			track := model.Track{
-	// 				ID:          entity.ID,
-	// 				Title:       entity.Title,
-	// 				Description: entity.Description,
-	// 				Genre:       entity.Genre,
-	// 				StreamURL:   entity.StreamURL,
-	// 				UserID:      entity.UserID,
-	// 			}
-	// 			tes <- track
-	// 		case <-ctx.Done():
-	// 			return // Exit the goroutine if context is canceled
-	// 		}
-	// 	}
-	// }()
-	// return tes, nil
+	tes := make(chan model.TrackEvents)
+	go func() {
+		defer close(tes)
+		trackEvents := r.core.Pubsub().TrackPubsub.Subscribe()
+		for {
+			select {
+			case entity, ok := <-trackEvents:
+				if !ok {
+					return
+				}
+				track := model.Track{
+					ID:          entity.ID,
+					Title:       entity.Title,
+					Description: entity.Description,
+					Genre:       entity.Genre,
+					StreamURL:   entity.StreamURL,
+					UserID:      entity.UserID,
+				}
+				tes <- track
+			case <-ctx.Done():
+				return // Exit the goroutine if context is canceled
+			}
+		}
+	}()
+	return tes, nil
 }
 
 // GenreEvents is the resolver for the genreEvents field.

@@ -82,12 +82,19 @@ func NewNode(logger *utils.Logger, homeDir string, app abcitypes.Application) (*
 	return node, nil
 }
 
+func (c *Core) Pubsub() *Pubsub {
+	return c.pubsub
+}
+
+func (c *Core) Rpc() *local.Local {
+	return c.rpc
+}
+
 func (c *Core) Run(node *node.Node) error {
 	c.rpc = local.New(node)
-
-	// start all the core processes
-	// pubsub
-	// eth indexer maybe? idk
-
+	err := c.RunPubsub()
+	if err != nil {
+		c.logger.Error("pubsub error", err)
+	}
 	return nil
 }

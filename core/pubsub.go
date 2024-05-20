@@ -34,16 +34,13 @@ func NewPubsub() *Pubsub {
 func (c *Core) RunPubsub() error {
 	rpc := c.rpc
 
-	err := rpc.Start()
-	if err != nil {
-		return err
-	}
-	defer rpc.Stop()
-
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	eventCh, err := rpc.Subscribe(ctx, "block-subscriber", "tm.event = 'NewBlock'")
+	if err != nil {
+		return err
+	}
 
 	for {
 		select {

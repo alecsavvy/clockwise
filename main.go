@@ -122,7 +122,7 @@ func run() error {
 	go func() {
 		defer wg.Done()
 		if err := coreApp.Run(node); err != nil {
-			logger.Error("pubsub crashed", err)
+			logger.Error("core app crashed", err)
 		}
 	}()
 
