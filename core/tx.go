@@ -1,5 +1,5 @@
 /* utilities specific to the core, not intended for external use */
-package client
+package core
 
 import (
 	"context"

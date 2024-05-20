@@ -1,4 +1,4 @@
-package client
+package core
 
 import (
 	"github.com/alecsavvy/clockwise/core/db"

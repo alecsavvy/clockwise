@@ -11,8 +11,8 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/alecsavvy/clockwise/core"
 	"github.com/alecsavvy/clockwise/core/chain"
-	"github.com/alecsavvy/clockwise/core/client"
 	"github.com/alecsavvy/clockwise/core/db"
 	"github.com/alecsavvy/clockwise/ports/graph"
 	"github.com/alecsavvy/clockwise/utils"
@@ -53,10 +53,10 @@ func run() error {
 		return utils.AppError("failure to init chain", err)
 	}
 
-	core := client.NewCore(logger, node.Node(), db)
+	clockwiseCore := core.NewCore(logger, node.Node(), db)
 
 	// graphql setup
-	gqlResolver := graph.NewResolver(logger, core)
+	gqlResolver := graph.NewResolver(logger, clockwiseCore)
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: gqlResolver}))
 	queryHandler := func(c echo.Context) error {
 		srv.ServeHTTP(c.Response(), c.Request())
