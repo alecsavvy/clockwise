@@ -3,9 +3,11 @@ package core
 import (
 	"context"
 
+	"github.com/alecsavvy/clockwise/core/db"
 	"github.com/alecsavvy/clockwise/cqrs/commands"
 	"github.com/alecsavvy/clockwise/cqrs/entities"
 	"github.com/alecsavvy/clockwise/utils"
+	abcitypes "github.com/cometbft/cometbft/abci/types"
 )
 
 func (c *Core) CreateTrack(cmd *commands.CreateTrackCommand) (*entities.TrackEntity, error) {
@@ -33,6 +35,36 @@ func (c *Core) CreateTrack(cmd *commands.CreateTrackCommand) (*entities.TrackEnt
 	}
 
 	return trackEntity, nil
+}
+
+func (c *Core) handleCreateTrack(qtx *db.Queries, createdAt int64, b []byte) (*abcitypes.ExecTxResult, error) {
+	ctx := context.Background()
+
+	var cmd commands.CreateTrackCommand
+	err := c.fromTxBytes(b, &cmd)
+	if err != nil {
+		return nil, utils.AppError("not a create track command in create track handler", err)
+	}
+
+	track := cmd.Data
+
+	err = qtx.CreateTrack(ctx, db.CreateTrackParams{
+		ID:          track.ID,
+		Title:       track.Title,
+		Genre:       track.Genre,
+		Description: track.Description,
+		StreamUrl:   track.StreamURL,
+		UserID:      track.UserID,
+		CreatedAt:   createdAt,
+	})
+
+	if err != nil {
+		return nil, utils.AppError("failure to insert track", err)
+	}
+
+	return &abcitypes.ExecTxResult{
+		Code: 0,
+	}, nil
 }
 
 func (c *Core) GetTracks() ([]*entities.TrackEntity, error) {

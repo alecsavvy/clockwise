@@ -3,8 +3,11 @@ package core
 import (
 	"context"
 
+	"github.com/alecsavvy/clockwise/core/db"
 	"github.com/alecsavvy/clockwise/cqrs/commands"
 	"github.com/alecsavvy/clockwise/cqrs/entities"
+	"github.com/alecsavvy/clockwise/utils"
+	abcitypes "github.com/cometbft/cometbft/abci/types"
 )
 
 func (c *Core) CreateUser(cmd *commands.CreateUserCommand) (*entities.UserEntity, error) {
@@ -30,6 +33,34 @@ func (c *Core) CreateUser(cmd *commands.CreateUserCommand) (*entities.UserEntity
 	}
 
 	return userEntity, nil
+}
+
+func (c *Core) handleCreateUser(qtx *db.Queries, createdAt int64, b []byte) (*abcitypes.ExecTxResult, error) {
+	ctx := context.Background()
+
+	var cmd commands.CreateUserCommand
+	err := c.fromTxBytes(b, &cmd)
+	if err != nil {
+		return nil, utils.AppError("not a create user command in create user handler", err)
+	}
+
+	user := cmd.Data
+
+	err = qtx.CreateUser(ctx, db.CreateUserParams{
+		ID:        user.ID,
+		Handle:    user.Handle,
+		Bio:       user.Bio,
+		Address:   user.Address,
+		CreatedAt: createdAt,
+	})
+
+	if err != nil {
+		return nil, utils.AppError("failure to insert user", err)
+	}
+
+	return &abcitypes.ExecTxResult{
+		Code: 0,
+	}, nil
 }
 
 func (c *Core) GetUserFollowers(userId string) ([]*entities.FollowEntity, error) {

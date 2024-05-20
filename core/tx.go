@@ -48,13 +48,11 @@ func (c *Core) toTxBytes(tx interface{}) ([]byte, error) {
 	return txBytes, nil
 }
 
-func (c *Core) fromTxBytes(jsonBytes []byte) (interface{}, error) {
-	var result interface{}
-
-	err := json.Unmarshal(jsonBytes, &result)
+func (c *Core) fromTxBytes(jsonBytes []byte, result interface{}) error {
+	err := json.Unmarshal(jsonBytes, result)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return &result, nil
+	return nil
 }

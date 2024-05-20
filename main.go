@@ -5,14 +5,15 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"os/signal"
 	"sync"
+	"syscall"
 	"time"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/alecsavvy/clockwise/core"
-	"github.com/alecsavvy/clockwise/core/chain"
 	"github.com/alecsavvy/clockwise/core/db"
 	"github.com/alecsavvy/clockwise/ports/graph"
 	"github.com/alecsavvy/clockwise/utils"
@@ -45,18 +46,14 @@ func run() error {
 	}
 	defer pool.Close()
 
-	db := db.New(pool)
-
-	// chain setup
-	node, err := chain.New(logger, homeDir, pool)
+	coreApp := core.NewCore(logger, pool)
+	node, err := core.NewNode(logger, homeDir, coreApp)
 	if err != nil {
 		return utils.AppError("failure to init chain", err)
 	}
 
-	clockwiseCore := core.NewCore(logger, node.Node(), db)
-
 	// graphql setup
-	gqlResolver := graph.NewResolver(logger, clockwiseCore)
+	gqlResolver := graph.NewResolver(logger, coreApp)
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: gqlResolver}))
 	queryHandler := func(c echo.Context) error {
 		srv.ServeHTTP(c.Response(), c.Request())
@@ -95,12 +92,21 @@ func run() error {
 	// run all the processes
 	var wg sync.WaitGroup
 
-	wg.Add(2)
+	wg.Add(3)
 
 	// run chain
 	go func() {
 		defer wg.Done()
-		node.Run()
+		node.Start()
+
+		defer func() {
+			node.Stop()
+			node.Wait()
+		}()
+
+		c := make(chan os.Signal, 1)
+		signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+		<-c
 	}()
 
 	// run web server
@@ -113,13 +119,12 @@ func run() error {
 	}()
 
 	// // run pubsub listener
-	// go func() {
-	// 	time.Sleep(5 * time.Second)
-	// 	defer wg.Done()
-	// 	if err := pubsub.Run(); err != nil {
-	// 		logger.Error("pubsub crashed", err)
-	// 	}
-	// }()
+	go func() {
+		defer wg.Done()
+		if err := coreApp.Run(node); err != nil {
+			logger.Error("pubsub crashed", err)
+		}
+	}()
 
 	wg.Wait()
 	return nil

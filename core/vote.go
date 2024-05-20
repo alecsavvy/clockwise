@@ -3,7 +3,7 @@ vote.go
 
 Contains consensus voting logic.
 */
-package chain
+package core
 
 import (
 	"context"
@@ -12,11 +12,11 @@ import (
 )
 
 // ExtendVote implements types.Application.
-func (a *Application) ExtendVote(context.Context, *abcitypes.RequestExtendVote) (*abcitypes.ResponseExtendVote, error) {
+func (c *Core) ExtendVote(context.Context, *abcitypes.RequestExtendVote) (*abcitypes.ResponseExtendVote, error) {
 	return &abcitypes.ResponseExtendVote{}, nil
 }
 
 // VerifyVoteExtension implements types.Application.
-func (a *Application) VerifyVoteExtension(_ context.Context, req *abcitypes.RequestVerifyVoteExtension) (*abcitypes.ResponseVerifyVoteExtension, error) {
+func (c *Core) VerifyVoteExtension(_ context.Context, req *abcitypes.RequestVerifyVoteExtension) (*abcitypes.ResponseVerifyVoteExtension, error) {
 	return &abcitypes.ResponseVerifyVoteExtension{}, nil
 }
