@@ -3,18 +3,18 @@ package adapters
 import (
 	"context"
 
-	chainclient "github.com/alecsavvy/clockwise/core/chain_client"
 	chainutils "github.com/alecsavvy/clockwise/core/chain_utils"
 	"github.com/alecsavvy/clockwise/core/db"
 	"github.com/alecsavvy/clockwise/cqrs/commands"
 	"github.com/alecsavvy/clockwise/cqrs/entities"
 	"github.com/alecsavvy/clockwise/cqrs/services"
 	"github.com/alecsavvy/clockwise/pubsub"
+	"github.com/cometbft/cometbft/rpc/client/local"
 	ctypes "github.com/cometbft/cometbft/types"
 )
 
 type PubsubAdapter struct {
-	cc *chainclient.ChainClient
+	cc *local.Local
 	db *db.Queries
 
 	UserPubsub   *services.UserPubsub
@@ -23,7 +23,7 @@ type PubsubAdapter struct {
 	RepostPubsub *services.RepostPubsub
 }
 
-func NewPubsubAdapter(cc *chainclient.ChainClient, db *db.Queries) *PubsubAdapter {
+func NewPubsubAdapter(cc *local.Local, db *db.Queries) *PubsubAdapter {
 	return &PubsubAdapter{
 		cc:           cc,
 		db:           db,
@@ -35,8 +35,7 @@ func NewPubsubAdapter(cc *chainclient.ChainClient, db *db.Queries) *PubsubAdapte
 }
 
 func (ps *PubsubAdapter) Run() error {
-	cc := ps.cc
-	rpc := cc.GetRpc()
+	rpc := ps.cc
 
 	err := rpc.Start()
 	if err != nil {

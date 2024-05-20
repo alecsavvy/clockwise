@@ -17,7 +17,7 @@ import (
 
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
-	us := r.userService
+	core := r.core
 
 	createUserCmd := commands.NewCommand(commands.USER, commands.CREATE, commands.CreateUser{
 		ID:      uuid.NewString(),
@@ -26,12 +26,11 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 		Address: input.Address,
 	})
 
-	event, err := us.CreateUser(createUserCmd)
+	userEntity, err := core.CreateUser(createUserCmd)
 	if err != nil {
 		return nil, err
 	}
 
-	userEntity := event.User
 	newUser := &model.User{
 		ID:      userEntity.ID,
 		Handle:  userEntity.Handle,
@@ -44,7 +43,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 
 // CreateTrack is the resolver for the createTrack field.
 func (r *mutationResolver) CreateTrack(ctx context.Context, input model.NewTrack) (*model.Track, error) {
-	ts := r.trackService
+	core := r.core
 
 	createTrackCmd := commands.NewCommand(commands.TRACK, commands.CREATE, commands.CreateTrack{
 		ID:          uuid.NewString(),
@@ -55,12 +54,11 @@ func (r *mutationResolver) CreateTrack(ctx context.Context, input model.NewTrack
 		UserID:      input.UserID,
 	})
 
-	event, err := ts.CreateTrack(createTrackCmd)
+	trackEntity, err := core.CreateTrack(createTrackCmd)
 	if err != nil {
 		return nil, err
 	}
 
-	trackEntity := event.Track
 	newTrack := &model.Track{
 		ID:          trackEntity.ID,
 		Title:       trackEntity.Title,
@@ -105,9 +103,9 @@ func (r *mutationResolver) Unrepost(ctx context.Context, repostID string) (strin
 
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
-	us := r.userService
+	core := r.core
 
-	users, err := us.GetUsers()
+	users, err := core.GetUsers()
 	if err != nil {
 		return nil, err
 	}
@@ -125,9 +123,9 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 
 // Tracks is the resolver for the tracks field.
 func (r *queryResolver) Tracks(ctx context.Context) ([]*model.Track, error) {
-	ts := r.trackService
+	core := r.core
 
-	tracks, err := ts.GetTracks()
+	tracks, err := core.GetTracks()
 	if err != nil {
 		return nil, err
 	}
@@ -173,58 +171,60 @@ func (r *queryResolver) Reposts(ctx context.Context, trackID string) ([]*model.R
 
 // UserEvents is the resolver for the userEvents field.
 func (r *subscriptionResolver) UserEvents(ctx context.Context, userID string) (<-chan model.UserEvents, error) {
-	ues := make(chan model.UserEvents)
-	go func() {
-		defer close(ues)
-		userEvents := r.userPubsub.Subscribe()
-		for {
-			select {
-			case entity, ok := <-userEvents:
-				if !ok {
-					return
-				}
-				user := model.User{
-					ID:      entity.ID,
-					Handle:  entity.Handle,
-					Address: entity.Address,
-					Bio:     entity.Bio,
-				}
-				ues <- user
-			case <-ctx.Done():
-				return // Exit the goroutine if context is canceled
-			}
-		}
-	}()
-	return ues, nil
+	panic("not implemented")
+	// ues := make(chan model.UserEvents)
+	// go func() {
+	// 	defer close(ues)
+	// 	userEvents := r.userPubsub.Subscribe()
+	// 	for {
+	// 		select {
+	// 		case entity, ok := <-userEvents:
+	// 			if !ok {
+	// 				return
+	// 			}
+	// 			user := model.User{
+	// 				ID:      entity.ID,
+	// 				Handle:  entity.Handle,
+	// 				Address: entity.Address,
+	// 				Bio:     entity.Bio,
+	// 			}
+	// 			ues <- user
+	// 		case <-ctx.Done():
+	// 			return // Exit the goroutine if context is canceled
+	// 		}
+	// 	}
+	// }()
+	// return ues, nil
 }
 
 // TrackEvents is the resolver for the trackEvents field.
 func (r *subscriptionResolver) TrackEvents(ctx context.Context, trackID string) (<-chan model.TrackEvents, error) {
-	tes := make(chan model.TrackEvents)
-	go func() {
-		defer close(tes)
-		trackEvents := r.trackPubsub.Subscribe()
-		for {
-			select {
-			case entity, ok := <-trackEvents:
-				if !ok {
-					return
-				}
-				track := model.Track{
-					ID:          entity.ID,
-					Title:       entity.Title,
-					Description: entity.Description,
-					Genre:       entity.Genre,
-					StreamURL:   entity.StreamURL,
-					UserID:      entity.UserID,
-				}
-				tes <- track
-			case <-ctx.Done():
-				return // Exit the goroutine if context is canceled
-			}
-		}
-	}()
-	return tes, nil
+	panic("not implemented")
+	// tes := make(chan model.TrackEvents)
+	// go func() {
+	// 	defer close(tes)
+	// 	trackEvents := r.trackPubsub.Subscribe()
+	// 	for {
+	// 		select {
+	// 		case entity, ok := <-trackEvents:
+	// 			if !ok {
+	// 				return
+	// 			}
+	// 			track := model.Track{
+	// 				ID:          entity.ID,
+	// 				Title:       entity.Title,
+	// 				Description: entity.Description,
+	// 				Genre:       entity.Genre,
+	// 				StreamURL:   entity.StreamURL,
+	// 				UserID:      entity.UserID,
+	// 			}
+	// 			tes <- track
+	// 		case <-ctx.Done():
+	// 			return // Exit the goroutine if context is canceled
+	// 		}
+	// 	}
+	// }()
+	// return tes, nil
 }
 
 // GenreEvents is the resolver for the genreEvents field.

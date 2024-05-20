@@ -70,8 +70,8 @@ func New(logger *utils.Logger, homeDir string, pool *pgxpool.Pool) (*Node, error
 	}, nil
 }
 
-func (n *Node) RPC() string {
-	return n.node.Config().RPC.ListenAddress
+func (n *Node) Node() *nm.Node {
+	return n.node
 }
 
 func (n *Node) Run() {

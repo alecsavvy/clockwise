@@ -11,13 +11,11 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/alecsavvy/clockwise/core/adapters"
 	"github.com/alecsavvy/clockwise/core/chain"
-	chainclient "github.com/alecsavvy/clockwise/core/chain_client"
+	"github.com/alecsavvy/clockwise/core/client"
 	"github.com/alecsavvy/clockwise/core/db"
 	"github.com/alecsavvy/clockwise/ports/graph"
 	"github.com/alecsavvy/clockwise/utils"
-	rpchttp "github.com/cometbft/cometbft/rpc/client/http"
 	"github.com/gorilla/websocket"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/labstack/echo/v4"
@@ -55,22 +53,10 @@ func run() error {
 		return utils.AppError("failure to init chain", err)
 	}
 
-	// rpc client setup
-	rpcUrl := node.RPC()
-	client, err := rpchttp.New(rpcUrl, "/websocket")
-	if err != nil {
-		return utils.AppError("failure to init chain rpc", err)
-	}
-	client.SetLogger(logger)
-	chainClient := chainclient.New(logger, client)
-
-	// adapters
-	userRepo := adapters.NewUserRepo(logger, chainClient, db)
-	trackRepo := adapters.NewTrackRepo(logger, chainClient, db)
-	pubsub := adapters.NewPubsubAdapter(chainClient, db)
+	core := client.NewCore(logger, node.Node(), db)
 
 	// graphql setup
-	gqlResolver := graph.NewResolver(logger, userRepo, trackRepo, pubsub.UserPubsub, pubsub.TrackPubsub)
+	gqlResolver := graph.NewResolver(logger, core)
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: gqlResolver}))
 	queryHandler := func(c echo.Context) error {
 		srv.ServeHTTP(c.Response(), c.Request())
@@ -109,7 +95,7 @@ func run() error {
 	// run all the processes
 	var wg sync.WaitGroup
 
-	wg.Add(3)
+	wg.Add(2)
 
 	// run chain
 	go func() {
@@ -126,14 +112,14 @@ func run() error {
 		}
 	}()
 
-	// run pubsub listener
-	go func() {
-		time.Sleep(5 * time.Second)
-		defer wg.Done()
-		if err := pubsub.Run(); err != nil {
-			logger.Error("pubsub crashed", err)
-		}
-	}()
+	// // run pubsub listener
+	// go func() {
+	// 	time.Sleep(5 * time.Second)
+	// 	defer wg.Done()
+	// 	if err := pubsub.Run(); err != nil {
+	// 		logger.Error("pubsub crashed", err)
+	// 	}
+	// }()
 
 	wg.Wait()
 	return nil
