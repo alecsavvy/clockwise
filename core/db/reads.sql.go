@@ -9,6 +9,25 @@ import (
 	"context"
 )
 
+const getFollowByID = `-- name: GetFollowByID :one
+select id, follower_id, following_id, created_at
+from follows
+where id = $1
+limit 1
+`
+
+func (q *Queries) GetFollowByID(ctx context.Context, id string) (Follow, error) {
+	row := q.db.QueryRow(ctx, getFollowByID, id)
+	var i Follow
+	err := row.Scan(
+		&i.ID,
+		&i.FollowerID,
+		&i.FollowingID,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
 const getFollowers = `-- name: GetFollowers :many
 select id, follower_id, following_id, created_at
 from follows
@@ -71,6 +90,25 @@ func (q *Queries) GetFollowing(ctx context.Context, followingID string) ([]Follo
 		return nil, err
 	}
 	return items, nil
+}
+
+const getRepostByID = `-- name: GetRepostByID :one
+select id, reposter_id, track_id, created_at
+from reposts
+where id = $1
+limit 1
+`
+
+func (q *Queries) GetRepostByID(ctx context.Context, id string) (Repost, error) {
+	row := q.db.QueryRow(ctx, getRepostByID, id)
+	var i Repost
+	err := row.Scan(
+		&i.ID,
+		&i.ReposterID,
+		&i.TrackID,
+		&i.CreatedAt,
+	)
+	return i, err
 }
 
 const getTrackByID = `-- name: GetTrackByID :one

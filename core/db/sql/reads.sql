@@ -55,3 +55,15 @@ select *
 from tracks
 where title = $1
 limit 1;
+
+-- name: GetFollowByID :one
+select *
+from follows
+where id = $1
+limit 1;
+
+-- name: GetRepostByID :one
+select *
+from reposts
+where id = $1
+limit 1;
