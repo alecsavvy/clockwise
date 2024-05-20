@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/alecsavvy/clockwise/core/db"
-	"github.com/alecsavvy/clockwise/cqrs/commands"
-	"github.com/alecsavvy/clockwise/cqrs/entities"
+	"github.com/alecsavvy/clockwise/core/interface/commands"
+	"github.com/alecsavvy/clockwise/core/interface/entities"
 	"github.com/alecsavvy/clockwise/utils"
 	abcitypes "github.com/cometbft/cometbft/abci/types"
 )
