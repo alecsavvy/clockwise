@@ -29,13 +29,13 @@ order by created_at;
 -- name: GetFollowers :many
 select *
 from follows
-where follower_id = $1
+where following_id = $1
 order by created_at;
 
 -- name: GetFollowing :many
 select *
 from follows
-where following_id = $1
+where follower_id = $1
 order by created_at;
 
 -- name: GetTrackReposts :many

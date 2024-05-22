@@ -35,18 +35,23 @@ func (c *Core) rootHandler(qtx *db.Queries, rfb *abcitypes.RequestFinalizeBlock)
 
 		switch operation {
 		case commands.Operation{Action: commands.CREATE, Entity: commands.USER}:
-			txResult, err := c.handleCreateUser(qtx, createdAt, tx)
+			txResult, err := c.finalizeCreateUser(qtx, createdAt, tx)
 			if err != nil {
-				return nil, utils.AppError("cannot handle create user", err)
+				return nil, utils.AppError("cannot finalize create user", err)
 			}
 			txResults[i] = txResult
 		case commands.Operation{Action: commands.CREATE, Entity: commands.TRACK}:
-			txResult, err := c.handleCreateTrack(qtx, createdAt, tx)
+			txResult, err := c.finalizeCreateTrack(qtx, createdAt, tx)
 			if err != nil {
-				return nil, utils.AppError("cannot handle create track", err)
+				return nil, utils.AppError("cannot finalize create track", err)
 			}
 			txResults[i] = txResult
 		case commands.Operation{Action: commands.CREATE, Entity: commands.FOLLOW}:
+			txResult, err := c.finalizeCreateFollow(qtx, createdAt, tx)
+			if err != nil {
+				return nil, utils.AppError("cannot finalize create follow", err)
+			}
+			txResults[i] = txResult
 		case commands.Operation{Action: commands.CREATE, Entity: commands.REPOST}:
 		case commands.Operation{Action: commands.DELETE, Entity: commands.FOLLOW}:
 		case commands.Operation{Action: commands.DELETE, Entity: commands.REPOST}:

@@ -83,7 +83,26 @@ func (r *mutationResolver) UpdateTrack(ctx context.Context, input model.UpdateTr
 
 // Follow is the resolver for the follow field.
 func (r *mutationResolver) Follow(ctx context.Context, input model.NewFollow) (*model.Follow, error) {
-	panic(fmt.Errorf("not implemented: Follow - follow"))
+	core := r.core
+
+	createFollowCommand := commands.NewCommand(commands.FOLLOW, commands.CREATE, commands.CreateFollow{
+		ID:          uuid.NewString(),
+		FollowerID:  input.FollowerID,
+		FollowingID: input.FollowingID,
+	})
+
+	followEntity, err := core.CreateFollow(createFollowCommand)
+	if err != nil {
+		return nil, err
+	}
+
+	newFollow := &model.Follow{
+		ID:          followEntity.ID,
+		FollowerID:  followEntity.FollowerID,
+		FollowingID: followEntity.FollowingID,
+	}
+
+	return newFollow, nil
 }
 
 // Repost is the resolver for the repost field.
@@ -146,7 +165,14 @@ func (r *queryResolver) Tracks(ctx context.Context) ([]*model.Track, error) {
 
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, userID string) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: User - user"))
+	c := r.core
+
+	user, err := c.GetUser(userID)
+	if err != nil {
+		return nil, err
+	}
+
+	return r.userEntitiesToModels([]*entities.UserEntity{user})[0], nil
 }
 
 // Track is the resolver for the track field.
@@ -156,12 +182,26 @@ func (r *queryResolver) Track(ctx context.Context, trackID string) (*model.Track
 
 // Followers is the resolver for the followers field.
 func (r *queryResolver) Followers(ctx context.Context, userID string) ([]*model.Follow, error) {
-	panic(fmt.Errorf("not implemented: Followers - followers"))
+	c := r.core
+
+	followers, err := c.GetUserFollowers(userID)
+	if err != nil {
+		return nil, err
+	}
+
+	return r.followEntitiesToModels(followers), nil
 }
 
 // Following is the resolver for the following field.
 func (r *queryResolver) Following(ctx context.Context, userID string) ([]*model.Follow, error) {
-	panic(fmt.Errorf("not implemented: Following - following"))
+	c := r.core
+
+	following, err := c.GetUserFollowing(userID)
+	if err != nil {
+		return nil, err
+	}
+
+	return r.followEntitiesToModels(following), nil
 }
 
 // Reposts is the resolver for the reposts field.

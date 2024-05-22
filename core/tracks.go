@@ -45,7 +45,7 @@ func (c *Core) CreateTrack(cmd *commands.CreateTrackCommand) (*entities.TrackEnt
 	return trackEntity, nil
 }
 
-func (c *Core) handleCreateTrack(qtx *db.Queries, createdAt int64, b []byte) (*abcitypes.ExecTxResult, error) {
+func (c *Core) finalizeCreateTrack(qtx *db.Queries, createdAt int64, b []byte) (*abcitypes.ExecTxResult, error) {
 	ctx := context.Background()
 
 	var cmd commands.CreateTrackCommand

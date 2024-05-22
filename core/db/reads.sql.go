@@ -31,12 +31,12 @@ func (q *Queries) GetFollowByID(ctx context.Context, id string) (Follow, error) 
 const getFollowers = `-- name: GetFollowers :many
 select id, follower_id, following_id, created_at
 from follows
-where follower_id = $1
+where following_id = $1
 order by created_at
 `
 
-func (q *Queries) GetFollowers(ctx context.Context, followerID string) ([]Follow, error) {
-	rows, err := q.db.Query(ctx, getFollowers, followerID)
+func (q *Queries) GetFollowers(ctx context.Context, followingID string) ([]Follow, error) {
+	rows, err := q.db.Query(ctx, getFollowers, followingID)
 	if err != nil {
 		return nil, err
 	}
@@ -63,12 +63,12 @@ func (q *Queries) GetFollowers(ctx context.Context, followerID string) ([]Follow
 const getFollowing = `-- name: GetFollowing :many
 select id, follower_id, following_id, created_at
 from follows
-where following_id = $1
+where follower_id = $1
 order by created_at
 `
 
-func (q *Queries) GetFollowing(ctx context.Context, followingID string) ([]Follow, error) {
-	rows, err := q.db.Query(ctx, getFollowing, followingID)
+func (q *Queries) GetFollowing(ctx context.Context, followerID string) ([]Follow, error) {
+	rows, err := q.db.Query(ctx, getFollowing, followerID)
 	if err != nil {
 		return nil, err
 	}

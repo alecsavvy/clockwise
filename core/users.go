@@ -35,7 +35,7 @@ func (c *Core) CreateUser(cmd *commands.CreateUserCommand) (*entities.UserEntity
 	return userEntity, nil
 }
 
-func (c *Core) handleCreateUser(qtx *db.Queries, createdAt int64, b []byte) (*abcitypes.ExecTxResult, error) {
+func (c *Core) finalizeCreateUser(qtx *db.Queries, createdAt int64, b []byte) (*abcitypes.ExecTxResult, error) {
 	ctx := context.Background()
 
 	var cmd commands.CreateUserCommand
@@ -63,30 +63,6 @@ func (c *Core) handleCreateUser(qtx *db.Queries, createdAt int64, b []byte) (*ab
 	}, nil
 }
 
-func (c *Core) GetUserFollowers(userId string) ([]*entities.FollowEntity, error) {
-	ctx := context.Background()
-	db := c.db
-
-	follows, err := db.GetFollowers(ctx, userId)
-	if err != nil {
-		return nil, err
-	}
-
-	return c.followModelsToEntities(follows), nil
-}
-
-func (c *Core) GetUserFollowing(userId string) ([]*entities.FollowEntity, error) {
-	ctx := context.Background()
-	db := c.db
-
-	follows, err := db.GetFollowing(ctx, userId)
-	if err != nil {
-		return nil, err
-	}
-
-	return c.followModelsToEntities(follows), nil
-}
-
 func (c *Core) GetUserReposts(userId string) ([]*entities.RepostEntity, error) {
 	ctx := context.Background()
 	db := c.db
@@ -108,4 +84,15 @@ func (c *Core) GetUsers() ([]*entities.UserEntity, error) {
 	}
 
 	return c.userModelsToEntities(users), nil
+}
+
+func (c *Core) GetUser(userId string) (*entities.UserEntity, error) {
+	ctx := context.Background()
+
+	users, err := c.db.GetUserByID(ctx, userId)
+	if err != nil {
+		return nil, err
+	}
+
+	return c.userModelsToEntities([]db.User{users})[0], nil
 }

@@ -26,17 +26,23 @@ func (q *Queries) CreateBlock(ctx context.Context, arg CreateBlockParams) error 
 
 const createFollow = `-- name: CreateFollow :exec
 insert into follows (id, follower_id, following_id, created_at)
-values ($1, $2, $3, & 4)
+values ($1, $2, $3, $4)
 `
 
 type CreateFollowParams struct {
 	ID          string
 	FollowerID  string
 	FollowingID string
+	CreatedAt   int64
 }
 
 func (q *Queries) CreateFollow(ctx context.Context, arg CreateFollowParams) error {
-	_, err := q.db.Exec(ctx, createFollow, arg.ID, arg.FollowerID, arg.FollowingID)
+	_, err := q.db.Exec(ctx, createFollow,
+		arg.ID,
+		arg.FollowerID,
+		arg.FollowingID,
+		arg.CreatedAt,
+	)
 	return err
 }
 

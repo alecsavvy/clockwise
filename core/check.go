@@ -40,7 +40,9 @@ func (c *Core) CheckTx(ctx context.Context, req *abcitypes.RequestCheckTx) (*abc
 			logger.Error("invalid track create", err)
 			return errorCheck()
 		}
+		return successCheck()
 	case commands.Operation{Action: commands.CREATE, Entity: commands.FOLLOW}:
+		return successCheck()
 	case commands.Operation{Action: commands.CREATE, Entity: commands.REPOST}:
 	case commands.Operation{Action: commands.DELETE, Entity: commands.FOLLOW}:
 	case commands.Operation{Action: commands.DELETE, Entity: commands.REPOST}:
