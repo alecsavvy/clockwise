@@ -18,7 +18,8 @@ import (
 
 //go:embed templates/*
 var embeddedFiles embed.FS
-var tmpl *template.Template
+var stats_templ *template.Template
+var block_templ *template.Template
 
 // config
 var interval = 500
@@ -27,7 +28,12 @@ var statsBuffer = 100
 
 func init() {
 	var err error
-	tmpl, err = template.ParseFS(embeddedFiles, "templates/stats_template.html")
+	stats_templ, err = template.ParseFS(embeddedFiles, "templates/stats_template.html")
+	if err != nil {
+		panic(err)
+	}
+
+	block_templ, err = template.ParseFS(embeddedFiles, "templates/block_template.html")
 	if err != nil {
 		panic(err)
 	}
@@ -65,6 +71,7 @@ func main() {
 		e := echo.New()
 		e.HideBanner = true
 		e.GET("/stats", stats.statsHandler)
+		e.POST("/get_block", getBlock)
 		e.GET("/", htmlTemplates)
 
 		err = e.Start("0.0.0.0:8080")

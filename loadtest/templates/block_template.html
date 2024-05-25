@@ -1,0 +1,51 @@
+{{define "block"}}
+<div>
+  <h1>Block Explorer</h1>
+  <p>
+    <strong>RPC:</strong>
+    {{.Rpc}}
+  </p>
+  <p>
+    <strong>Block Number:</strong>
+    {{.BlockNumber}}
+  </p>
+  <p><strong>Block Hash:</strong> {{.BlockHash}}</p>
+  <table class="min-w-full leading-normal">
+    <thead>
+      <tr></tr>
+      <tr>
+        <th
+          class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+        >
+          Operation
+        </th>
+        <th
+          class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+        >
+          User ID
+        </th>
+        <th
+          class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+        >
+          Entity ID
+        </th>
+        <th
+          class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+        >
+          Metadata
+        </th>
+      </tr>
+    </thead>
+    <tbody class="text-gray-700">
+      {{range $em := .ManageEntities}}
+      <tr>
+        <td>{{$em.Action}}{{$em.EntityType}}</td>
+        <td>{{$em.UserID}}</td>
+        <td>{{$em.EntityID}}</td>
+        <td>{{$em.Metadata}}</td>
+      </tr>
+      {{end}}
+    </tbody>
+  </table>
+</div>
+{{end}}

@@ -60,5 +60,5 @@ func (s *Stats) recordStat(node string, wasError bool) {
 
 // route that serves the stats ui
 func (s *Stats) statsHandler(c echo.Context) error {
-	return tmpl.ExecuteTemplate(c.Response().Writer, "stats", s)
+	return stats_templ.ExecuteTemplate(c.Response().Writer, "stats", s)
 }
