@@ -771,7 +771,7 @@ func (ec *executionContext) _ManageEntity_metadata(ctx context.Context, field gr
 	}
 	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNJSON2string(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ManageEntity_metadata(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -781,7 +781,7 @@ func (ec *executionContext) fieldContext_ManageEntity_metadata(ctx context.Conte
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type JSON does not have child fields")
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -3327,7 +3327,7 @@ func (ec *executionContext) unmarshalInputNewManageEntity(ctx context.Context, o
 			it.EntityID = data
 		case "metadata":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("metadata"))
-			data, err := ec.unmarshalNJSON2string(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3972,21 +3972,6 @@ func (ec *executionContext) unmarshalNInt2int(ctx context.Context, v interface{}
 
 func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
 	res := graphql.MarshalInt(v)
-	if res == graphql.Null {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-	}
-	return res
-}
-
-func (ec *executionContext) unmarshalNJSON2string(ctx context.Context, v interface{}) (string, error) {
-	res, err := graphql.UnmarshalString(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNJSON2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
-	res := graphql.MarshalString(v)
 	if res == graphql.Null {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")

@@ -1,12 +1,10 @@
-scalar JSON
-
 type ManageEntity {
   requestId: String!
   userId: Int!
   signer: String!
   entityType: String!
   entityId: Int!
-  metadata: JSON!
+  metadata: String!
   action: String!
 }
 
@@ -16,7 +14,7 @@ input NewManageEntity {
   signer: String!
   entityType: String!
   entityId: Int!
-  metadata: JSON!
+  metadata: String!
   action: String!
 }
 

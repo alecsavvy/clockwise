@@ -4,6 +4,7 @@ go 1.22.2
 
 require (
 	github.com/99designs/gqlgen v0.17.45
+	github.com/Khan/genqlient v0.7.0
 	github.com/cometbft/cometbft v0.38.7
 	github.com/spf13/viper v1.18.1
 	github.com/vektah/gqlparser/v2 v2.5.11
