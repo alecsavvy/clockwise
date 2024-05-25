@@ -1,7 +1,9 @@
 package main
 
 import (
+	"embed"
 	"fmt"
+	"io/fs"
 	"net/http"
 	"os"
 	"os/signal"
@@ -12,13 +14,17 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/alecsavvy/clockwise/api"
 	"github.com/alecsavvy/clockwise/core"
 	"github.com/alecsavvy/clockwise/graph"
 	"github.com/alecsavvy/clockwise/utils"
 	"github.com/gorilla/websocket"
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
+
+//go:embed templates/*
+var embeddedFiles embed.FS
 
 func run() error {
 	// logger setup
@@ -61,6 +67,14 @@ func run() error {
 		return nil
 	}
 
+	api := api.NewApi(logger, coreApp)
+
+	htmlFS, err := fs.Sub(embeddedFiles, "templates")
+	if err != nil {
+		return err
+	}
+	htmlTemplates := echo.WrapHandler(http.FileServerFS(htmlFS))
+
 	// web server setup
 	e := echo.New()
 
@@ -70,6 +84,8 @@ func run() error {
 
 	e.GET("/graphiql", graphiqlHandler)
 	e.Any("/query", queryHandler)
+	e.GET("/events", api.SSEHandler)
+	e.GET("/", htmlTemplates)
 
 	// run all the processes
 	var wg sync.WaitGroup

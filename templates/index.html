@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SSE with HTMX</title>
+    <script src="https://unpkg.com/htmx.org"></script>
+  </head>
+  <body>
+    <h1>Server Time Updates</h1>
+    <div
+      id="server-time"
+      hx-get="/events"
+      hx-trigger="sse:open from:EventSource"
+      hx-swap="outerHTML"
+    >
+      Waiting for time updates...
+    </div>
+  </body>
+</html>
