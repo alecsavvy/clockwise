@@ -7,6 +7,7 @@ package core
 
 import (
 	"context"
+	"fmt"
 
 	abcitypes "github.com/cometbft/cometbft/abci/types"
 )
@@ -14,10 +15,21 @@ import (
 // Prepares a block for commitment and provides final validation
 func (c *Core) FinalizeBlock(ctx context.Context, rfb *abcitypes.RequestFinalizeBlock) (*abcitypes.ResponseFinalizeBlock, error) {
 	var txResults = make([]*abcitypes.ExecTxResult, len(rfb.Txs))
-	for _, txRes := range txResults {
-		txRes.Code = abcitypes.CodeTypeOK
+	for i, tx := range rfb.Txs {
+		var me ManageEntity
+		c.fromTxBytes(tx, &me)
+		txResults[i] = &abcitypes.ExecTxResult{
+			Code: abcitypes.CodeTypeOK,
+			Events: []abcitypes.Event{
+				{
+					Type: fmt.Sprintf("%s%s", me.EntityType, me.Action),
+					Attributes: []abcitypes.EventAttribute{
+						{Key: "requestId", Value: me.RequestID},
+					},
+				},
+			},
+		}
 	}
-
 	return &abcitypes.ResponseFinalizeBlock{TxResults: txResults}, nil
 }
 

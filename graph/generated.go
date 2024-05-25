@@ -72,7 +72,7 @@ type ComplexityRoot struct {
 	}
 
 	Subscription struct {
-		ManageEntities func(childComplexity int, filter *model.ManageEntityFilter) int
+		ManageEntities func(childComplexity int) int
 	}
 }
 
@@ -87,7 +87,7 @@ type QueryResolver interface {
 	SearchManageEntities(ctx context.Context, filter *model.ManageEntityFilter) ([]*model.ManageEntity, error)
 }
 type SubscriptionResolver interface {
-	ManageEntities(ctx context.Context, filter *model.ManageEntityFilter) (<-chan []*model.ManageEntity, error)
+	ManageEntities(ctx context.Context) (<-chan *model.ManageEntity, error)
 }
 
 type executableSchema struct {
@@ -235,12 +235,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		args, err := ec.field_Subscription_manageEntities_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Subscription.ManageEntities(childComplexity, args["filter"].(*model.ManageEntityFilter)), true
+		return e.complexity.Subscription.ManageEntities(childComplexity), true
 
 	}
 	return 0, false
@@ -476,21 +471,6 @@ func (ec *executionContext) field_Query_listUserManageEntities_args(ctx context.
 }
 
 func (ec *executionContext) field_Query_searchManageEntities_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 *model.ManageEntityFilter
-	if tmp, ok := rawArgs["filter"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
-		arg0, err = ec.unmarshalOManageEntityFilter2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐManageEntityFilter(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["filter"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Subscription_manageEntities_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 *model.ManageEntityFilter
@@ -1408,18 +1388,21 @@ func (ec *executionContext) _Subscription_manageEntities(ctx context.Context, fi
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Subscription().ManageEntities(rctx, fc.Args["filter"].(*model.ManageEntityFilter))
+		return ec.resolvers.Subscription().ManageEntities(rctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return nil
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return nil
 	}
 	return func(ctx context.Context) graphql.Marshaler {
 		select {
-		case res, ok := <-resTmp.(<-chan []*model.ManageEntity):
+		case res, ok := <-resTmp.(<-chan *model.ManageEntity):
 			if !ok {
 				return nil
 			}
@@ -1427,7 +1410,7 @@ func (ec *executionContext) _Subscription_manageEntities(ctx context.Context, fi
 				w.Write([]byte{'{'})
 				graphql.MarshalString(field.Alias).MarshalGQL(w)
 				w.Write([]byte{':'})
-				ec.marshalOManageEntity2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐManageEntity(ctx, field.Selections, res).MarshalGQL(w)
+				ec.marshalNManageEntity2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐManageEntity(ctx, field.Selections, res).MarshalGQL(w)
 				w.Write([]byte{'}'})
 			})
 		case <-ctx.Done():
@@ -1461,17 +1444,6 @@ func (ec *executionContext) fieldContext_Subscription_manageEntities(ctx context
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ManageEntity", field.Name)
 		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Subscription_manageEntities_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
 	}
 	return fc, nil
 }

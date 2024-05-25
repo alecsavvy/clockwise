@@ -13,7 +13,13 @@ import (
 
 // ManageEntity is the resolver for the manageEntity field.
 func (r *mutationResolver) ManageEntity(ctx context.Context, manageEntity model.NewManageEntity) (*model.ManageEntity, error) {
-	panic(fmt.Errorf("not implemented: ManageEntity - manageEntity"))
+	core := r.core
+	em := APItoInner(NewAPItoAPI(&manageEntity))
+	res, err := core.Send(em)
+	if err != nil {
+		return nil, err
+	}
+	return InnerToAPI(res), nil
 }
 
 // ManageEntityBatch is the resolver for the manageEntityBatch field.
@@ -42,8 +48,25 @@ func (r *queryResolver) SearchManageEntities(ctx context.Context, filter *model.
 }
 
 // ManageEntities is the resolver for the manageEntities field.
-func (r *subscriptionResolver) ManageEntities(ctx context.Context, filter *model.ManageEntityFilter) (<-chan []*model.ManageEntity, error) {
-	panic(fmt.Errorf("not implemented: ManageEntities - manageEntities"))
+func (r *subscriptionResolver) ManageEntities(ctx context.Context) (<-chan *model.ManageEntity, error) {
+	ems := make(chan *model.ManageEntity)
+	go func() {
+		defer close(ems)
+		manageEntities := r.core.Pubsub().EntityManagerPubsub.Subscribe()
+		for {
+			select {
+			case em, ok := <-manageEntities:
+				if !ok {
+					return
+				}
+				newEm := InnerToAPI(em)
+				ems <- newEm
+			case <-ctx.Done():
+				return
+			}
+		}
+	}()
+	return ems, nil
 }
 
 // Mutation returns MutationResolver implementation.

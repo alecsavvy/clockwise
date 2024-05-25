@@ -41,5 +41,5 @@ type Mutation {
 }
 
 type Subscription {
-  manageEntities(filter: ManageEntityFilter): [ManageEntity]
+  manageEntities: ManageEntity!
 }

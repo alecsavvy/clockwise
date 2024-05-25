@@ -8,11 +8,10 @@ import (
 	"fmt"
 	"time"
 
-	abcitypes "github.com/cometbft/cometbft/abci/types"
 	"github.com/cometbft/cometbft/types"
 )
 
-func (c *Core) Send(tx interface{}) (*abcitypes.TxResult, error) {
+func (c *Core) Send(tx interface{}) (*ManageEntity, error) {
 	ctx := context.Background()
 	rpc := c.rpc
 
@@ -34,7 +33,12 @@ func (c *Core) Send(tx interface{}) (*abcitypes.TxResult, error) {
 	select {
 	case tx := <-txChan:
 		etx := tx.Data.(types.EventDataTx)
-		return &etx.TxResult, nil
+		var res ManageEntity
+		err := c.fromTxBytes(etx.Tx, &res)
+		if err != nil {
+			return nil, err
+		}
+		return &res, nil
 	case <-time.After(30 * time.Second):
 		return nil, errors.New("tx waiting timeout")
 	}

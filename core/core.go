@@ -12,23 +12,20 @@ import (
 	"github.com/cometbft/cometbft/privval"
 	"github.com/cometbft/cometbft/proxy"
 	"github.com/cometbft/cometbft/rpc/client/local"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/spf13/viper"
 )
 
 type Core struct {
 	logger *utils.Logger
 	rpc    *local.Local
-	pool   *pgxpool.Pool
 	pubsub *Pubsub
 }
 
 var _ abcitypes.Application = (*Core)(nil)
 
-func NewCore(logger *utils.Logger, pool *pgxpool.Pool) *Core {
+func NewCore(logger *utils.Logger) *Core {
 	return &Core{
 		logger: logger,
-		pool:   pool,
 		pubsub: NewPubsub(),
 	}
 }

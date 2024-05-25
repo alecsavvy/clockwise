@@ -3,13 +3,20 @@ package core
 import (
 	"context"
 
+	"github.com/alecsavvy/clockwise/pubsub"
 	ctypes "github.com/cometbft/cometbft/types"
 )
 
-type Pubsub struct{}
+type EntityManagerPubsub = pubsub.Pubsub[*ManageEntity]
+
+type Pubsub struct {
+	EntityManagerPubsub *EntityManagerPubsub
+}
 
 func NewPubsub() *Pubsub {
-	return &Pubsub{}
+	return &Pubsub{
+		EntityManagerPubsub: pubsub.NewPubsub[*ManageEntity](),
+	}
 }
 
 func (c *Core) RunPubsub() error {
@@ -32,16 +39,13 @@ func (c *Core) RunPubsub() error {
 			}
 
 			txs := block.Block.Txs
-			c.broadcastTxs(txs)
+			for _, tx := range txs {
+				var me ManageEntity
+				c.fromTxBytes(tx, &me)
+				c.pubsub.EntityManagerPubsub.Publish(&me)
+			}
 		case <-ctx.Done():
 			return nil
 		}
 	}
-}
-
-func (c *Core) broadcastTxs(txs ctypes.Txs) {
-	// context.Background()
-	// for _, _ := range txs {
-	// 	// broadcast txs
-	// }
 }
