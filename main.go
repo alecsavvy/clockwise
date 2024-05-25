@@ -85,6 +85,7 @@ func run() error {
 	e.GET("/graphiql", graphiqlHandler)
 	e.Any("/query", queryHandler)
 	e.GET("/events", api.SSEHandler)
+	e.GET("/health_check", api.HealthCheck)
 	e.GET("/", htmlTemplates)
 
 	// run all the processes
@@ -110,7 +111,7 @@ func run() error {
 	// run web server
 	go func() {
 		defer wg.Done()
-		err = e.Start(":26659")
+		err = e.Start("0.0.0.0:26659")
 		if err != nil {
 			logger.Error("web server crashed", err)
 		}

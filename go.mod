@@ -30,7 +30,7 @@ require (
 	github.com/go-logfmt/logfmt v0.6.0 // indirect
 	github.com/google/btree v1.1.2 // indirect
 	github.com/google/orderedcode v0.0.1 // indirect
-	github.com/google/uuid v1.6.0 // indirect
+	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.0
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jmhodges/levigo v1.0.0 // indirect
