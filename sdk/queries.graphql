@@ -1,0 +1,31 @@
+# queries.graphql
+
+mutation ManageEntity(
+  $requestId: String!
+  $userId: Int!
+  $signer: String!
+  $entityType: String!
+  $entityId: Int!
+  $metadata: String!
+  $action: String!
+) {
+  manageEntity(
+    manageEntity: {
+      requestId: $requestId
+      userId: $userId
+      signer: $signer
+      entityType: $entityType
+      entityId: $entityId
+      metadata: $metadata
+      action: $action
+    }
+  ) {
+    requestId
+    userId
+    signer
+    entityType
+    entityId
+    metadata
+    action
+  }
+}

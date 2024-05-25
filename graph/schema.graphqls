@@ -1,0 +1,43 @@
+type ManageEntity {
+  requestId: String!
+  userId: Int!
+  signer: String!
+  entityType: String!
+  entityId: Int!
+  metadata: String!
+  action: String!
+}
+
+input NewManageEntity {
+  requestId: String!
+  userId: Int!
+  signer: String!
+  entityType: String!
+  entityId: Int!
+  metadata: String!
+  action: String!
+}
+
+input ManageEntityFilter {
+  userId: Int
+  signer: String
+  entityType: String
+  entityId: Int
+  action: String
+}
+
+type Query {
+  getManageEntity(requestId: String!): ManageEntity
+  listUserManageEntities(userId: Int!): [ManageEntity]
+  listEntitiesByType(entityType: String!): [ManageEntity]
+  searchManageEntities(filter: ManageEntityFilter): [ManageEntity]
+}
+
+type Mutation {
+  manageEntity(manageEntity: NewManageEntity!): ManageEntity!
+  manageEntityBatch(batch: [NewManageEntity]!): [ManageEntity]!
+}
+
+type Subscription {
+  manageEntities: ManageEntity!
+}

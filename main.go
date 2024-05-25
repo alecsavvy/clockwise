@@ -1,8 +1,9 @@
 package main
 
 import (
-	"context"
+	"embed"
 	"fmt"
+	"io/fs"
 	"net/http"
 	"os"
 	"os/signal"
@@ -13,15 +14,17 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/alecsavvy/clockwise/api"
 	"github.com/alecsavvy/clockwise/core"
-	"github.com/alecsavvy/clockwise/core/db"
-	"github.com/alecsavvy/clockwise/ports/graph"
+	"github.com/alecsavvy/clockwise/graph"
 	"github.com/alecsavvy/clockwise/utils"
 	"github.com/gorilla/websocket"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
+
+//go:embed templates/*
+var embeddedFiles embed.FS
 
 func run() error {
 	// logger setup
@@ -31,22 +34,7 @@ func run() error {
 	// config setup
 	homeDir := "./cmt-home"
 
-	// db setup
-	ctx := context.Background()
-	pgConnectionString := os.Getenv("pgConnectionString")
-
-	err := db.RunMigrations(logger, pgConnectionString)
-	if err != nil {
-		return utils.AppError("could not complete database migrations", err)
-	}
-
-	pool, err := pgxpool.New(ctx, pgConnectionString)
-	if err != nil {
-		return utils.AppError("failure to create db pool", err)
-	}
-	defer pool.Close()
-
-	coreApp := core.NewCore(logger, pool)
+	coreApp := core.NewCore(logger)
 	node, err := core.NewNode(logger, homeDir, coreApp)
 	if err != nil {
 		return utils.AppError("failure to init chain", err)
@@ -79,6 +67,14 @@ func run() error {
 		return nil
 	}
 
+	api := api.NewApi(logger, coreApp)
+
+	htmlFS, err := fs.Sub(embeddedFiles, "templates")
+	if err != nil {
+		return err
+	}
+	htmlTemplates := echo.WrapHandler(http.FileServerFS(htmlFS))
+
 	// web server setup
 	e := echo.New()
 
@@ -88,6 +84,9 @@ func run() error {
 
 	e.GET("/graphiql", graphiqlHandler)
 	e.Any("/query", queryHandler)
+	e.GET("/events", api.SSEHandler)
+	e.GET("/health_check", api.HealthCheck)
+	e.GET("/", htmlTemplates)
 
 	// run all the processes
 	var wg sync.WaitGroup
@@ -112,7 +111,7 @@ func run() error {
 	// run web server
 	go func() {
 		defer wg.Done()
-		err = e.Start(":26659")
+		err = e.Start("0.0.0.0:26659")
 		if err != nil {
 			logger.Error("web server crashed", err)
 		}

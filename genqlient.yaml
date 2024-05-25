@@ -1,0 +1,4 @@
+schema: ./graph/schema.graphqls
+operations:
+  - ./sdk/queries.graphql
+generated: ./sdk/gqlclient/generated.go

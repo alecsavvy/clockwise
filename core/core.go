@@ -4,7 +4,6 @@ package core
 import (
 	"fmt"
 
-	"github.com/alecsavvy/clockwise/core/db"
 	"github.com/alecsavvy/clockwise/utils"
 	abcitypes "github.com/cometbft/cometbft/abci/types"
 	cfg "github.com/cometbft/cometbft/config"
@@ -13,29 +12,21 @@ import (
 	"github.com/cometbft/cometbft/privval"
 	"github.com/cometbft/cometbft/proxy"
 	"github.com/cometbft/cometbft/rpc/client/local"
-	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/spf13/viper"
 )
 
 type Core struct {
-	logger    *utils.Logger
-	rpc       *local.Local
-	db        *db.Queries
-	pool      *pgxpool.Pool
-	pubsub    *Pubsub
-	currentTx pgx.Tx
+	logger *utils.Logger
+	rpc    *local.Local
+	pubsub *Pubsub
 }
 
 var _ abcitypes.Application = (*Core)(nil)
 
-func NewCore(logger *utils.Logger, pool *pgxpool.Pool) *Core {
+func NewCore(logger *utils.Logger) *Core {
 	return &Core{
-		logger:    logger,
-		db:        db.New(pool),
-		pool:      pool,
-		pubsub:    NewPubsub(),
-		currentTx: nil,
+		logger: logger,
+		pubsub: NewPubsub(),
 	}
 }
 

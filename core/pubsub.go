@@ -3,31 +3,22 @@ package core
 import (
 	"context"
 
-	"github.com/alecsavvy/clockwise/core/db"
-	"github.com/alecsavvy/clockwise/core/interface/commands"
-	"github.com/alecsavvy/clockwise/core/interface/entities"
 	"github.com/alecsavvy/clockwise/pubsub"
 	ctypes "github.com/cometbft/cometbft/types"
 )
 
-type UserPubsub = pubsub.Pubsub[*entities.UserEntity]
-type TrackPubsub = pubsub.Pubsub[*entities.TrackEntity]
-type FollowPubsub = pubsub.Pubsub[*entities.FollowEntity]
-type RepostPubsub = pubsub.Pubsub[*entities.RepostEntity]
+type EntityManagerPubsub = pubsub.Pubsub[*ManageEntity]
+type NewBlockPubsub = pubsub.Pubsub[*ctypes.Block]
 
 type Pubsub struct {
-	UserPubsub   *UserPubsub
-	TrackPubsub  *TrackPubsub
-	FollowPubsub *FollowPubsub
-	RepostPubsub *RepostPubsub
+	EntityManagerPubsub *EntityManagerPubsub
+	NewBlockPubsub      *NewBlockPubsub
 }
 
 func NewPubsub() *Pubsub {
 	return &Pubsub{
-		UserPubsub:   pubsub.NewPubsub[*entities.UserEntity](),
-		TrackPubsub:  pubsub.NewPubsub[*entities.TrackEntity](),
-		FollowPubsub: pubsub.NewPubsub[*entities.FollowEntity](),
-		RepostPubsub: pubsub.NewPubsub[*entities.RepostEntity](),
+		EntityManagerPubsub: pubsub.NewPubsub[*ManageEntity](),
+		NewBlockPubsub:      pubsub.NewPubsub[*ctypes.Block](),
 	}
 }
 
@@ -50,39 +41,18 @@ func (c *Core) RunPubsub() error {
 				continue
 			}
 
+			// publish full blocks to listeneres
+			c.pubsub.NewBlockPubsub.Publish(block.Block)
+
 			txs := block.Block.Txs
-			c.broadcastTxs(txs)
+			for _, tx := range txs {
+				// publish manage entities to listeners
+				var me ManageEntity
+				c.fromTxBytes(tx, &me)
+				c.pubsub.EntityManagerPubsub.Publish(&me)
+			}
 		case <-ctx.Done():
 			return nil
-		}
-	}
-}
-
-func (c *Core) broadcastTxs(txs ctypes.Txs) {
-	ctx := context.Background()
-	for _, tx := range txs {
-		var cmd commands.Command[any]
-		c.fromTxBytes(tx, &cmd)
-		operation := cmd.Operation
-
-		switch operation {
-		case commands.Operation{Action: commands.CREATE, Entity: commands.USER}:
-			var e commands.CreateUserCommand
-			c.fromTxBytes(tx, &e)
-			user, _ := c.db.GetUserByID(ctx, e.Data.ID)
-			userEntity := c.userModelsToEntities([]db.User{user})[0]
-			c.pubsub.UserPubsub.Publish(userEntity)
-		case commands.Operation{Action: commands.CREATE, Entity: commands.TRACK}:
-			var e commands.CreateTrackCommand
-			c.fromTxBytes(tx, &e)
-			track, _ := c.db.GetTrackByID(ctx, e.Data.ID)
-			trackEntity := c.trackModelsToEntities([]db.Track{track})[0]
-			c.pubsub.TrackPubsub.Publish(trackEntity)
-		case commands.Operation{Action: commands.CREATE, Entity: commands.FOLLOW}:
-		case commands.Operation{Action: commands.CREATE, Entity: commands.REPOST}:
-		case commands.Operation{Action: commands.DELETE, Entity: commands.FOLLOW}:
-		case commands.Operation{Action: commands.DELETE, Entity: commands.REPOST}:
-		default:
 		}
 	}
 }

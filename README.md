@@ -1,27 +1,41 @@
 # clockwise
 
-clockwise is simple. clockwise is ephemeral. a blockchain for decentralized and finalized message passing.
+Clockwise is an entity manager implementation intended to upgrade the acdc network to something more lightweight and secure.
 
-- implement a function for service discovery that continuously gets polled.
-- implement a signing and validation function for communication between nodes.
-- blocks are signed deterministically by a node, sealer is based on hash of block num -> node.
-- nodes have three types, archive, signer, and validator.
-- network config must match for nodes to participate.
+## running
 
-## node types
+To run the local cluster on your machine with a running loadtest, all you need to do is run the make file. Make sure to have docker running and go installed.
 
-### observers
+```
+make
+```
 
-observer nodes are important for receiving a stream of blocks and performing side effects as a result of which transactions are finalized.
+## architecture
 
-can be configured to have persistence or pruning.
+### core
 
-### sealers
+Where the embedded chain node is ran from as well as the abci for said node is implemented.
 
-sealers take part in the block creation process. they provide new blocks and broadcast newly sealed ones. they also periodically pull in missed blocks from their peers.
+### pubsub
 
-can be configured to have persistence or pruning as long as they can still perform sealing duties.
+A generic pubsub module that uses channels to publish to multiple subscribers.
 
-### archivers
+### api
 
-archivers always have persistence configured and store records of all blocks. if a sealer or observer needs a record(s) of an old block they under the hood will query their selected archiver.
+Generic rest apis for clockwise, this where a `/relay` endpoint would live. Also has a
+
+### graph
+
+GraphQL interface for clockwise. This was initially implemented to avoid needing a frontend to test. To use go to `http://{node}:{port}/graphiql`
+
+### loadtest (moshpit)
+
+Separate binary that uses the graphql client to send a constant stream of entity manager events to nodes. Also known as mosh pit. Has a UI located at `http://localhost:8080`.
+
+### infra
+
+Docker compose, dockerfiles, and other crap to stand up the cluster locally. Also builds moshpit into it's own image.
+
+### sdk
+
+External go client that's used by moshpit but could also be used by external projects.

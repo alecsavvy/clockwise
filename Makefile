@@ -2,6 +2,7 @@ default:
 	make down
 	make gen
 	make up
+	open http://localhost:8080/
 
 up:
 	cd infra && docker compose up --build -d
@@ -19,5 +20,4 @@ init-testnet:
 gen:
 	make init-testnet
 	go generate ./...
-	cd core/db && sqlc generate
 	go mod tidy
