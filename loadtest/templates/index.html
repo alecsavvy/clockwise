@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Stats Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@1.8.0/dist/htmx.min.js"></script>
+  </head>
+  <body class="bg-gray-100 text-gray-900 font-sans">
+    <div class="max-w-4xl mx-auto p-5">
+      <div
+        id="stats-container"
+        hx-get="/stats"
+        hx-trigger="every 250ms"
+        hx-swap="innerHTML"
+        class="bg-white shadow-md rounded-lg p-4"
+      >
+        Loading stats...
+      </div>
+    </div>
+  </body>
+</html>

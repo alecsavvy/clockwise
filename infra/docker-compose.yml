@@ -134,6 +134,16 @@ services:
     restart: unless-stopped
     networks:
       - audius-testnet
+    ports:
+      - "8080:8080"
+    depends_on:
+      - node-0
+      - node-1
+      - node-2
+      - node-3
+      - node-4
+      - node-5
+      - node-6
 
 networks:
   audius-testnet:
