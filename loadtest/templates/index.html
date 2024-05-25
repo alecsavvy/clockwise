@@ -18,5 +18,52 @@
         Loading stats...
       </div>
     </div>
+    <div class="max-w-4xl mx-auto p-5 dropdown-container">
+      <form
+        id="data-form"
+        hx-post="/get_block"
+        hx-target="#result-div"
+        hx-trigger="change from:#dropdown,change from:#number-input"
+        hx-swap="innerHTML"
+        class="bg-white shadow-md rounded-lg p-4"
+      >
+        <select id="dropdown" name="option" required>
+          <option value="">Select an Option</option>
+          <option value="0">Discovery 0</option>
+          <option value="1">Discovery 1</option>
+          <option value="2">Discovery 2</option>
+          <option value="3">Discovery 3</option>
+          <option value="4">Discovery 4</option>
+          <option value="5">Discovery 5</option>
+          <option value="6">Discovery 6</option>
+        </select>
+
+        <input
+          type="number"
+          id="number-input"
+          name="Block Number"
+          required
+          placeholder="blocknumber"
+          min="1"
+        />
+
+        <input type="submit" value="Submit" />
+      </form>
+
+      <div id="result-div" class="bg-white shadow-md rounded-lg p-4"></div>
+
+      <script>
+        document
+          .getElementById("data-form")
+          .addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent the default form submit action
+            var dropdown = document.getElementById("dropdown").value;
+            var numberInput = document.getElementById("number-input").value;
+            if (dropdown && numberInput) {
+              htmx.trigger("#data-form", "submit"); // Trigger the HTMX request
+            }
+          });
+      </script>
+    </div>
   </body>
 </html>
