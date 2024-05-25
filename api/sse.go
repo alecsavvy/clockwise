@@ -2,8 +2,8 @@ package api
 
 import (
 	"fmt"
-	"time"
 
+	ctypes "github.com/cometbft/cometbft/types"
 	"github.com/labstack/echo/v4"
 )
 
@@ -15,8 +15,22 @@ func (api *Api) SSEHandler(c echo.Context) error {
 	// Ensure that the server sends a response immediately
 	c.Response().Flush()
 
-	ticker := time.NewTicker(1 * time.Second)
-	defer ticker.Stop()
+	blockChan := make(chan *ctypes.Block)
+	go func() {
+		defer close(blockChan)
+		blocks := api.core.Pubsub().NewBlockPubsub.Subscribe()
+		for {
+			select {
+			case newBlock, ok := <-blocks:
+				if !ok {
+					return
+				}
+				blockChan <- newBlock
+			case <-c.Request().Context().Done():
+				return
+			}
+		}
+	}()
 
 	quit := make(chan struct{})
 	go func() {
@@ -28,9 +42,9 @@ func (api *Api) SSEHandler(c echo.Context) error {
 		select {
 		case <-quit:
 			return nil
-		case t := <-ticker.C:
+		case block := <-blockChan:
 			// Write the SSE data
-			fmt.Fprintf(c.Response(), "data: %v\n\n", t.Format(time.RFC1123))
+			fmt.Fprintf(c.Response(), "data: %v\n\n", block.Height)
 			c.Response().Flush()
 		}
 	}
