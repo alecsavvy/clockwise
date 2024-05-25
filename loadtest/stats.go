@@ -12,6 +12,7 @@ type Stats struct {
 	TotalNodeCount              int
 	TransactionIntervalMillis   int
 	ParallelRequests            int
+	RPS                         int
 	NodeTotalAttempted          map[string]int
 	NodeTotalSuccesses          map[string]int
 	NodeTotalFailures           map[string]int
@@ -29,6 +30,7 @@ func NewStats() *Stats {
 		TotalNodeCount:              len(discprovUrls),
 		TransactionIntervalMillis:   interval,
 		ParallelRequests:            parallelRequests,
+		RPS:                         calculateRPS(),
 		NodeTotalAttempted:          map[string]int{},
 		NodeTotalSuccesses:          map[string]int{},
 		NodeTotalFailures:           map[string]int{},
@@ -36,6 +38,11 @@ func NewStats() *Stats {
 	}
 	go stats.runUpdater()
 	return stats
+}
+
+func calculateRPS() int {
+	intervalSeconds := float64(interval) / 1000
+	return int(float64(parallelRequests) / intervalSeconds)
 }
 
 // run the update listener

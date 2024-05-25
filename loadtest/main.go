@@ -22,8 +22,8 @@ var stats_templ *template.Template
 var block_templ *template.Template
 
 // config
-var interval = 500
-var parallelRequests = 3
+var interval = 250
+var parallelRequests = 20
 var statsBuffer = 100
 
 func init() {

@@ -2,6 +2,7 @@ default:
 	make down
 	make gen
 	make up
+	open http://localhost:8080/
 
 up:
 	cd infra && docker compose up --build -d

@@ -1,15 +1,16 @@
 {{define "block"}}
 <div>
-  <h1>Block Explorer</h1>
-  <p>
-    <strong>RPC:</strong>
-    {{.Rpc}}
-  </p>
-  <p>
-    <strong>Block Number:</strong>
-    {{.BlockNumber}}
-  </p>
-  <p><strong>Block Hash:</strong> {{.BlockHash}}</p>
+  <div class="p-2">
+    <p>
+      <strong>Block Number:</strong>
+      {{.BlockNumber}}
+    </p>
+    <p><strong>Block Hash:</strong> {{.BlockHash}}</p>
+    <p>
+      <strong>RPC:</strong>
+      {{.Rpc}}
+    </p>
+  </div>
   <table class="min-w-full leading-normal">
     <thead>
       <tr></tr>
@@ -36,7 +37,7 @@
         </th>
       </tr>
     </thead>
-    <tbody class="text-gray-700">
+    <tbody class="text-gray-700 px-5">
       {{range $em := .ManageEntities}}
       <tr>
         <td>{{$em.Action}}{{$em.EntityType}}</td>
