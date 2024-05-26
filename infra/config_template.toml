@@ -6,15 +6,15 @@ laddr = "tcp://0.0.0.0:26657"
 [p2p]
 laddr = "tcp://0.0.0.0:26656"
 
+[mempool]
+size = 10000
+max_tx_bytes = 1024
+max_txs_bytes = 1073741824
+
 [instrumentation]
 prometheus = false
 
 [consensus]
 create_empty_blocks = false
 create_empty_blocks_interval = "0s"
-
-[pruning]
-strategy = "custom"
-pruning_keep_recent = "50"
-pruning_keep_every = "0"
-pruning_interval = "10"
+timeout_commit = "1s"

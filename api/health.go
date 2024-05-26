@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 
-	coretypes "github.com/cometbft/cometbft/rpc/core/types"
 	"github.com/labstack/echo/v4"
 )
 
@@ -17,10 +16,12 @@ func (eb *ErrorBucket) addError(msg string, err error) {
 }
 
 type HealthCheckResponse struct {
-	IsHealthy bool                     `json:"is_healthy"`
-	NetInfo   *coretypes.ResultNetInfo `json:"net_info"`
-	Status    *coretypes.ResultStatus  `json:"core_status"`
-	Errors    ErrorBucket              `json:"errors"`
+	IsHealthy         bool        `json:"is_healthy"`
+	NodeID            string      `json:"node_id"`
+	LatestBlockHeight uint        `json:"latest_block_height"`
+	CatchingUp        bool        `json:"catching_up"`
+	Peers             uint        `json:"peers"`
+	Errors            ErrorBucket `json:"errors"`
 }
 
 func (api *Api) HealthCheck(c echo.Context) error {
@@ -32,18 +33,20 @@ func (api *Api) HealthCheck(c echo.Context) error {
 	var res HealthCheckResponse
 	var errorBucket ErrorBucket
 
-	netinfo, err := rpc.NetInfo(ctx)
-	if err != nil {
-		errorBucket.addError("unhealthy netinfo", err)
-	}
-
 	status, err := rpc.Status(ctx)
 	if err != nil {
 		errorBucket.addError("unhealthy core status", err)
 	}
 
-	res.NetInfo = netinfo
-	res.Status = status
+	netinfo, err := rpc.NetInfo(ctx)
+	if err != nil {
+		errorBucket.addError("unhealthy net info", err)
+	}
+
+	res.NodeID = string(status.NodeInfo.ID())
+	res.LatestBlockHeight = uint(status.SyncInfo.LatestBlockHeight)
+	res.CatchingUp = status.SyncInfo.CatchingUp
+	res.Peers = uint(netinfo.NPeers)
 	res.Errors = errorBucket
 	res.IsHealthy = len(errorBucket.bucket) == 0
 

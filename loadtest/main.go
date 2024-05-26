@@ -20,11 +20,12 @@ import (
 var embeddedFiles embed.FS
 var stats_templ *template.Template
 var block_templ *template.Template
+var health_templ *template.Template
 
 // config
 var interval = 250
-var parallelRequests = 20
-var statsBuffer = 100
+var parallelRequests = 5
+var statsBuffer = 10000
 
 func init() {
 	var err error
@@ -34,6 +35,11 @@ func init() {
 	}
 
 	block_templ, err = template.ParseFS(embeddedFiles, "templates/block_template.html")
+	if err != nil {
+		panic(err)
+	}
+
+	health_templ, err = template.ParseFS(embeddedFiles, "templates/health_template.html")
 	if err != nil {
 		panic(err)
 	}
@@ -71,6 +77,7 @@ func main() {
 		e := echo.New()
 		e.HideBanner = true
 		e.GET("/stats", stats.statsHandler)
+		e.GET("/health_stats", getHealthStats)
 		e.POST("/get_block", getBlock)
 		e.GET("/", htmlTemplates)
 

@@ -14,6 +14,7 @@ type Block struct {
 	Rpc            string
 	BlockNumber    int
 	BlockHash      string
+	TotalTxs       int
 	ManageEntities []*core.ManageEntity
 }
 
@@ -60,7 +61,8 @@ func getBlock(c echo.Context) error {
 		Rpc:            endpoint,
 		BlockNumber:    blockNumber,
 		BlockHash:      blockHash,
-		ManageEntities: manageEntities,
+		TotalTxs:       len(manageEntities),
+		ManageEntities: manageEntities[:20],
 	}
 	return block_templ.ExecuteTemplate(c.Response().Writer, "block", b)
 }
