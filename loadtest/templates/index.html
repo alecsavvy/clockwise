@@ -18,6 +18,17 @@
         Loading stats...
       </div>
     </div>
+    <div class="max-w-4xl mx-auto p-5">
+      <div
+        id="health-container"
+        hx-get="/health_stats"
+        hx-trigger="every 250ms"
+        hx-swap="innerHTML"
+        class="bg-white shadow-md rounded-lg p-4"
+      >
+        Loading health...
+      </div>
+    </div>
     <div class="max-w-4xl mx-auto p-5 dropdown-container">
       <div class="bg-white shadow-md rounded-lg p-4">
         <div class="flex justify-between items-center">
