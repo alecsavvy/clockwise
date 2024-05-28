@@ -21,6 +21,7 @@ type HealthCheckResponse struct {
 	LatestBlockHeight uint        `json:"latest_block_height"`
 	CatchingUp        bool        `json:"catching_up"`
 	Peers             uint        `json:"peers"`
+	UnconfirmedTxs    uint        `json:"unconfirmed_txs"`
 	Errors            ErrorBucket `json:"errors"`
 }
 
@@ -43,10 +44,16 @@ func (api *Api) HealthCheck(c echo.Context) error {
 		errorBucket.addError("unhealthy net info", err)
 	}
 
+	unconfirmed, err := rpc.NumUnconfirmedTxs(ctx)
+	if err != nil {
+		errorBucket.addError("unhealthy unconfirmed txs", err)
+	}
+
 	res.NodeID = string(status.NodeInfo.ID())
 	res.LatestBlockHeight = uint(status.SyncInfo.LatestBlockHeight)
 	res.CatchingUp = status.SyncInfo.CatchingUp
 	res.Peers = uint(netinfo.NPeers)
+	res.UnconfirmedTxs = uint(unconfirmed.Total)
 	res.Errors = errorBucket
 	res.IsHealthy = len(errorBucket.bucket) == 0
 

@@ -15,7 +15,7 @@ init:
 	cometbft init --home ./cmt-home
 
 init-testnet:
-	cometbft testnet --n=4 --v=3 --config ./infra/config_template.toml --o=./testnet-home --starting-ip-address 192.167.10.2
+	cometbft testnet --n=3 --v=4 --config ./infra/config_template.toml --o=./testnet-home --starting-ip-address 192.167.10.2
 
 gen:
 	make init-testnet
