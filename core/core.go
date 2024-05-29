@@ -18,15 +18,20 @@ import (
 type Core struct {
 	logger *utils.Logger
 	rpc    *local.Local
+	node   *node.Node
 	pubsub *Pubsub
+
+	// app config
+	RetainBlocks int64
 }
 
 var _ abcitypes.Application = (*Core)(nil)
 
-func NewCore(logger *utils.Logger) *Core {
+func NewCore(logger *utils.Logger, retainBlocks int64) *Core {
 	return &Core{
 		logger: logger,
 		pubsub: NewPubsub(),
+		RetainBlocks: retainBlocks,
 	}
 }
 
@@ -83,6 +88,7 @@ func (c *Core) Rpc() *local.Local {
 
 func (c *Core) Run(node *node.Node) error {
 	c.rpc = local.New(node)
+	c.node = node
 	err := c.RunPubsub()
 	if err != nil {
 		c.logger.Error("pubsub error", err)

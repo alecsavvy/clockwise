@@ -18,3 +18,13 @@ prometheus = false
 create_empty_blocks = false
 create_empty_blocks_interval = "0s"
 timeout_commit = "1s"
+
+[storage.pruning.data_companion]
+enabled = true
+
+[grpc.privileged]
+laddr = "tcp://0.0.0.0:26660"
+
+[grpc.privileged.pruning_service]
+enabled = true
+

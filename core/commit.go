@@ -35,6 +35,20 @@ func (c *Core) FinalizeBlock(ctx context.Context, rfb *abcitypes.RequestFinalize
 
 // Writes the state changes to the database after checking and finalizing a block
 func (c *Core) Commit(ctx context.Context, req *abcitypes.RequestCommit) (*abcitypes.ResponseCommit, error) {
-	// persist anything if we did
-	return &abcitypes.ResponseCommit{}, nil
+	resp := &abcitypes.ResponseCommit{}
+	/**
+	// TODO: check if indexer is up to date here, only prune once indexer is up to date. 
+	// i.e. a node can seed postgres after indexing
+	if app.RetainBlocks > 0 && app.state.Height >= app.RetainBlocks {
+		resp.RetainHeight = app.state.Height - app.RetainBlocks + 1
+	}
+	*/
+	latestBlock, err := c.rpc.Block(ctx, nil)
+	if err != nil {
+		return nil, err
+	}
+	if c.RetainBlocks > 0 && latestBlock.Block.Height >= c.RetainBlocks {
+		resp.RetainHeight = latestBlock.Block.Height - c.RetainBlocks + 1
+	}
+	return resp, nil
 }

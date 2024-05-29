@@ -19,6 +19,7 @@ type Block struct {
 }
 
 func getBlock(c echo.Context) error {
+	logger := c.Logger()
 	ctx := c.Request().Context()
 	// parse out form
 	option := c.FormValue("option")
@@ -32,12 +33,14 @@ func getBlock(c echo.Context) error {
 	// create rpc connection
 	client, err := http.New(endpoint, "/")
 	if err != nil {
+		logger.Error(err, "could not create rpc")
 		return err
 	}
 
 	// get block
 	block, err := client.Block(ctx, &blockHeight)
 	if err != nil {
+		logger.Error(err, "could not get block, doesn't exist or was pruned")
 		return err
 	}
 
@@ -49,7 +52,6 @@ func getBlock(c echo.Context) error {
 		var em core.ManageEntity
 		err := json.Unmarshal(tx, &em)
 		if err != nil {
-			logger := c.Logger()
 			logger.Error(err, "uh oh")
 			return err
 		}
