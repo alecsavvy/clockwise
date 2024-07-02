@@ -21,3 +21,6 @@ gen:
 	make init-testnet
 	go generate ./...
 	go mod tidy
+
+deps:
+	go install github.com/cometbft/cometbft/cmd/cometbft@v0.38.9
