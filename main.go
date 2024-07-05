@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"embed"
 	"fmt"
 	"io/fs"
@@ -16,9 +17,11 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/alecsavvy/clockwise/api"
 	"github.com/alecsavvy/clockwise/core"
+	"github.com/alecsavvy/clockwise/core/db"
 	"github.com/alecsavvy/clockwise/graph"
 	"github.com/alecsavvy/clockwise/utils"
 	"github.com/gorilla/websocket"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -27,9 +30,28 @@ import (
 var embeddedFiles embed.FS
 
 func run() error {
+	// app level context
+	ctx := context.Background()
+
 	// logger setup
 	logger := utils.NewLogger(nil)
 	logger.Info("good morning")
+
+	// db setup
+	pgConnectionString := os.Getenv("pgConnectionString")
+
+	err := db.RunMigrations(logger, pgConnectionString)
+	if err != nil {
+		return utils.AppError("could not complete database migrations", err)
+	}
+
+	pool, err := pgxpool.New(ctx, pgConnectionString)
+	if err != nil {
+		return utils.AppError("failure to create db pool", err)
+	}
+	defer pool.Close()
+
+	db.New(pool)
 
 	// config setup
 	homeDir := "./cmt-home"

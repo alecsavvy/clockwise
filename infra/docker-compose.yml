@@ -7,6 +7,8 @@ services:
       target: final
       args:
         NODE: "0"
+    environment:
+      - pgConnectionString=postgresql://postgres:pass@discovery_db:5432/db0?sslmode=disable
     restart: unless-stopped
     ports:
       - "6600:26656" # CometBFT P2P Server
@@ -16,6 +18,9 @@ services:
     networks:
       audius-testnet:
         ipv4_address: 192.167.10.2
+    depends_on:
+      - geth
+      - postgres
 
   node-1:
     container_name: discoveryprovider1.docker.co
@@ -25,6 +30,8 @@ services:
       target: final
       args:
         NODE: "1"
+    environment:
+      - pgConnectionString=postgresql://postgres:pass@discovery_db:5432/db1?sslmode=disable
     restart: unless-stopped
     ports:
       - "6610:26656"
@@ -34,6 +41,9 @@ services:
     networks:
       audius-testnet:
         ipv4_address: 192.167.10.3
+    depends_on:
+      - geth
+      - postgres
 
   node-2:
     container_name: discoveryprovider2.docker.co
@@ -43,6 +53,8 @@ services:
       target: final
       args:
         NODE: "2"
+    environment:
+      - pgConnectionString=postgresql://postgres:pass@discovery_db:5432/db2?sslmode=disable
     restart: unless-stopped
     ports:
       - "6620:26656"
@@ -52,6 +64,9 @@ services:
     networks:
       audius-testnet:
         ipv4_address: 192.167.10.4
+    depends_on:
+      - geth
+      - postgres
 
   node-3:
     container_name: discoveryprovider3.docker.co
@@ -61,6 +76,8 @@ services:
       target: final
       args:
         NODE: "3"
+    environment:
+      - pgConnectionString=postgresql://postgres:pass@discovery_db:5432/db3?sslmode=disable
     restart: unless-stopped
     ports:
       - "6630:26656"
@@ -70,6 +87,9 @@ services:
     networks:
       audius-testnet:
         ipv4_address: 192.167.10.5
+    depends_on:
+      - geth
+      - postgres
 
   node-4:
     container_name: discoveryprovider4.docker.co
@@ -79,6 +99,8 @@ services:
       target: final
       args:
         NODE: "4"
+    environment:
+      - pgConnectionString=postgresql://postgres:pass@discovery_db:5432/db4?sslmode=disable
     restart: unless-stopped
     ports:
       - "6640:26656"
@@ -88,6 +110,9 @@ services:
     networks:
       audius-testnet:
         ipv4_address: 192.167.10.6
+    depends_on:
+      - geth
+      - postgres
 
   node-5:
     container_name: discoveryprovider5.docker.co
@@ -97,6 +122,8 @@ services:
       target: final
       args:
         NODE: "5"
+    environment:
+      - pgConnectionString=postgresql://postgres:pass@discovery_db:5432/db5?sslmode=disable
     restart: unless-stopped
     ports:
       - "6650:26656"
@@ -106,6 +133,9 @@ services:
     networks:
       audius-testnet:
         ipv4_address: 192.167.10.7
+    depends_on:
+      - geth
+      - postgres
 
   node-6:
     container_name: discoveryprovider6.docker.co
@@ -115,6 +145,8 @@ services:
       target: final
       args:
         NODE: "6"
+    environment:
+      - pgConnectionString=postgresql://postgres:pass@discovery_db:5432/db6?sslmode=disable
     restart: unless-stopped
     ports:
       - "6660:26656"
@@ -124,6 +156,9 @@ services:
     networks:
       audius-testnet:
         ipv4_address: 192.167.10.8
+    depends_on:
+      - geth
+      - postgres
 
   loadtest:
     container_name: moshpit
@@ -144,6 +179,41 @@ services:
       - node-4
       - node-5
       - node-6
+
+  geth:
+    container_name: ethereum.docker.co
+    image: ethereum/client-go:latest
+    command:
+      - "--dev"
+      - "--http"
+      - "--http.addr"
+      - "0.0.0.0"
+      - "--http.api"
+      - "personal,eth,net,web3,txpool,miner"
+      - "--verbosity"
+      - "3"
+    ports:
+      - "8545:8545"
+      - "8546:8546"
+    networks:
+      audius-testnet:
+        ipv4_address: 192.167.10.9
+
+  postgres:
+    image: postgres:15
+    container_name: discovery_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: main_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init_db:/docker-entrypoint-initdb.d
+    networks:
+      audius-testnet:
+        ipv4_address: 192.167.10.10
 
 networks:
   audius-testnet:

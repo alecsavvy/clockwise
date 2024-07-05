@@ -11,7 +11,11 @@ require (
 )
 
 require (
+	github.com/go-gorp/gorp/v3 v3.1.0 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
+	github.com/jackc/pgpassfile v1.0.0 // indirect
+	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
+	github.com/jackc/puddle/v2 v2.2.1 // indirect
 	golang.org/x/time v0.5.0 // indirect
 )
 
@@ -86,6 +90,7 @@ require (
 	github.com/golang/snappy v0.0.5-0.20220116011046-fa5810519dcb // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
+	github.com/jackc/pgx/v5 v5.6.0
 	github.com/klauspost/compress v1.17.2 // indirect
 	github.com/labstack/echo/v4 v4.12.0
 	github.com/labstack/gommon v0.4.2 // indirect
@@ -94,6 +99,7 @@ require (
 	github.com/oasisprotocol/curve25519-voi v0.0.0-20220708102147-0a8a51822cae // indirect
 	github.com/petermattis/goid v0.0.0-20180202154549-b0b1615b78e5 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/rubenv/sql-migrate v1.6.1
 	github.com/sasha-s/go-deadlock v0.3.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
