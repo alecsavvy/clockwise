@@ -19,14 +19,26 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	ExampleService_SayHello_FullMethodName = "/protocol.ExampleService/SayHello"
+	ExampleService_GetUser_FullMethodName       = "/protocol.ExampleService/GetUser"
+	ExampleService_CreateUser_FullMethodName    = "/protocol.ExampleService/CreateUser"
+	ExampleService_GetTrack_FullMethodName      = "/protocol.ExampleService/GetTrack"
+	ExampleService_CreateTrack_FullMethodName   = "/protocol.ExampleService/CreateTrack"
+	ExampleService_RepostTrack_FullMethodName   = "/protocol.ExampleService/RepostTrack"
+	ExampleService_UnrepostTrack_FullMethodName = "/protocol.ExampleService/UnrepostTrack"
+	ExampleService_GetReposts_FullMethodName    = "/protocol.ExampleService/GetReposts"
 )
 
 // ExampleServiceClient is the client API for ExampleService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ExampleServiceClient interface {
-	SayHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloResponse, error)
+	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*UserResponse, error)
+	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*UserResponse, error)
+	GetTrack(ctx context.Context, in *GetTrackRequest, opts ...grpc.CallOption) (*TrackResponse, error)
+	CreateTrack(ctx context.Context, in *CreateTrackRequest, opts ...grpc.CallOption) (*TrackResponse, error)
+	RepostTrack(ctx context.Context, in *RepostTrackRequest, opts ...grpc.CallOption) (*RepostTrackResponse, error)
+	UnrepostTrack(ctx context.Context, in *UnrepostTrackRequest, opts ...grpc.CallOption) (*RepostTrackResponse, error)
+	GetReposts(ctx context.Context, in *GetRepostsRequest, opts ...grpc.CallOption) (*RepostTrackResponse, error)
 }
 
 type exampleServiceClient struct {
@@ -37,9 +49,63 @@ func NewExampleServiceClient(cc grpc.ClientConnInterface) ExampleServiceClient {
 	return &exampleServiceClient{cc}
 }
 
-func (c *exampleServiceClient) SayHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloResponse, error) {
-	out := new(HelloResponse)
-	err := c.cc.Invoke(ctx, ExampleService_SayHello_FullMethodName, in, out, opts...)
+func (c *exampleServiceClient) GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*UserResponse, error) {
+	out := new(UserResponse)
+	err := c.cc.Invoke(ctx, ExampleService_GetUser_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *exampleServiceClient) CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*UserResponse, error) {
+	out := new(UserResponse)
+	err := c.cc.Invoke(ctx, ExampleService_CreateUser_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *exampleServiceClient) GetTrack(ctx context.Context, in *GetTrackRequest, opts ...grpc.CallOption) (*TrackResponse, error) {
+	out := new(TrackResponse)
+	err := c.cc.Invoke(ctx, ExampleService_GetTrack_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *exampleServiceClient) CreateTrack(ctx context.Context, in *CreateTrackRequest, opts ...grpc.CallOption) (*TrackResponse, error) {
+	out := new(TrackResponse)
+	err := c.cc.Invoke(ctx, ExampleService_CreateTrack_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *exampleServiceClient) RepostTrack(ctx context.Context, in *RepostTrackRequest, opts ...grpc.CallOption) (*RepostTrackResponse, error) {
+	out := new(RepostTrackResponse)
+	err := c.cc.Invoke(ctx, ExampleService_RepostTrack_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *exampleServiceClient) UnrepostTrack(ctx context.Context, in *UnrepostTrackRequest, opts ...grpc.CallOption) (*RepostTrackResponse, error) {
+	out := new(RepostTrackResponse)
+	err := c.cc.Invoke(ctx, ExampleService_UnrepostTrack_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *exampleServiceClient) GetReposts(ctx context.Context, in *GetRepostsRequest, opts ...grpc.CallOption) (*RepostTrackResponse, error) {
+	out := new(RepostTrackResponse)
+	err := c.cc.Invoke(ctx, ExampleService_GetReposts_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +116,13 @@ func (c *exampleServiceClient) SayHello(ctx context.Context, in *HelloRequest, o
 // All implementations must embed UnimplementedExampleServiceServer
 // for forward compatibility
 type ExampleServiceServer interface {
-	SayHello(context.Context, *HelloRequest) (*HelloResponse, error)
+	GetUser(context.Context, *GetUserRequest) (*UserResponse, error)
+	CreateUser(context.Context, *CreateUserRequest) (*UserResponse, error)
+	GetTrack(context.Context, *GetTrackRequest) (*TrackResponse, error)
+	CreateTrack(context.Context, *CreateTrackRequest) (*TrackResponse, error)
+	RepostTrack(context.Context, *RepostTrackRequest) (*RepostTrackResponse, error)
+	UnrepostTrack(context.Context, *UnrepostTrackRequest) (*RepostTrackResponse, error)
+	GetReposts(context.Context, *GetRepostsRequest) (*RepostTrackResponse, error)
 	mustEmbedUnimplementedExampleServiceServer()
 }
 
@@ -58,8 +130,26 @@ type ExampleServiceServer interface {
 type UnimplementedExampleServiceServer struct {
 }
 
-func (UnimplementedExampleServiceServer) SayHello(context.Context, *HelloRequest) (*HelloResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
+func (UnimplementedExampleServiceServer) GetUser(context.Context, *GetUserRequest) (*UserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
+}
+func (UnimplementedExampleServiceServer) CreateUser(context.Context, *CreateUserRequest) (*UserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
+}
+func (UnimplementedExampleServiceServer) GetTrack(context.Context, *GetTrackRequest) (*TrackResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTrack not implemented")
+}
+func (UnimplementedExampleServiceServer) CreateTrack(context.Context, *CreateTrackRequest) (*TrackResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateTrack not implemented")
+}
+func (UnimplementedExampleServiceServer) RepostTrack(context.Context, *RepostTrackRequest) (*RepostTrackResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RepostTrack not implemented")
+}
+func (UnimplementedExampleServiceServer) UnrepostTrack(context.Context, *UnrepostTrackRequest) (*RepostTrackResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UnrepostTrack not implemented")
+}
+func (UnimplementedExampleServiceServer) GetReposts(context.Context, *GetRepostsRequest) (*RepostTrackResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetReposts not implemented")
 }
 func (UnimplementedExampleServiceServer) mustEmbedUnimplementedExampleServiceServer() {}
 
@@ -74,20 +164,128 @@ func RegisterExampleServiceServer(s grpc.ServiceRegistrar, srv ExampleServiceSer
 	s.RegisterService(&ExampleService_ServiceDesc, srv)
 }
 
-func _ExampleService_SayHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HelloRequest)
+func _ExampleService_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ExampleServiceServer).SayHello(ctx, in)
+		return srv.(ExampleServiceServer).GetUser(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ExampleService_SayHello_FullMethodName,
+		FullMethod: ExampleService_GetUser_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ExampleServiceServer).SayHello(ctx, req.(*HelloRequest))
+		return srv.(ExampleServiceServer).GetUser(ctx, req.(*GetUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ExampleService_CreateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExampleServiceServer).CreateUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ExampleService_CreateUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExampleServiceServer).CreateUser(ctx, req.(*CreateUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ExampleService_GetTrack_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTrackRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExampleServiceServer).GetTrack(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ExampleService_GetTrack_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExampleServiceServer).GetTrack(ctx, req.(*GetTrackRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ExampleService_CreateTrack_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateTrackRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExampleServiceServer).CreateTrack(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ExampleService_CreateTrack_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExampleServiceServer).CreateTrack(ctx, req.(*CreateTrackRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ExampleService_RepostTrack_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RepostTrackRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExampleServiceServer).RepostTrack(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ExampleService_RepostTrack_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExampleServiceServer).RepostTrack(ctx, req.(*RepostTrackRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ExampleService_UnrepostTrack_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UnrepostTrackRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExampleServiceServer).UnrepostTrack(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ExampleService_UnrepostTrack_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExampleServiceServer).UnrepostTrack(ctx, req.(*UnrepostTrackRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ExampleService_GetReposts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRepostsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExampleServiceServer).GetReposts(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ExampleService_GetReposts_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExampleServiceServer).GetReposts(ctx, req.(*GetRepostsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -100,8 +298,32 @@ var ExampleService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ExampleServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SayHello",
-			Handler:    _ExampleService_SayHello_Handler,
+			MethodName: "GetUser",
+			Handler:    _ExampleService_GetUser_Handler,
+		},
+		{
+			MethodName: "CreateUser",
+			Handler:    _ExampleService_CreateUser_Handler,
+		},
+		{
+			MethodName: "GetTrack",
+			Handler:    _ExampleService_GetTrack_Handler,
+		},
+		{
+			MethodName: "CreateTrack",
+			Handler:    _ExampleService_CreateTrack_Handler,
+		},
+		{
+			MethodName: "RepostTrack",
+			Handler:    _ExampleService_RepostTrack_Handler,
+		},
+		{
+			MethodName: "UnrepostTrack",
+			Handler:    _ExampleService_UnrepostTrack_Handler,
+		},
+		{
+			MethodName: "GetReposts",
+			Handler:    _ExampleService_GetReposts_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

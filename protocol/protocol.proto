@@ -5,13 +5,151 @@ package protocol;
 option go_package = "./gen;gen";
 
 service ExampleService {
-  rpc SayHello (HelloRequest) returns (HelloResponse);
+  rpc GetUser (GetUserRequest) returns (UserResponse);
+  rpc CreateUser (CreateUserRequest) returns (UserResponse);
+  rpc GetTrack (GetTrackRequest) returns (TrackResponse);
+  rpc CreateTrack (CreateTrackRequest) returns (TrackResponse);
+  rpc RepostTrack (RepostTrackRequest) returns (RepostTrackResponse);
+  rpc UnrepostTrack (UnrepostTrackRequest) returns (RepostTrackResponse);
+  rpc GetReposts (GetRepostsRequest) returns (RepostTrackResponse);
 }
 
-message HelloRequest {
-  string name = 1;
+message Envelope {
+  string signature = 1;
 }
 
-message HelloResponse {
-  string message = 1;
+message CreateUserRequest {
+  Envelope envelope = 1;
+  Data data = 2;
+  message Data {
+    string handle = 1;
+    string address = 2;
+    string bio = 3;
+  }
+}
+
+message GetUserRequest {
+  Envelope envelope = 1;
+  Data data = 2;
+  message Data {
+    string id = 1;
+    string handle = 2;
+    string address = 3;
+  }
+}
+
+message UserResponse {
+  Envelope envelope = 1;
+  Data data = 2;
+  message Data {
+    string id = 1;
+    string handle = 2;
+    string address = 3;
+    string bio = 4;
+  }
+}
+
+message FollowUserRequest {
+  Envelope envelope = 1;
+  Data data = 2;
+  message Data {
+    string follower_id = 1;
+    string followee_id = 2;
+  }
+}
+
+message GetFollowsRequest {
+  Envelope envelope = 1;
+  Data data = 2;
+  message Data {
+    string follower_id = 1;
+    string followee_id = 2;
+  }
+}
+
+message UnfollowUserRequest {
+  Envelope envelope = 1;
+  Data data = 2;
+  message Data {
+    string follower_id = 1;
+    string followee_id = 2;
+  }
+}
+
+message FollowUserResponse {
+  Envelope envelope = 1;
+  repeated Data data = 2;
+  message Data {
+    string id = 1;
+    string follower_id = 2;
+    string followee_id = 3;
+  }
+}
+
+message CreateTrackRequest {
+  Envelope envelope = 1;
+  Data data = 2;
+  message Data {
+    string title = 1;
+    string stream_url = 2;
+    string description = 3;
+    string user_id = 4;
+  }
+}
+
+message GetTrackRequest {
+  Envelope envelope = 1;
+  Data data = 2;
+  message Data {
+    string id = 1;
+    string title = 2;
+  }
+}
+
+message TrackResponse {
+  Envelope envelope = 1;
+  Data data = 2;
+  message Data {
+    string id = 1;
+    string title = 2;
+    string stream_url = 3;
+    string description = 4;
+    string user_id = 5;
+  }
+}
+
+message RepostTrackRequest {
+  Envelope envelope = 1;
+  Data data = 2;
+  message Data {
+    string track_id = 1;
+    string reposter_id = 2;
+  }
+}
+
+message GetRepostsRequest {
+  Envelope envelope = 1;
+  Data data = 2;
+  message Data {
+    string track_id = 1;
+    string reposter_id = 2;
+  }
+}
+
+message UnrepostTrackRequest {
+  Envelope envelope = 1;
+  Data data = 2;
+  message Data {
+    string id = 1;
+  }
+}
+
+message RepostTrackResponse {
+  Envelope envelope = 1;
+  repeated Data data = 2;
+  message Data {
+    string id = 1;
+    string track_id = 2;
+    string reposter_id = 3;
+  }
 }
