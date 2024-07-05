@@ -15,7 +15,6 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/alecsavvy/clockwise/api"
 	"github.com/alecsavvy/clockwise/core"
 	"github.com/alecsavvy/clockwise/core/db"
 	"github.com/alecsavvy/clockwise/graph"
@@ -90,8 +89,6 @@ func run() error {
 		return nil
 	}
 
-	api := api.NewApi(logger, coreApp)
-
 	htmlFS, err := fs.Sub(embeddedFiles, "templates")
 	if err != nil {
 		return err
@@ -107,8 +104,6 @@ func run() error {
 
 	e.GET("/graphiql", graphiqlHandler)
 	e.Any("/query", queryHandler)
-	e.GET("/events", api.SSEHandler)
-	e.GET("/health_check", api.HealthCheck)
 	e.GET("/", htmlTemplates)
 
 	// run all the processes
