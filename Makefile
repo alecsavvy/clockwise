@@ -25,3 +25,10 @@ gen:
 
 deps:
 	go install github.com/cometbft/cometbft/cmd/cometbft@v0.38.9
+
+mosh:
+	docker start moshpit
+	open http://localhost:8080/
+
+chill:
+	docker stop moshpit
