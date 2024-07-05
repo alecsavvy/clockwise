@@ -1,4 +1,3 @@
-/* the client that external modules use like grpc and clis */
 package core
 
 import (
@@ -29,8 +28,8 @@ var _ abcitypes.Application = (*Core)(nil)
 
 func NewCore(logger *utils.Logger, retainBlocks int64) *Core {
 	return &Core{
-		logger: logger,
-		pubsub: NewPubsub(),
+		logger:       logger,
+		pubsub:       NewPubsub(),
 		RetainBlocks: retainBlocks,
 	}
 }
