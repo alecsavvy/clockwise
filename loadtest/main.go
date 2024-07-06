@@ -58,7 +58,7 @@ func main() {
 		defer wg.Done()
 		for {
 			for i := 0; i < parallelRequests; i++ {
-				go sendRandomRequest(logger, stats)
+				// go sendRandomRequest(logger, stats)
 			}
 			time.Sleep(time.Duration(interval) * time.Millisecond)
 		}

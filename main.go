@@ -50,13 +50,11 @@ func run() error {
 	}
 	defer pool.Close()
 
-	db.New(pool)
-
 	// config setup
 	homeDir := "./cmt-home"
 
 	// only keep last 100 blocks after successful indexing
-	coreApp := core.NewCore(logger, 100)
+	coreApp := core.NewCore(logger, pool, 100)
 	node, err := core.NewNode(logger, homeDir, coreApp)
 	if err != nil {
 		return utils.AppError("failure to init chain", err)

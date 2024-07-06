@@ -3,7 +3,6 @@ package core
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	abcitypes "github.com/cometbft/cometbft/abci/types"
 )
@@ -25,7 +24,7 @@ func (c *Core) InitChain(context.Context, *abcitypes.RequestInitChain) (*abcityp
 // Performs validation on a proposed transaction, should be very performant as this check
 // gets called a lot (per the cometbft docs)
 func (c *Core) CheckTx(ctx context.Context, req *abcitypes.RequestCheckTx) (*abcitypes.ResponseCheckTx, error) {
-	if err := CheckTx(c, ctx, req); err != nil {
+	if err := c.validateTx(req.GetTx()); err != nil {
 		return &abcitypes.ResponseCheckTx{Code: CodeTypeNotOK, Log: err.Error()}, nil
 	}
 	return &abcitypes.ResponseCheckTx{Code: abcitypes.CodeTypeOK}, nil
@@ -44,34 +43,24 @@ func (c *Core) ProcessProposal(context.Context, *abcitypes.RequestProcessProposa
 
 // Prepares a block for commitment and provides final validation
 func (c *Core) FinalizeBlock(ctx context.Context, rfb *abcitypes.RequestFinalizeBlock) (*abcitypes.ResponseFinalizeBlock, error) {
-	var txResults = make([]*abcitypes.ExecTxResult, len(rfb.Txs))
-	for i, tx := range rfb.Txs {
-		var me ManageEntity
-		c.fromTxBytes(tx, &me)
-		txResults[i] = &abcitypes.ExecTxResult{
-			Code: abcitypes.CodeTypeOK,
-			Events: []abcitypes.Event{
-				{
-					Type: fmt.Sprintf("%s%s", me.EntityType, me.Action),
-					Attributes: []abcitypes.EventAttribute{
-						{Key: "requestId", Value: me.RequestID},
-					},
-				},
-			},
-		}
+	txResults, err := c.indexTxs(ctx, rfb)
+	if err != nil {
+		c.logger.Errorf("CONSENSUS ERROR %s", err)
+		return nil, err
 	}
 	return &abcitypes.ResponseFinalizeBlock{TxResults: txResults}, nil
 }
 
 // Writes the state changes to the database after checking and finalizing a block
 func (c *Core) Commit(ctx context.Context, req *abcitypes.RequestCommit) (*abcitypes.ResponseCommit, error) {
+
 	resp := &abcitypes.ResponseCommit{}
 	/**
 	// TODO: check if indexer is up to date here, only prune once indexer is up to date.
 	// i.e. a node can seed postgres after indexing
 	if app.RetainBlocks > 0 && app.state.Height >= app.RetainBlocks {
 		resp.RetainHeight = app.state.Height - app.RetainBlocks + 1
-	}
+		}
 	*/
 	latestBlock, err := c.rpc.Block(ctx, nil)
 	if err != nil {
@@ -80,6 +69,11 @@ func (c *Core) Commit(ctx context.Context, req *abcitypes.RequestCommit) (*abcit
 	if c.RetainBlocks > 0 && latestBlock.Block.Height >= c.RetainBlocks {
 		resp.RetainHeight = latestBlock.Block.Height - c.RetainBlocks + 1
 	}
+
+	if err := c.commitInProgressTx(ctx); err != nil {
+		c.logger.Error("failure to commit tx", "error", err)
+	}
+
 	return resp, nil
 }
 
@@ -106,4 +100,14 @@ func (c *Core) OfferSnapshot(context.Context, *abcitypes.RequestOfferSnapshot) (
 // ApplySnapshotChunk implements types.Application.
 func (c *Core) ApplySnapshotChunk(context.Context, *abcitypes.RequestApplySnapshotChunk) (*abcitypes.ResponseApplySnapshotChunk, error) {
 	return &abcitypes.ResponseApplySnapshotChunk{}, nil
+}
+
+// ExtendVote implements types.Application.
+func (c *Core) ExtendVote(context.Context, *abcitypes.RequestExtendVote) (*abcitypes.ResponseExtendVote, error) {
+	return &abcitypes.ResponseExtendVote{}, nil
+}
+
+// VerifyVoteExtension implements types.Application.
+func (c *Core) VerifyVoteExtension(_ context.Context, req *abcitypes.RequestVerifyVoteExtension) (*abcitypes.ResponseVerifyVoteExtension, error) {
+	return &abcitypes.ResponseVerifyVoteExtension{}, nil
 }

@@ -3,6 +3,9 @@ package core
 import (
 	"fmt"
 
+	"github.com/alecsavvy/clockwise/core/db"
+	"github.com/alecsavvy/clockwise/protocol"
+	"github.com/alecsavvy/clockwise/protocol/gen"
 	"github.com/alecsavvy/clockwise/utils"
 	abcitypes "github.com/cometbft/cometbft/abci/types"
 	cfg "github.com/cometbft/cometbft/config"
@@ -11,6 +14,8 @@ import (
 	"github.com/cometbft/cometbft/privval"
 	"github.com/cometbft/cometbft/proxy"
 	"github.com/cometbft/cometbft/rpc/client/local"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/spf13/viper"
 )
 
@@ -20,18 +25,48 @@ type Core struct {
 	node   *node.Node
 	pubsub *Pubsub
 
+	validationRoutes protocol.MessageRouterMap
+	indexingRoutes   protocol.MessageRouterMap
+
+	queries *db.Queries
+
+	pool      *pgxpool.Pool
+	currentTx pgx.Tx
+
 	// app config
 	RetainBlocks int64
 }
 
 var _ abcitypes.Application = (*Core)(nil)
 
-func NewCore(logger *utils.Logger, retainBlocks int64) *Core {
-	return &Core{
+func NewCore(logger *utils.Logger, pool *pgxpool.Pool, retainBlocks int64) *Core {
+	core := &Core{
 		logger:       logger,
 		pubsub:       NewPubsub(),
+		queries:      db.New(pool),
+		pool:         pool,
 		RetainBlocks: retainBlocks,
 	}
+
+	// register validation routes
+	validateRoutes := make(protocol.MessageRouterMap, 0)
+	validateRoutes[gen.MessageType_MESSAGE_TYPE_CREATE_USER] = core.validateCreateUser
+	validateRoutes[gen.MessageType_MESSAGE_TYPE_CREATE_TRACK] = core.validateCreateTrack
+	validateRoutes[gen.MessageType_MESSAGE_TYPE_REPOST_TRACK] = core.validateRepostTrack
+	validateRoutes[gen.MessageType_MESSAGE_TYPE_UNREPOST_TRACK] = core.validateUnRepostTrack
+	validateRoutes[gen.MessageType_MESSAGE_TYPE_FOLLOW_USER] = core.validateFollowUser
+	validateRoutes[gen.MessageType_MESSAGE_TYPE_UNFOLLOW_USER] = core.validateUnfollowUser
+
+	// register indexing routes
+	indexRoutes := make(protocol.MessageRouterMap, 0)
+	indexRoutes[gen.MessageType_MESSAGE_TYPE_CREATE_USER] = core.indexCreateUser
+	indexRoutes[gen.MessageType_MESSAGE_TYPE_CREATE_TRACK] = core.indexCreateTrack
+	indexRoutes[gen.MessageType_MESSAGE_TYPE_REPOST_TRACK] = core.indexRepostTrack
+	indexRoutes[gen.MessageType_MESSAGE_TYPE_UNREPOST_TRACK] = core.indexUnrepostTrack
+	indexRoutes[gen.MessageType_MESSAGE_TYPE_FOLLOW_USER] = core.indexFollowUser
+	indexRoutes[gen.MessageType_MESSAGE_TYPE_UNFOLLOW_USER] = core.indexUnfollowUser
+
+	return core
 }
 
 func NewNode(logger *utils.Logger, homeDir string, app abcitypes.Application) (*node.Node, error) {
