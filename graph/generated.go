@@ -49,45 +49,79 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
-	ManageEntity struct {
-		Action     func(childComplexity int) int
-		EntityID   func(childComplexity int) int
-		EntityType func(childComplexity int) int
-		Metadata   func(childComplexity int) int
-		RequestID  func(childComplexity int) int
-		Signer     func(childComplexity int) int
-		UserID     func(childComplexity int) int
+	Follow struct {
+		FolloweeID func(childComplexity int) int
+		FollowerID func(childComplexity int) int
 	}
 
 	Mutation struct {
-		ManageEntity      func(childComplexity int, manageEntity model.NewManageEntity) int
-		ManageEntityBatch func(childComplexity int, batch []*model.NewManageEntity) int
+		CreateTrack   func(childComplexity int, input model.NewTrack) int
+		CreateUser    func(childComplexity int, input model.NewUser) int
+		FollowUser    func(childComplexity int, input model.NewFollow) int
+		RepostTrack   func(childComplexity int, input model.NewRepost) int
+		UnfollowUser  func(childComplexity int, input model.NewUnfollow) int
+		UnrepostTrack func(childComplexity int, input model.NewUnrepost) int
 	}
 
 	Query struct {
-		GetManageEntity        func(childComplexity int, requestID string) int
-		ListEntitiesByType     func(childComplexity int, entityType string) int
-		ListUserManageEntities func(childComplexity int, userID int) int
-		SearchManageEntities   func(childComplexity int, filter *model.ManageEntityFilter) int
+		GetTrack  func(childComplexity int, title string) int
+		GetTracks func(childComplexity int) int
+		GetUser   func(childComplexity int, handle string) int
+		GetUsers  func(childComplexity int) int
+	}
+
+	Repost struct {
+		ReposterID func(childComplexity int) int
+		TrackID    func(childComplexity int) int
 	}
 
 	Subscription struct {
-		ManageEntities func(childComplexity int) int
+		Follows func(childComplexity int) int
+		Reposts func(childComplexity int) int
+		Tracks  func(childComplexity int) int
+		Users   func(childComplexity int) int
+	}
+
+	Track struct {
+		Description func(childComplexity int) int
+		ID          func(childComplexity int) int
+		Reposts     func(childComplexity int) int
+		StreamURL   func(childComplexity int) int
+		Title       func(childComplexity int) int
+		UserID      func(childComplexity int) int
+	}
+
+	User struct {
+		Address   func(childComplexity int) int
+		Bio       func(childComplexity int) int
+		Followers func(childComplexity int) int
+		Following func(childComplexity int) int
+		Handle    func(childComplexity int) int
+		ID        func(childComplexity int) int
+		Reposts   func(childComplexity int) int
+		Tracks    func(childComplexity int) int
 	}
 }
 
 type MutationResolver interface {
-	ManageEntity(ctx context.Context, manageEntity model.NewManageEntity) (*model.ManageEntity, error)
-	ManageEntityBatch(ctx context.Context, batch []*model.NewManageEntity) ([]*model.ManageEntity, error)
+	CreateUser(ctx context.Context, input model.NewUser) (*model.User, error)
+	CreateTrack(ctx context.Context, input model.NewTrack) (*model.Track, error)
+	FollowUser(ctx context.Context, input model.NewFollow) (*model.Follow, error)
+	RepostTrack(ctx context.Context, input model.NewRepost) (*model.Repost, error)
+	UnfollowUser(ctx context.Context, input model.NewUnfollow) (bool, error)
+	UnrepostTrack(ctx context.Context, input model.NewUnrepost) (bool, error)
 }
 type QueryResolver interface {
-	GetManageEntity(ctx context.Context, requestID string) (*model.ManageEntity, error)
-	ListUserManageEntities(ctx context.Context, userID int) ([]*model.ManageEntity, error)
-	ListEntitiesByType(ctx context.Context, entityType string) ([]*model.ManageEntity, error)
-	SearchManageEntities(ctx context.Context, filter *model.ManageEntityFilter) ([]*model.ManageEntity, error)
+	GetUsers(ctx context.Context) ([]*model.User, error)
+	GetTracks(ctx context.Context) ([]*model.Track, error)
+	GetUser(ctx context.Context, handle string) (*model.User, error)
+	GetTrack(ctx context.Context, title string) (*model.Track, error)
 }
 type SubscriptionResolver interface {
-	ManageEntities(ctx context.Context) (<-chan *model.ManageEntity, error)
+	Tracks(ctx context.Context) (<-chan *model.Track, error)
+	Users(ctx context.Context) (<-chan *model.User, error)
+	Follows(ctx context.Context) (<-chan *model.Follow, error)
+	Reposts(ctx context.Context) (<-chan *model.Repost, error)
 }
 
 type executableSchema struct {
@@ -109,133 +143,269 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	_ = ec
 	switch typeName + "." + field {
 
-	case "ManageEntity.action":
-		if e.complexity.ManageEntity.Action == nil {
+	case "Follow.followeeId":
+		if e.complexity.Follow.FolloweeID == nil {
 			break
 		}
 
-		return e.complexity.ManageEntity.Action(childComplexity), true
+		return e.complexity.Follow.FolloweeID(childComplexity), true
 
-	case "ManageEntity.entityId":
-		if e.complexity.ManageEntity.EntityID == nil {
+	case "Follow.followerId":
+		if e.complexity.Follow.FollowerID == nil {
 			break
 		}
 
-		return e.complexity.ManageEntity.EntityID(childComplexity), true
+		return e.complexity.Follow.FollowerID(childComplexity), true
 
-	case "ManageEntity.entityType":
-		if e.complexity.ManageEntity.EntityType == nil {
+	case "Mutation.createTrack":
+		if e.complexity.Mutation.CreateTrack == nil {
 			break
 		}
 
-		return e.complexity.ManageEntity.EntityType(childComplexity), true
-
-	case "ManageEntity.metadata":
-		if e.complexity.ManageEntity.Metadata == nil {
-			break
-		}
-
-		return e.complexity.ManageEntity.Metadata(childComplexity), true
-
-	case "ManageEntity.requestId":
-		if e.complexity.ManageEntity.RequestID == nil {
-			break
-		}
-
-		return e.complexity.ManageEntity.RequestID(childComplexity), true
-
-	case "ManageEntity.signer":
-		if e.complexity.ManageEntity.Signer == nil {
-			break
-		}
-
-		return e.complexity.ManageEntity.Signer(childComplexity), true
-
-	case "ManageEntity.userId":
-		if e.complexity.ManageEntity.UserID == nil {
-			break
-		}
-
-		return e.complexity.ManageEntity.UserID(childComplexity), true
-
-	case "Mutation.manageEntity":
-		if e.complexity.Mutation.ManageEntity == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_manageEntity_args(context.TODO(), rawArgs)
+		args, err := ec.field_Mutation_createTrack_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Mutation.ManageEntity(childComplexity, args["manageEntity"].(model.NewManageEntity)), true
+		return e.complexity.Mutation.CreateTrack(childComplexity, args["input"].(model.NewTrack)), true
 
-	case "Mutation.manageEntityBatch":
-		if e.complexity.Mutation.ManageEntityBatch == nil {
+	case "Mutation.createUser":
+		if e.complexity.Mutation.CreateUser == nil {
 			break
 		}
 
-		args, err := ec.field_Mutation_manageEntityBatch_args(context.TODO(), rawArgs)
+		args, err := ec.field_Mutation_createUser_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Mutation.ManageEntityBatch(childComplexity, args["batch"].([]*model.NewManageEntity)), true
+		return e.complexity.Mutation.CreateUser(childComplexity, args["input"].(model.NewUser)), true
 
-	case "Query.getManageEntity":
-		if e.complexity.Query.GetManageEntity == nil {
+	case "Mutation.followUser":
+		if e.complexity.Mutation.FollowUser == nil {
 			break
 		}
 
-		args, err := ec.field_Query_getManageEntity_args(context.TODO(), rawArgs)
+		args, err := ec.field_Mutation_followUser_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Query.GetManageEntity(childComplexity, args["requestId"].(string)), true
+		return e.complexity.Mutation.FollowUser(childComplexity, args["input"].(model.NewFollow)), true
 
-	case "Query.listEntitiesByType":
-		if e.complexity.Query.ListEntitiesByType == nil {
+	case "Mutation.repostTrack":
+		if e.complexity.Mutation.RepostTrack == nil {
 			break
 		}
 
-		args, err := ec.field_Query_listEntitiesByType_args(context.TODO(), rawArgs)
+		args, err := ec.field_Mutation_repostTrack_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Query.ListEntitiesByType(childComplexity, args["entityType"].(string)), true
+		return e.complexity.Mutation.RepostTrack(childComplexity, args["input"].(model.NewRepost)), true
 
-	case "Query.listUserManageEntities":
-		if e.complexity.Query.ListUserManageEntities == nil {
+	case "Mutation.unfollowUser":
+		if e.complexity.Mutation.UnfollowUser == nil {
 			break
 		}
 
-		args, err := ec.field_Query_listUserManageEntities_args(context.TODO(), rawArgs)
+		args, err := ec.field_Mutation_unfollowUser_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Query.ListUserManageEntities(childComplexity, args["userId"].(int)), true
+		return e.complexity.Mutation.UnfollowUser(childComplexity, args["input"].(model.NewUnfollow)), true
 
-	case "Query.searchManageEntities":
-		if e.complexity.Query.SearchManageEntities == nil {
+	case "Mutation.unrepostTrack":
+		if e.complexity.Mutation.UnrepostTrack == nil {
 			break
 		}
 
-		args, err := ec.field_Query_searchManageEntities_args(context.TODO(), rawArgs)
+		args, err := ec.field_Mutation_unrepostTrack_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Query.SearchManageEntities(childComplexity, args["filter"].(*model.ManageEntityFilter)), true
+		return e.complexity.Mutation.UnrepostTrack(childComplexity, args["input"].(model.NewUnrepost)), true
 
-	case "Subscription.manageEntities":
-		if e.complexity.Subscription.ManageEntities == nil {
+	case "Query.getTrack":
+		if e.complexity.Query.GetTrack == nil {
 			break
 		}
 
-		return e.complexity.Subscription.ManageEntities(childComplexity), true
+		args, err := ec.field_Query_getTrack_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetTrack(childComplexity, args["title"].(string)), true
+
+	case "Query.getTracks":
+		if e.complexity.Query.GetTracks == nil {
+			break
+		}
+
+		return e.complexity.Query.GetTracks(childComplexity), true
+
+	case "Query.getUser":
+		if e.complexity.Query.GetUser == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getUser_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetUser(childComplexity, args["handle"].(string)), true
+
+	case "Query.getUsers":
+		if e.complexity.Query.GetUsers == nil {
+			break
+		}
+
+		return e.complexity.Query.GetUsers(childComplexity), true
+
+	case "Repost.reposterId":
+		if e.complexity.Repost.ReposterID == nil {
+			break
+		}
+
+		return e.complexity.Repost.ReposterID(childComplexity), true
+
+	case "Repost.trackId":
+		if e.complexity.Repost.TrackID == nil {
+			break
+		}
+
+		return e.complexity.Repost.TrackID(childComplexity), true
+
+	case "Subscription.follows":
+		if e.complexity.Subscription.Follows == nil {
+			break
+		}
+
+		return e.complexity.Subscription.Follows(childComplexity), true
+
+	case "Subscription.reposts":
+		if e.complexity.Subscription.Reposts == nil {
+			break
+		}
+
+		return e.complexity.Subscription.Reposts(childComplexity), true
+
+	case "Subscription.tracks":
+		if e.complexity.Subscription.Tracks == nil {
+			break
+		}
+
+		return e.complexity.Subscription.Tracks(childComplexity), true
+
+	case "Subscription.users":
+		if e.complexity.Subscription.Users == nil {
+			break
+		}
+
+		return e.complexity.Subscription.Users(childComplexity), true
+
+	case "Track.description":
+		if e.complexity.Track.Description == nil {
+			break
+		}
+
+		return e.complexity.Track.Description(childComplexity), true
+
+	case "Track.id":
+		if e.complexity.Track.ID == nil {
+			break
+		}
+
+		return e.complexity.Track.ID(childComplexity), true
+
+	case "Track.reposts":
+		if e.complexity.Track.Reposts == nil {
+			break
+		}
+
+		return e.complexity.Track.Reposts(childComplexity), true
+
+	case "Track.streamUrl":
+		if e.complexity.Track.StreamURL == nil {
+			break
+		}
+
+		return e.complexity.Track.StreamURL(childComplexity), true
+
+	case "Track.title":
+		if e.complexity.Track.Title == nil {
+			break
+		}
+
+		return e.complexity.Track.Title(childComplexity), true
+
+	case "Track.userId":
+		if e.complexity.Track.UserID == nil {
+			break
+		}
+
+		return e.complexity.Track.UserID(childComplexity), true
+
+	case "User.address":
+		if e.complexity.User.Address == nil {
+			break
+		}
+
+		return e.complexity.User.Address(childComplexity), true
+
+	case "User.bio":
+		if e.complexity.User.Bio == nil {
+			break
+		}
+
+		return e.complexity.User.Bio(childComplexity), true
+
+	case "User.followers":
+		if e.complexity.User.Followers == nil {
+			break
+		}
+
+		return e.complexity.User.Followers(childComplexity), true
+
+	case "User.following":
+		if e.complexity.User.Following == nil {
+			break
+		}
+
+		return e.complexity.User.Following(childComplexity), true
+
+	case "User.handle":
+		if e.complexity.User.Handle == nil {
+			break
+		}
+
+		return e.complexity.User.Handle(childComplexity), true
+
+	case "User.id":
+		if e.complexity.User.ID == nil {
+			break
+		}
+
+		return e.complexity.User.ID(childComplexity), true
+
+	case "User.reposts":
+		if e.complexity.User.Reposts == nil {
+			break
+		}
+
+		return e.complexity.User.Reposts(childComplexity), true
+
+	case "User.tracks":
+		if e.complexity.User.Tracks == nil {
+			break
+		}
+
+		return e.complexity.User.Tracks(childComplexity), true
 
 	}
 	return 0, false
@@ -245,8 +415,12 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	rc := graphql.GetOperationContext(ctx)
 	ec := executionContext{rc, e, 0, 0, make(chan graphql.DeferredResult)}
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
-		ec.unmarshalInputManageEntityFilter,
-		ec.unmarshalInputNewManageEntity,
+		ec.unmarshalInputNewFollow,
+		ec.unmarshalInputNewRepost,
+		ec.unmarshalInputNewTrack,
+		ec.unmarshalInputNewUnfollow,
+		ec.unmarshalInputNewUnrepost,
+		ec.unmarshalInputNewUser,
 	)
 	first := true
 
@@ -380,33 +554,93 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
 // region    ***************************** args.gotpl *****************************
 
-func (ec *executionContext) field_Mutation_manageEntityBatch_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createTrack_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 []*model.NewManageEntity
-	if tmp, ok := rawArgs["batch"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("batch"))
-		arg0, err = ec.unmarshalNNewManageEntity2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐNewManageEntity(ctx, tmp)
+	var arg0 model.NewTrack
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNNewTrack2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐNewTrack(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["batch"] = arg0
+	args["input"] = arg0
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_manageEntity_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 model.NewManageEntity
-	if tmp, ok := rawArgs["manageEntity"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("manageEntity"))
-		arg0, err = ec.unmarshalNNewManageEntity2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐNewManageEntity(ctx, tmp)
+	var arg0 model.NewUser
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNNewUser2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐNewUser(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["manageEntity"] = arg0
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_followUser_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.NewFollow
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNNewFollow2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐNewFollow(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_repostTrack_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.NewRepost
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNNewRepost2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐNewRepost(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_unfollowUser_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.NewUnfollow
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNNewUnfollow2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐNewUnfollow(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_unrepostTrack_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.NewUnrepost
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNNewUnrepost2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐNewUnrepost(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
 	return args, nil
 }
 
@@ -425,63 +659,33 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_getManageEntity_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Query_getTrack_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["requestId"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("requestId"))
+	if tmp, ok := rawArgs["title"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
 		arg0, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["requestId"] = arg0
+	args["title"] = arg0
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_listEntitiesByType_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Query_getUser_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["entityType"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("entityType"))
+	if tmp, ok := rawArgs["handle"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("handle"))
 		arg0, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["entityType"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_listUserManageEntities_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 int
-	if tmp, ok := rawArgs["userId"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
-		arg0, err = ec.unmarshalNInt2int(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["userId"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_searchManageEntities_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 *model.ManageEntityFilter
-	if tmp, ok := rawArgs["filter"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
-		arg0, err = ec.unmarshalOManageEntityFilter2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐManageEntityFilter(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["filter"] = arg0
+	args["handle"] = arg0
 	return args, nil
 }
 
@@ -523,8 +727,8 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _ManageEntity_requestId(ctx context.Context, field graphql.CollectedField, obj *model.ManageEntity) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ManageEntity_requestId(ctx, field)
+func (ec *executionContext) _Follow_followerId(ctx context.Context, field graphql.CollectedField, obj *model.Follow) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Follow_followerId(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -537,7 +741,7 @@ func (ec *executionContext) _ManageEntity_requestId(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.RequestID, nil
+		return obj.FollowerID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -554,9 +758,9 @@ func (ec *executionContext) _ManageEntity_requestId(ctx context.Context, field g
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_ManageEntity_requestId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Follow_followerId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "ManageEntity",
+		Object:     "Follow",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -567,8 +771,8 @@ func (ec *executionContext) fieldContext_ManageEntity_requestId(ctx context.Cont
 	return fc, nil
 }
 
-func (ec *executionContext) _ManageEntity_userId(ctx context.Context, field graphql.CollectedField, obj *model.ManageEntity) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ManageEntity_userId(ctx, field)
+func (ec *executionContext) _Follow_followeeId(ctx context.Context, field graphql.CollectedField, obj *model.Follow) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Follow_followeeId(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -581,51 +785,7 @@ func (ec *executionContext) _ManageEntity_userId(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.UserID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ManageEntity_userId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ManageEntity",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ManageEntity_signer(ctx context.Context, field graphql.CollectedField, obj *model.ManageEntity) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ManageEntity_signer(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Signer, nil
+		return obj.FolloweeID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -642,9 +802,9 @@ func (ec *executionContext) _ManageEntity_signer(ctx context.Context, field grap
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_ManageEntity_signer(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Follow_followeeId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "ManageEntity",
+		Object:     "Follow",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -655,8 +815,8 @@ func (ec *executionContext) fieldContext_ManageEntity_signer(ctx context.Context
 	return fc, nil
 }
 
-func (ec *executionContext) _ManageEntity_entityType(ctx context.Context, field graphql.CollectedField, obj *model.ManageEntity) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ManageEntity_entityType(ctx, field)
+func (ec *executionContext) _Mutation_createUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createUser(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -669,7 +829,7 @@ func (ec *executionContext) _ManageEntity_entityType(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.EntityType, nil
+		return ec.resolvers.Mutation().CreateUser(rctx, fc.Args["input"].(model.NewUser))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -681,188 +841,12 @@ func (ec *executionContext) _ManageEntity_entityType(ctx context.Context, field 
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_ManageEntity_entityType(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ManageEntity",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ManageEntity_entityId(ctx context.Context, field graphql.CollectedField, obj *model.ManageEntity) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ManageEntity_entityId(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.EntityID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ManageEntity_entityId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ManageEntity",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ManageEntity_metadata(ctx context.Context, field graphql.CollectedField, obj *model.ManageEntity) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ManageEntity_metadata(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Metadata, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ManageEntity_metadata(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ManageEntity",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ManageEntity_action(ctx context.Context, field graphql.CollectedField, obj *model.ManageEntity) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ManageEntity_action(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Action, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ManageEntity_action(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ManageEntity",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Mutation_manageEntity(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_manageEntity(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().ManageEntity(rctx, fc.Args["manageEntity"].(model.NewManageEntity))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*model.ManageEntity)
-	fc.Result = res
-	return ec.marshalNManageEntity2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐManageEntity(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Mutation_manageEntity(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Mutation_createUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Mutation",
 		Field:      field,
@@ -870,22 +854,24 @@ func (ec *executionContext) fieldContext_Mutation_manageEntity(ctx context.Conte
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "requestId":
-				return ec.fieldContext_ManageEntity_requestId(ctx, field)
-			case "userId":
-				return ec.fieldContext_ManageEntity_userId(ctx, field)
-			case "signer":
-				return ec.fieldContext_ManageEntity_signer(ctx, field)
-			case "entityType":
-				return ec.fieldContext_ManageEntity_entityType(ctx, field)
-			case "entityId":
-				return ec.fieldContext_ManageEntity_entityId(ctx, field)
-			case "metadata":
-				return ec.fieldContext_ManageEntity_metadata(ctx, field)
-			case "action":
-				return ec.fieldContext_ManageEntity_action(ctx, field)
+			case "id":
+				return ec.fieldContext_User_id(ctx, field)
+			case "handle":
+				return ec.fieldContext_User_handle(ctx, field)
+			case "address":
+				return ec.fieldContext_User_address(ctx, field)
+			case "bio":
+				return ec.fieldContext_User_bio(ctx, field)
+			case "followers":
+				return ec.fieldContext_User_followers(ctx, field)
+			case "following":
+				return ec.fieldContext_User_following(ctx, field)
+			case "reposts":
+				return ec.fieldContext_User_reposts(ctx, field)
+			case "tracks":
+				return ec.fieldContext_User_tracks(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type ManageEntity", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
 	}
 	defer func() {
@@ -895,15 +881,15 @@ func (ec *executionContext) fieldContext_Mutation_manageEntity(ctx context.Conte
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_manageEntity_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Mutation_createUser_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_manageEntityBatch(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_manageEntityBatch(ctx, field)
+func (ec *executionContext) _Mutation_createTrack(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createTrack(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -916,7 +902,7 @@ func (ec *executionContext) _Mutation_manageEntityBatch(ctx context.Context, fie
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().ManageEntityBatch(rctx, fc.Args["batch"].([]*model.NewManageEntity))
+		return ec.resolvers.Mutation().CreateTrack(rctx, fc.Args["input"].(model.NewTrack))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -928,12 +914,12 @@ func (ec *executionContext) _Mutation_manageEntityBatch(ctx context.Context, fie
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.ManageEntity)
+	res := resTmp.(*model.Track)
 	fc.Result = res
-	return ec.marshalNManageEntity2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐManageEntity(ctx, field.Selections, res)
+	return ec.marshalNTrack2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐTrack(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Mutation_manageEntityBatch(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Mutation_createTrack(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Mutation",
 		Field:      field,
@@ -941,22 +927,20 @@ func (ec *executionContext) fieldContext_Mutation_manageEntityBatch(ctx context.
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "requestId":
-				return ec.fieldContext_ManageEntity_requestId(ctx, field)
+			case "id":
+				return ec.fieldContext_Track_id(ctx, field)
+			case "title":
+				return ec.fieldContext_Track_title(ctx, field)
+			case "streamUrl":
+				return ec.fieldContext_Track_streamUrl(ctx, field)
+			case "description":
+				return ec.fieldContext_Track_description(ctx, field)
 			case "userId":
-				return ec.fieldContext_ManageEntity_userId(ctx, field)
-			case "signer":
-				return ec.fieldContext_ManageEntity_signer(ctx, field)
-			case "entityType":
-				return ec.fieldContext_ManageEntity_entityType(ctx, field)
-			case "entityId":
-				return ec.fieldContext_ManageEntity_entityId(ctx, field)
-			case "metadata":
-				return ec.fieldContext_ManageEntity_metadata(ctx, field)
-			case "action":
-				return ec.fieldContext_ManageEntity_action(ctx, field)
+				return ec.fieldContext_Track_userId(ctx, field)
+			case "reposts":
+				return ec.fieldContext_Track_reposts(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type ManageEntity", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type Track", field.Name)
 		},
 	}
 	defer func() {
@@ -966,15 +950,15 @@ func (ec *executionContext) fieldContext_Mutation_manageEntityBatch(ctx context.
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_manageEntityBatch_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Mutation_createTrack_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_getManageEntity(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_getManageEntity(ctx, field)
+func (ec *executionContext) _Mutation_followUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_followUser(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -987,44 +971,37 @@ func (ec *executionContext) _Query_getManageEntity(ctx context.Context, field gr
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetManageEntity(rctx, fc.Args["requestId"].(string))
+		return ec.resolvers.Mutation().FollowUser(rctx, fc.Args["input"].(model.NewFollow))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.ManageEntity)
+	res := resTmp.(*model.Follow)
 	fc.Result = res
-	return ec.marshalOManageEntity2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐManageEntity(ctx, field.Selections, res)
+	return ec.marshalNFollow2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐFollow(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_getManageEntity(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Mutation_followUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "Query",
+		Object:     "Mutation",
 		Field:      field,
 		IsMethod:   true,
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "requestId":
-				return ec.fieldContext_ManageEntity_requestId(ctx, field)
-			case "userId":
-				return ec.fieldContext_ManageEntity_userId(ctx, field)
-			case "signer":
-				return ec.fieldContext_ManageEntity_signer(ctx, field)
-			case "entityType":
-				return ec.fieldContext_ManageEntity_entityType(ctx, field)
-			case "entityId":
-				return ec.fieldContext_ManageEntity_entityId(ctx, field)
-			case "metadata":
-				return ec.fieldContext_ManageEntity_metadata(ctx, field)
-			case "action":
-				return ec.fieldContext_ManageEntity_action(ctx, field)
+			case "followerId":
+				return ec.fieldContext_Follow_followerId(ctx, field)
+			case "followeeId":
+				return ec.fieldContext_Follow_followeeId(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type ManageEntity", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type Follow", field.Name)
 		},
 	}
 	defer func() {
@@ -1034,15 +1011,15 @@ func (ec *executionContext) fieldContext_Query_getManageEntity(ctx context.Conte
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_getManageEntity_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Mutation_followUser_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_listUserManageEntities(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_listUserManageEntities(ctx, field)
+func (ec *executionContext) _Mutation_repostTrack(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_repostTrack(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1055,44 +1032,37 @@ func (ec *executionContext) _Query_listUserManageEntities(ctx context.Context, f
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ListUserManageEntities(rctx, fc.Args["userId"].(int))
+		return ec.resolvers.Mutation().RepostTrack(rctx, fc.Args["input"].(model.NewRepost))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.ManageEntity)
+	res := resTmp.(*model.Repost)
 	fc.Result = res
-	return ec.marshalOManageEntity2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐManageEntity(ctx, field.Selections, res)
+	return ec.marshalNRepost2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐRepost(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_listUserManageEntities(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Mutation_repostTrack(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "Query",
+		Object:     "Mutation",
 		Field:      field,
 		IsMethod:   true,
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "requestId":
-				return ec.fieldContext_ManageEntity_requestId(ctx, field)
-			case "userId":
-				return ec.fieldContext_ManageEntity_userId(ctx, field)
-			case "signer":
-				return ec.fieldContext_ManageEntity_signer(ctx, field)
-			case "entityType":
-				return ec.fieldContext_ManageEntity_entityType(ctx, field)
-			case "entityId":
-				return ec.fieldContext_ManageEntity_entityId(ctx, field)
-			case "metadata":
-				return ec.fieldContext_ManageEntity_metadata(ctx, field)
-			case "action":
-				return ec.fieldContext_ManageEntity_action(ctx, field)
+			case "reposterId":
+				return ec.fieldContext_Repost_reposterId(ctx, field)
+			case "trackId":
+				return ec.fieldContext_Repost_trackId(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type ManageEntity", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type Repost", field.Name)
 		},
 	}
 	defer func() {
@@ -1102,15 +1072,15 @@ func (ec *executionContext) fieldContext_Query_listUserManageEntities(ctx contex
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_listUserManageEntities_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Mutation_repostTrack_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_listEntitiesByType(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_listEntitiesByType(ctx, field)
+func (ec *executionContext) _Mutation_unfollowUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_unfollowUser(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1123,44 +1093,31 @@ func (ec *executionContext) _Query_listEntitiesByType(ctx context.Context, field
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ListEntitiesByType(rctx, fc.Args["entityType"].(string))
+		return ec.resolvers.Mutation().UnfollowUser(rctx, fc.Args["input"].(model.NewUnfollow))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.ManageEntity)
+	res := resTmp.(bool)
 	fc.Result = res
-	return ec.marshalOManageEntity2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐManageEntity(ctx, field.Selections, res)
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_listEntitiesByType(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Mutation_unfollowUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "Query",
+		Object:     "Mutation",
 		Field:      field,
 		IsMethod:   true,
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "requestId":
-				return ec.fieldContext_ManageEntity_requestId(ctx, field)
-			case "userId":
-				return ec.fieldContext_ManageEntity_userId(ctx, field)
-			case "signer":
-				return ec.fieldContext_ManageEntity_signer(ctx, field)
-			case "entityType":
-				return ec.fieldContext_ManageEntity_entityType(ctx, field)
-			case "entityId":
-				return ec.fieldContext_ManageEntity_entityId(ctx, field)
-			case "metadata":
-				return ec.fieldContext_ManageEntity_metadata(ctx, field)
-			case "action":
-				return ec.fieldContext_ManageEntity_action(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ManageEntity", field.Name)
+			return nil, errors.New("field of type Boolean does not have child fields")
 		},
 	}
 	defer func() {
@@ -1170,15 +1127,15 @@ func (ec *executionContext) fieldContext_Query_listEntitiesByType(ctx context.Co
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_listEntitiesByType_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Mutation_unfollowUser_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_searchManageEntities(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_searchManageEntities(ctx, field)
+func (ec *executionContext) _Mutation_unrepostTrack(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_unrepostTrack(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1191,44 +1148,31 @@ func (ec *executionContext) _Query_searchManageEntities(ctx context.Context, fie
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().SearchManageEntities(rctx, fc.Args["filter"].(*model.ManageEntityFilter))
+		return ec.resolvers.Mutation().UnrepostTrack(rctx, fc.Args["input"].(model.NewUnrepost))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.ManageEntity)
+	res := resTmp.(bool)
 	fc.Result = res
-	return ec.marshalOManageEntity2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐManageEntity(ctx, field.Selections, res)
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_searchManageEntities(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Mutation_unrepostTrack(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "Query",
+		Object:     "Mutation",
 		Field:      field,
 		IsMethod:   true,
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "requestId":
-				return ec.fieldContext_ManageEntity_requestId(ctx, field)
-			case "userId":
-				return ec.fieldContext_ManageEntity_userId(ctx, field)
-			case "signer":
-				return ec.fieldContext_ManageEntity_signer(ctx, field)
-			case "entityType":
-				return ec.fieldContext_ManageEntity_entityType(ctx, field)
-			case "entityId":
-				return ec.fieldContext_ManageEntity_entityId(ctx, field)
-			case "metadata":
-				return ec.fieldContext_ManageEntity_metadata(ctx, field)
-			case "action":
-				return ec.fieldContext_ManageEntity_action(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ManageEntity", field.Name)
+			return nil, errors.New("field of type Boolean does not have child fields")
 		},
 	}
 	defer func() {
@@ -1238,7 +1182,263 @@ func (ec *executionContext) fieldContext_Query_searchManageEntities(ctx context.
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_searchManageEntities_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Mutation_unrepostTrack_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getUsers(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getUsers(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetUsers(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.User)
+	fc.Result = res
+	return ec.marshalNUser2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getUsers(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_User_id(ctx, field)
+			case "handle":
+				return ec.fieldContext_User_handle(ctx, field)
+			case "address":
+				return ec.fieldContext_User_address(ctx, field)
+			case "bio":
+				return ec.fieldContext_User_bio(ctx, field)
+			case "followers":
+				return ec.fieldContext_User_followers(ctx, field)
+			case "following":
+				return ec.fieldContext_User_following(ctx, field)
+			case "reposts":
+				return ec.fieldContext_User_reposts(ctx, field)
+			case "tracks":
+				return ec.fieldContext_User_tracks(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getTracks(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getTracks(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetTracks(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Track)
+	fc.Result = res
+	return ec.marshalNTrack2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐTrack(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getTracks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Track_id(ctx, field)
+			case "title":
+				return ec.fieldContext_Track_title(ctx, field)
+			case "streamUrl":
+				return ec.fieldContext_Track_streamUrl(ctx, field)
+			case "description":
+				return ec.fieldContext_Track_description(ctx, field)
+			case "userId":
+				return ec.fieldContext_Track_userId(ctx, field)
+			case "reposts":
+				return ec.fieldContext_Track_reposts(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Track", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getUser(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetUser(rctx, fc.Args["handle"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.User)
+	fc.Result = res
+	return ec.marshalOUser2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_User_id(ctx, field)
+			case "handle":
+				return ec.fieldContext_User_handle(ctx, field)
+			case "address":
+				return ec.fieldContext_User_address(ctx, field)
+			case "bio":
+				return ec.fieldContext_User_bio(ctx, field)
+			case "followers":
+				return ec.fieldContext_User_followers(ctx, field)
+			case "following":
+				return ec.fieldContext_User_following(ctx, field)
+			case "reposts":
+				return ec.fieldContext_User_reposts(ctx, field)
+			case "tracks":
+				return ec.fieldContext_User_tracks(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getUser_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getTrack(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getTrack(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetTrack(rctx, fc.Args["title"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Track)
+	fc.Result = res
+	return ec.marshalOTrack2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐTrack(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getTrack(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Track_id(ctx, field)
+			case "title":
+				return ec.fieldContext_Track_title(ctx, field)
+			case "streamUrl":
+				return ec.fieldContext_Track_streamUrl(ctx, field)
+			case "description":
+				return ec.fieldContext_Track_description(ctx, field)
+			case "userId":
+				return ec.fieldContext_Track_userId(ctx, field)
+			case "reposts":
+				return ec.fieldContext_Track_reposts(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Track", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getTrack_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -1374,8 +1574,96 @@ func (ec *executionContext) fieldContext_Query___schema(ctx context.Context, fie
 	return fc, nil
 }
 
-func (ec *executionContext) _Subscription_manageEntities(ctx context.Context, field graphql.CollectedField) (ret func(ctx context.Context) graphql.Marshaler) {
-	fc, err := ec.fieldContext_Subscription_manageEntities(ctx, field)
+func (ec *executionContext) _Repost_reposterId(ctx context.Context, field graphql.CollectedField, obj *model.Repost) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Repost_reposterId(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ReposterID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Repost_reposterId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Repost",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Repost_trackId(ctx context.Context, field graphql.CollectedField, obj *model.Repost) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Repost_trackId(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TrackID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Repost_trackId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Repost",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Subscription_tracks(ctx context.Context, field graphql.CollectedField) (ret func(ctx context.Context) graphql.Marshaler) {
+	fc, err := ec.fieldContext_Subscription_tracks(ctx, field)
 	if err != nil {
 		return nil
 	}
@@ -1388,7 +1676,7 @@ func (ec *executionContext) _Subscription_manageEntities(ctx context.Context, fi
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Subscription().ManageEntities(rctx)
+		return ec.resolvers.Subscription().Tracks(rctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1402,7 +1690,7 @@ func (ec *executionContext) _Subscription_manageEntities(ctx context.Context, fi
 	}
 	return func(ctx context.Context) graphql.Marshaler {
 		select {
-		case res, ok := <-resTmp.(<-chan *model.ManageEntity):
+		case res, ok := <-resTmp.(<-chan *model.Track):
 			if !ok {
 				return nil
 			}
@@ -1410,7 +1698,7 @@ func (ec *executionContext) _Subscription_manageEntities(ctx context.Context, fi
 				w.Write([]byte{'{'})
 				graphql.MarshalString(field.Alias).MarshalGQL(w)
 				w.Write([]byte{':'})
-				ec.marshalNManageEntity2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐManageEntity(ctx, field.Selections, res).MarshalGQL(w)
+				ec.marshalNTrack2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐTrack(ctx, field.Selections, res).MarshalGQL(w)
 				w.Write([]byte{'}'})
 			})
 		case <-ctx.Done():
@@ -1419,7 +1707,7 @@ func (ec *executionContext) _Subscription_manageEntities(ctx context.Context, fi
 	}
 }
 
-func (ec *executionContext) fieldContext_Subscription_manageEntities(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Subscription_tracks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Subscription",
 		Field:      field,
@@ -1427,22 +1715,878 @@ func (ec *executionContext) fieldContext_Subscription_manageEntities(ctx context
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "requestId":
-				return ec.fieldContext_ManageEntity_requestId(ctx, field)
+			case "id":
+				return ec.fieldContext_Track_id(ctx, field)
+			case "title":
+				return ec.fieldContext_Track_title(ctx, field)
+			case "streamUrl":
+				return ec.fieldContext_Track_streamUrl(ctx, field)
+			case "description":
+				return ec.fieldContext_Track_description(ctx, field)
 			case "userId":
-				return ec.fieldContext_ManageEntity_userId(ctx, field)
-			case "signer":
-				return ec.fieldContext_ManageEntity_signer(ctx, field)
-			case "entityType":
-				return ec.fieldContext_ManageEntity_entityType(ctx, field)
-			case "entityId":
-				return ec.fieldContext_ManageEntity_entityId(ctx, field)
-			case "metadata":
-				return ec.fieldContext_ManageEntity_metadata(ctx, field)
-			case "action":
-				return ec.fieldContext_ManageEntity_action(ctx, field)
+				return ec.fieldContext_Track_userId(ctx, field)
+			case "reposts":
+				return ec.fieldContext_Track_reposts(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type ManageEntity", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type Track", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Subscription_users(ctx context.Context, field graphql.CollectedField) (ret func(ctx context.Context) graphql.Marshaler) {
+	fc, err := ec.fieldContext_Subscription_users(ctx, field)
+	if err != nil {
+		return nil
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = nil
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Subscription().Users(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return nil
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return nil
+	}
+	return func(ctx context.Context) graphql.Marshaler {
+		select {
+		case res, ok := <-resTmp.(<-chan *model.User):
+			if !ok {
+				return nil
+			}
+			return graphql.WriterFunc(func(w io.Writer) {
+				w.Write([]byte{'{'})
+				graphql.MarshalString(field.Alias).MarshalGQL(w)
+				w.Write([]byte{':'})
+				ec.marshalNUser2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐUser(ctx, field.Selections, res).MarshalGQL(w)
+				w.Write([]byte{'}'})
+			})
+		case <-ctx.Done():
+			return nil
+		}
+	}
+}
+
+func (ec *executionContext) fieldContext_Subscription_users(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Subscription",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_User_id(ctx, field)
+			case "handle":
+				return ec.fieldContext_User_handle(ctx, field)
+			case "address":
+				return ec.fieldContext_User_address(ctx, field)
+			case "bio":
+				return ec.fieldContext_User_bio(ctx, field)
+			case "followers":
+				return ec.fieldContext_User_followers(ctx, field)
+			case "following":
+				return ec.fieldContext_User_following(ctx, field)
+			case "reposts":
+				return ec.fieldContext_User_reposts(ctx, field)
+			case "tracks":
+				return ec.fieldContext_User_tracks(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Subscription_follows(ctx context.Context, field graphql.CollectedField) (ret func(ctx context.Context) graphql.Marshaler) {
+	fc, err := ec.fieldContext_Subscription_follows(ctx, field)
+	if err != nil {
+		return nil
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = nil
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Subscription().Follows(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return nil
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return nil
+	}
+	return func(ctx context.Context) graphql.Marshaler {
+		select {
+		case res, ok := <-resTmp.(<-chan *model.Follow):
+			if !ok {
+				return nil
+			}
+			return graphql.WriterFunc(func(w io.Writer) {
+				w.Write([]byte{'{'})
+				graphql.MarshalString(field.Alias).MarshalGQL(w)
+				w.Write([]byte{':'})
+				ec.marshalNFollow2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐFollow(ctx, field.Selections, res).MarshalGQL(w)
+				w.Write([]byte{'}'})
+			})
+		case <-ctx.Done():
+			return nil
+		}
+	}
+}
+
+func (ec *executionContext) fieldContext_Subscription_follows(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Subscription",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "followerId":
+				return ec.fieldContext_Follow_followerId(ctx, field)
+			case "followeeId":
+				return ec.fieldContext_Follow_followeeId(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Follow", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Subscription_reposts(ctx context.Context, field graphql.CollectedField) (ret func(ctx context.Context) graphql.Marshaler) {
+	fc, err := ec.fieldContext_Subscription_reposts(ctx, field)
+	if err != nil {
+		return nil
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = nil
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Subscription().Reposts(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return nil
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return nil
+	}
+	return func(ctx context.Context) graphql.Marshaler {
+		select {
+		case res, ok := <-resTmp.(<-chan *model.Repost):
+			if !ok {
+				return nil
+			}
+			return graphql.WriterFunc(func(w io.Writer) {
+				w.Write([]byte{'{'})
+				graphql.MarshalString(field.Alias).MarshalGQL(w)
+				w.Write([]byte{':'})
+				ec.marshalNRepost2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐRepost(ctx, field.Selections, res).MarshalGQL(w)
+				w.Write([]byte{'}'})
+			})
+		case <-ctx.Done():
+			return nil
+		}
+	}
+}
+
+func (ec *executionContext) fieldContext_Subscription_reposts(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Subscription",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "reposterId":
+				return ec.fieldContext_Repost_reposterId(ctx, field)
+			case "trackId":
+				return ec.fieldContext_Repost_trackId(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Repost", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Track_id(ctx context.Context, field graphql.CollectedField, obj *model.Track) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Track_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Track_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Track",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Track_title(ctx context.Context, field graphql.CollectedField, obj *model.Track) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Track_title(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Title, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Track_title(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Track",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Track_streamUrl(ctx context.Context, field graphql.CollectedField, obj *model.Track) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Track_streamUrl(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.StreamURL, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Track_streamUrl(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Track",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Track_description(ctx context.Context, field graphql.CollectedField, obj *model.Track) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Track_description(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Description, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Track_description(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Track",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Track_userId(ctx context.Context, field graphql.CollectedField, obj *model.Track) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Track_userId(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UserID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Track_userId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Track",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Track_reposts(ctx context.Context, field graphql.CollectedField, obj *model.Track) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Track_reposts(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Reposts, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Repost)
+	fc.Result = res
+	return ec.marshalNRepost2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐRepost(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Track_reposts(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Track",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "reposterId":
+				return ec.fieldContext_Repost_reposterId(ctx, field)
+			case "trackId":
+				return ec.fieldContext_Repost_trackId(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Repost", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_User_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_User_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "User",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _User_handle(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_User_handle(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Handle, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_User_handle(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "User",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _User_address(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_User_address(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Address, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_User_address(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "User",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _User_bio(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_User_bio(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Bio, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_User_bio(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "User",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _User_followers(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_User_followers(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Followers, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Follow)
+	fc.Result = res
+	return ec.marshalNFollow2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐFollow(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_User_followers(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "User",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "followerId":
+				return ec.fieldContext_Follow_followerId(ctx, field)
+			case "followeeId":
+				return ec.fieldContext_Follow_followeeId(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Follow", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _User_following(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_User_following(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Following, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Follow)
+	fc.Result = res
+	return ec.marshalNFollow2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐFollow(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_User_following(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "User",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "followerId":
+				return ec.fieldContext_Follow_followerId(ctx, field)
+			case "followeeId":
+				return ec.fieldContext_Follow_followeeId(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Follow", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _User_reposts(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_User_reposts(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Reposts, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Repost)
+	fc.Result = res
+	return ec.marshalNRepost2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐRepost(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_User_reposts(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "User",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "reposterId":
+				return ec.fieldContext_Repost_reposterId(ctx, field)
+			case "trackId":
+				return ec.fieldContext_Repost_trackId(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Repost", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _User_tracks(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_User_tracks(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Tracks, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Track)
+	fc.Result = res
+	return ec.marshalNTrack2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐTrack(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_User_tracks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "User",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Track_id(ctx, field)
+			case "title":
+				return ec.fieldContext_Track_title(ctx, field)
+			case "streamUrl":
+				return ec.fieldContext_Track_streamUrl(ctx, field)
+			case "description":
+				return ec.fieldContext_Track_description(ctx, field)
+			case "userId":
+				return ec.fieldContext_Track_userId(ctx, field)
+			case "reposts":
+				return ec.fieldContext_Track_reposts(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Track", field.Name)
 		},
 	}
 	return fc, nil
@@ -3221,124 +4365,225 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 
 // region    **************************** input.gotpl *****************************
 
-func (ec *executionContext) unmarshalInputManageEntityFilter(ctx context.Context, obj interface{}) (model.ManageEntityFilter, error) {
-	var it model.ManageEntityFilter
+func (ec *executionContext) unmarshalInputNewFollow(ctx context.Context, obj interface{}) (model.NewFollow, error) {
+	var it model.NewFollow
 	asMap := map[string]interface{}{}
 	for k, v := range obj.(map[string]interface{}) {
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"userId", "signer", "entityType", "entityId", "action"}
+	fieldsInOrder := [...]string{"followerId", "followeeId"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "userId":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+		case "followerId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("followerId"))
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.UserID = data
-		case "signer":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("signer"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			it.FollowerID = data
+		case "followeeId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("followeeId"))
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Signer = data
-		case "entityType":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("entityType"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EntityType = data
-		case "entityId":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("entityId"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EntityID = data
-		case "action":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("action"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Action = data
+			it.FolloweeID = data
 		}
 	}
 
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputNewManageEntity(ctx context.Context, obj interface{}) (model.NewManageEntity, error) {
-	var it model.NewManageEntity
+func (ec *executionContext) unmarshalInputNewRepost(ctx context.Context, obj interface{}) (model.NewRepost, error) {
+	var it model.NewRepost
 	asMap := map[string]interface{}{}
 	for k, v := range obj.(map[string]interface{}) {
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"requestId", "userId", "signer", "entityType", "entityId", "metadata", "action"}
+	fieldsInOrder := [...]string{"reposterId", "trackId"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "requestId":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("requestId"))
+		case "reposterId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reposterId"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.RequestID = data
+			it.ReposterID = data
+		case "trackId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trackId"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TrackID = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputNewTrack(ctx context.Context, obj interface{}) (model.NewTrack, error) {
+	var it model.NewTrack
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"title", "streamUrl", "description", "userId"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "title":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Title = data
+		case "streamUrl":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("streamUrl"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StreamURL = data
+		case "description":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Description = data
 		case "userId":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
-			data, err := ec.unmarshalNInt2int(ctx, v)
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.UserID = data
-		case "signer":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("signer"))
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputNewUnfollow(ctx context.Context, obj interface{}) (model.NewUnfollow, error) {
+	var it model.NewUnfollow
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"followerId", "followeeId"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "followerId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("followerId"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Signer = data
-		case "entityType":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("entityType"))
+			it.FollowerID = data
+		case "followeeId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("followeeId"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.EntityType = data
-		case "entityId":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("entityId"))
-			data, err := ec.unmarshalNInt2int(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EntityID = data
-		case "metadata":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("metadata"))
+			it.FolloweeID = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputNewUnrepost(ctx context.Context, obj interface{}) (model.NewUnrepost, error) {
+	var it model.NewUnrepost
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"reposterId", "trackId"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "reposterId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reposterId"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Metadata = data
-		case "action":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("action"))
+			it.ReposterID = data
+		case "trackId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trackId"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Action = data
+			it.TrackID = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputNewUser(ctx context.Context, obj interface{}) (model.NewUser, error) {
+	var it model.NewUser
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"handle", "address", "bio"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "handle":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("handle"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Handle = data
+		case "address":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("address"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Address = data
+		case "bio":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("bio"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Bio = data
 		}
 	}
 
@@ -3353,49 +4598,24 @@ func (ec *executionContext) unmarshalInputNewManageEntity(ctx context.Context, o
 
 // region    **************************** object.gotpl ****************************
 
-var manageEntityImplementors = []string{"ManageEntity"}
+var followImplementors = []string{"Follow"}
 
-func (ec *executionContext) _ManageEntity(ctx context.Context, sel ast.SelectionSet, obj *model.ManageEntity) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, manageEntityImplementors)
+func (ec *executionContext) _Follow(ctx context.Context, sel ast.SelectionSet, obj *model.Follow) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, followImplementors)
 
 	out := graphql.NewFieldSet(fields)
 	deferred := make(map[string]*graphql.FieldSet)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("ManageEntity")
-		case "requestId":
-			out.Values[i] = ec._ManageEntity_requestId(ctx, field, obj)
+			out.Values[i] = graphql.MarshalString("Follow")
+		case "followerId":
+			out.Values[i] = ec._Follow_followerId(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "userId":
-			out.Values[i] = ec._ManageEntity_userId(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "signer":
-			out.Values[i] = ec._ManageEntity_signer(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "entityType":
-			out.Values[i] = ec._ManageEntity_entityType(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "entityId":
-			out.Values[i] = ec._ManageEntity_entityId(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "metadata":
-			out.Values[i] = ec._ManageEntity_metadata(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "action":
-			out.Values[i] = ec._ManageEntity_action(ctx, field, obj)
+		case "followeeId":
+			out.Values[i] = ec._Follow_followeeId(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -3441,16 +4661,44 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Mutation")
-		case "manageEntity":
+		case "createUser":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_manageEntity(ctx, field)
+				return ec._Mutation_createUser(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "manageEntityBatch":
+		case "createTrack":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_manageEntityBatch(ctx, field)
+				return ec._Mutation_createTrack(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "followUser":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_followUser(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "repostTrack":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_repostTrack(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "unfollowUser":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_unfollowUser(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "unrepostTrack":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_unrepostTrack(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -3497,7 +4745,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Query")
-		case "getManageEntity":
+		case "getUsers":
 			field := field
 
 			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
@@ -3506,7 +4754,10 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_getManageEntity(ctx, field)
+				res = ec._Query_getUsers(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
 				return res
 			}
 
@@ -3516,7 +4767,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "listUserManageEntities":
+		case "getTracks":
 			field := field
 
 			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
@@ -3525,7 +4776,10 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_listUserManageEntities(ctx, field)
+				res = ec._Query_getTracks(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
 				return res
 			}
 
@@ -3535,7 +4789,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "listEntitiesByType":
+		case "getUser":
 			field := field
 
 			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
@@ -3544,7 +4798,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_listEntitiesByType(ctx, field)
+				res = ec._Query_getUser(ctx, field)
 				return res
 			}
 
@@ -3554,7 +4808,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "searchManageEntities":
+		case "getTrack":
 			field := field
 
 			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
@@ -3563,7 +4817,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_searchManageEntities(ctx, field)
+				res = ec._Query_getTrack(ctx, field)
 				return res
 			}
 
@@ -3604,6 +4858,50 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 	return out
 }
 
+var repostImplementors = []string{"Repost"}
+
+func (ec *executionContext) _Repost(ctx context.Context, sel ast.SelectionSet, obj *model.Repost) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, repostImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Repost")
+		case "reposterId":
+			out.Values[i] = ec._Repost_reposterId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "trackId":
+			out.Values[i] = ec._Repost_trackId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var subscriptionImplementors = []string{"Subscription"}
 
 func (ec *executionContext) _Subscription(ctx context.Context, sel ast.SelectionSet) func(ctx context.Context) graphql.Marshaler {
@@ -3617,11 +4915,155 @@ func (ec *executionContext) _Subscription(ctx context.Context, sel ast.Selection
 	}
 
 	switch fields[0].Name {
-	case "manageEntities":
-		return ec._Subscription_manageEntities(ctx, fields[0])
+	case "tracks":
+		return ec._Subscription_tracks(ctx, fields[0])
+	case "users":
+		return ec._Subscription_users(ctx, fields[0])
+	case "follows":
+		return ec._Subscription_follows(ctx, fields[0])
+	case "reposts":
+		return ec._Subscription_reposts(ctx, fields[0])
 	default:
 		panic("unknown field " + strconv.Quote(fields[0].Name))
 	}
+}
+
+var trackImplementors = []string{"Track"}
+
+func (ec *executionContext) _Track(ctx context.Context, sel ast.SelectionSet, obj *model.Track) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, trackImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Track")
+		case "id":
+			out.Values[i] = ec._Track_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "title":
+			out.Values[i] = ec._Track_title(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "streamUrl":
+			out.Values[i] = ec._Track_streamUrl(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "description":
+			out.Values[i] = ec._Track_description(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "userId":
+			out.Values[i] = ec._Track_userId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "reposts":
+			out.Values[i] = ec._Track_reposts(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var userImplementors = []string{"User"}
+
+func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj *model.User) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, userImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("User")
+		case "id":
+			out.Values[i] = ec._User_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "handle":
+			out.Values[i] = ec._User_handle(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "address":
+			out.Values[i] = ec._User_address(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "bio":
+			out.Values[i] = ec._User_bio(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "followers":
+			out.Values[i] = ec._User_followers(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "following":
+			out.Values[i] = ec._User_following(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "reposts":
+			out.Values[i] = ec._User_reposts(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "tracks":
+			out.Values[i] = ec._User_tracks(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
 }
 
 var __DirectiveImplementors = []string{"__Directive"}
@@ -3965,26 +5407,11 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) unmarshalNInt2int(ctx context.Context, v interface{}) (int, error) {
-	res, err := graphql.UnmarshalInt(v)
-	return res, graphql.ErrorOnPath(ctx, err)
+func (ec *executionContext) marshalNFollow2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐFollow(ctx context.Context, sel ast.SelectionSet, v model.Follow) graphql.Marshaler {
+	return ec._Follow(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
-	res := graphql.MarshalInt(v)
-	if res == graphql.Null {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-	}
-	return res
-}
-
-func (ec *executionContext) marshalNManageEntity2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐManageEntity(ctx context.Context, sel ast.SelectionSet, v model.ManageEntity) graphql.Marshaler {
-	return ec._ManageEntity(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNManageEntity2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐManageEntity(ctx context.Context, sel ast.SelectionSet, v []*model.ManageEntity) graphql.Marshaler {
+func (ec *executionContext) marshalNFollow2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐFollow(ctx context.Context, sel ast.SelectionSet, v []*model.Follow) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -4008,7 +5435,7 @@ func (ec *executionContext) marshalNManageEntity2ᚕᚖgithubᚗcomᚋalecsavvy�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOManageEntity2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐManageEntity(ctx, sel, v[i])
+			ret[i] = ec.marshalOFollow2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐFollow(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -4022,36 +5449,96 @@ func (ec *executionContext) marshalNManageEntity2ᚕᚖgithubᚗcomᚋalecsavvy�
 	return ret
 }
 
-func (ec *executionContext) marshalNManageEntity2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐManageEntity(ctx context.Context, sel ast.SelectionSet, v *model.ManageEntity) graphql.Marshaler {
+func (ec *executionContext) marshalNFollow2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐFollow(ctx context.Context, sel ast.SelectionSet, v *model.Follow) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
-	return ec._ManageEntity(ctx, sel, v)
+	return ec._Follow(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNNewManageEntity2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐNewManageEntity(ctx context.Context, v interface{}) (model.NewManageEntity, error) {
-	res, err := ec.unmarshalInputNewManageEntity(ctx, v)
+func (ec *executionContext) unmarshalNNewFollow2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐNewFollow(ctx context.Context, v interface{}) (model.NewFollow, error) {
+	res, err := ec.unmarshalInputNewFollow(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNNewManageEntity2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐNewManageEntity(ctx context.Context, v interface{}) ([]*model.NewManageEntity, error) {
-	var vSlice []interface{}
-	if v != nil {
-		vSlice = graphql.CoerceList(v)
+func (ec *executionContext) unmarshalNNewRepost2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐNewRepost(ctx context.Context, v interface{}) (model.NewRepost, error) {
+	res, err := ec.unmarshalInputNewRepost(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNNewTrack2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐNewTrack(ctx context.Context, v interface{}) (model.NewTrack, error) {
+	res, err := ec.unmarshalInputNewTrack(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNNewUnfollow2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐNewUnfollow(ctx context.Context, v interface{}) (model.NewUnfollow, error) {
+	res, err := ec.unmarshalInputNewUnfollow(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNNewUnrepost2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐNewUnrepost(ctx context.Context, v interface{}) (model.NewUnrepost, error) {
+	res, err := ec.unmarshalInputNewUnrepost(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNNewUser2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐNewUser(ctx context.Context, v interface{}) (model.NewUser, error) {
+	res, err := ec.unmarshalInputNewUser(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNRepost2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐRepost(ctx context.Context, sel ast.SelectionSet, v model.Repost) graphql.Marshaler {
+	return ec._Repost(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNRepost2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐRepost(ctx context.Context, sel ast.SelectionSet, v []*model.Repost) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
 	}
-	var err error
-	res := make([]*model.NewManageEntity, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalONewManageEntity2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐNewManageEntity(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
 		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalORepost2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐRepost(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
 	}
-	return res, nil
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalNRepost2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐRepost(ctx context.Context, sel ast.SelectionSet, v *model.Repost) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Repost(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {
@@ -4067,6 +5554,110 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) marshalNTrack2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐTrack(ctx context.Context, sel ast.SelectionSet, v model.Track) graphql.Marshaler {
+	return ec._Track(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNTrack2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐTrack(ctx context.Context, sel ast.SelectionSet, v []*model.Track) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOTrack2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐTrack(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalNTrack2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐTrack(ctx context.Context, sel ast.SelectionSet, v *model.Track) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Track(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNUser2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {
+	return ec._User(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v []*model.User) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOUser2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐUser(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._User(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {
@@ -4348,84 +5939,18 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
-func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v interface{}) (*int, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := graphql.UnmarshalInt(v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.SelectionSet, v *int) graphql.Marshaler {
+func (ec *executionContext) marshalOFollow2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐFollow(ctx context.Context, sel ast.SelectionSet, v *model.Follow) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	res := graphql.MarshalInt(*v)
-	return res
+	return ec._Follow(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOManageEntity2ᚕᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐManageEntity(ctx context.Context, sel ast.SelectionSet, v []*model.ManageEntity) graphql.Marshaler {
+func (ec *executionContext) marshalORepost2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐRepost(ctx context.Context, sel ast.SelectionSet, v *model.Repost) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalOManageEntity2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐManageEntity(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	return ret
-}
-
-func (ec *executionContext) marshalOManageEntity2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐManageEntity(ctx context.Context, sel ast.SelectionSet, v *model.ManageEntity) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._ManageEntity(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalOManageEntityFilter2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐManageEntityFilter(ctx context.Context, v interface{}) (*model.ManageEntityFilter, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := ec.unmarshalInputManageEntityFilter(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalONewManageEntity2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐNewManageEntity(ctx context.Context, v interface{}) (*model.NewManageEntity, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := ec.unmarshalInputNewManageEntity(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
+	return ec._Repost(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
@@ -4442,6 +5967,20 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	}
 	res := graphql.MarshalString(*v)
 	return res
+}
+
+func (ec *executionContext) marshalOTrack2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐTrack(ctx context.Context, sel ast.SelectionSet, v *model.Track) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Track(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOUser2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._User(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalO__EnumValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐEnumValueᚄ(ctx context.Context, sel ast.SelectionSet, v []introspection.EnumValue) graphql.Marshaler {

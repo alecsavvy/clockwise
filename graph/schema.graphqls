@@ -1,43 +1,85 @@
-type ManageEntity {
-  requestId: String!
-  userId: Int!
-  signer: String!
-  entityType: String!
-  entityId: Int!
-  metadata: String!
-  action: String!
+type User {
+  id: String!
+  handle: String!
+  address: String!
+  bio: String!
+  followers: [Follow]!
+  following: [Follow]!
+  reposts: [Repost]!
+  tracks: [Track]!
 }
 
-input NewManageEntity {
-  requestId: String!
-  userId: Int!
-  signer: String!
-  entityType: String!
-  entityId: Int!
-  metadata: String!
-  action: String!
+type Track {
+  id: String!
+  title: String!
+  streamUrl: String!
+  description: String!
+  userId: String!
+  reposts: [Repost]!
 }
 
-input ManageEntityFilter {
-  userId: Int
-  signer: String
-  entityType: String
-  entityId: Int
-  action: String
+type Follow {
+  followerId: String!
+  followeeId: String!
+}
+
+type Repost {
+  reposterId: String!
+  trackId: String!
+}
+
+input NewUser {
+  handle: String!
+  address: String!
+  bio: String!
+}
+
+input NewTrack {
+  title: String!
+  streamUrl: String!
+  description: String!
+  userId: String!
+}
+
+input NewFollow {
+  followerId: String!
+  followeeId: String!
+}
+
+input NewUnfollow {
+  followerId: String!
+  followeeId: String!
+}
+
+input NewRepost {
+  reposterId: String!
+  trackId: String!
+}
+
+input NewUnrepost {
+  reposterId: String!
+  trackId: String!
 }
 
 type Query {
-  getManageEntity(requestId: String!): ManageEntity
-  listUserManageEntities(userId: Int!): [ManageEntity]
-  listEntitiesByType(entityType: String!): [ManageEntity]
-  searchManageEntities(filter: ManageEntityFilter): [ManageEntity]
+  getUsers: [User]!
+  getTracks: [Track]!
+  getUser(handle: String!): User
+  getTrack(title: String!): Track
 }
 
 type Mutation {
-  manageEntity(manageEntity: NewManageEntity!): ManageEntity!
-  manageEntityBatch(batch: [NewManageEntity]!): [ManageEntity]!
+  createUser(input: NewUser!): User!
+  createTrack(input: NewTrack!): Track!
+  followUser(input: NewFollow!): Follow!
+  repostTrack(input: NewRepost!): Repost!
+  unfollowUser(input: NewUnfollow!): Boolean!
+  unrepostTrack(input: NewUnrepost!): Boolean!
 }
 
 type Subscription {
-  manageEntities: ManageEntity!
+  tracks: Track!
+  users: User!
+  follows: Follow!
+  reposts: Repost!
 }

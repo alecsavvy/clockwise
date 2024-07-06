@@ -2,39 +2,74 @@
 
 package model
 
-type ManageEntity struct {
-	RequestID  string `json:"requestId"`
-	UserID     int    `json:"userId"`
-	Signer     string `json:"signer"`
-	EntityType string `json:"entityType"`
-	EntityID   int    `json:"entityId"`
-	Metadata   string `json:"metadata"`
-	Action     string `json:"action"`
-}
-
-type ManageEntityFilter struct {
-	UserID     *int    `json:"userId,omitempty"`
-	Signer     *string `json:"signer,omitempty"`
-	EntityType *string `json:"entityType,omitempty"`
-	EntityID   *int    `json:"entityId,omitempty"`
-	Action     *string `json:"action,omitempty"`
+type Follow struct {
+	FollowerID string `json:"followerId"`
+	FolloweeID string `json:"followeeId"`
 }
 
 type Mutation struct {
 }
 
-type NewManageEntity struct {
-	RequestID  string `json:"requestId"`
-	UserID     int    `json:"userId"`
-	Signer     string `json:"signer"`
-	EntityType string `json:"entityType"`
-	EntityID   int    `json:"entityId"`
-	Metadata   string `json:"metadata"`
-	Action     string `json:"action"`
+type NewFollow struct {
+	FollowerID string `json:"followerId"`
+	FolloweeID string `json:"followeeId"`
+}
+
+type NewRepost struct {
+	ReposterID string `json:"reposterId"`
+	TrackID    string `json:"trackId"`
+}
+
+type NewTrack struct {
+	Title       string `json:"title"`
+	StreamURL   string `json:"streamUrl"`
+	Description string `json:"description"`
+	UserID      string `json:"userId"`
+}
+
+type NewUnfollow struct {
+	FollowerID string `json:"followerId"`
+	FolloweeID string `json:"followeeId"`
+}
+
+type NewUnrepost struct {
+	ReposterID string `json:"reposterId"`
+	TrackID    string `json:"trackId"`
+}
+
+type NewUser struct {
+	Handle  string `json:"handle"`
+	Address string `json:"address"`
+	Bio     string `json:"bio"`
 }
 
 type Query struct {
 }
 
+type Repost struct {
+	ReposterID string `json:"reposterId"`
+	TrackID    string `json:"trackId"`
+}
+
 type Subscription struct {
+}
+
+type Track struct {
+	ID          string    `json:"id"`
+	Title       string    `json:"title"`
+	StreamURL   string    `json:"streamUrl"`
+	Description string    `json:"description"`
+	UserID      string    `json:"userId"`
+	Reposts     []*Repost `json:"reposts"`
+}
+
+type User struct {
+	ID        string    `json:"id"`
+	Handle    string    `json:"handle"`
+	Address   string    `json:"address"`
+	Bio       string    `json:"bio"`
+	Followers []*Follow `json:"followers"`
+	Following []*Follow `json:"following"`
+	Reposts   []*Repost `json:"reposts"`
+	Tracks    []*Track  `json:"tracks"`
 }

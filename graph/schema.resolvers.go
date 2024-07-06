@@ -11,62 +11,74 @@ import (
 	"github.com/alecsavvy/clockwise/graph/model"
 )
 
-// ManageEntity is the resolver for the manageEntity field.
-func (r *mutationResolver) ManageEntity(ctx context.Context, manageEntity model.NewManageEntity) (*model.ManageEntity, error) {
-	core := r.core
-	em := APItoInner(NewAPItoAPI(&manageEntity))
-	res, err := core.Send(em)
-	if err != nil {
-		return nil, err
-	}
-	return InnerToAPI(res), nil
+// CreateUser is the resolver for the createUser field.
+func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
+	panic(fmt.Errorf("not implemented: CreateUser - createUser"))
 }
 
-// ManageEntityBatch is the resolver for the manageEntityBatch field.
-func (r *mutationResolver) ManageEntityBatch(ctx context.Context, batch []*model.NewManageEntity) ([]*model.ManageEntity, error) {
-	panic(fmt.Errorf("not implemented: ManageEntityBatch - manageEntityBatch"))
+// CreateTrack is the resolver for the createTrack field.
+func (r *mutationResolver) CreateTrack(ctx context.Context, input model.NewTrack) (*model.Track, error) {
+	panic(fmt.Errorf("not implemented: CreateTrack - createTrack"))
 }
 
-// GetManageEntity is the resolver for the getManageEntity field.
-func (r *queryResolver) GetManageEntity(ctx context.Context, requestID string) (*model.ManageEntity, error) {
-	panic(fmt.Errorf("not implemented: GetManageEntity - getManageEntity"))
+// FollowUser is the resolver for the followUser field.
+func (r *mutationResolver) FollowUser(ctx context.Context, input model.NewFollow) (*model.Follow, error) {
+	panic(fmt.Errorf("not implemented: FollowUser - followUser"))
 }
 
-// ListUserManageEntities is the resolver for the listUserManageEntities field.
-func (r *queryResolver) ListUserManageEntities(ctx context.Context, userID int) ([]*model.ManageEntity, error) {
-	panic(fmt.Errorf("not implemented: ListUserManageEntities - listUserManageEntities"))
+// RepostTrack is the resolver for the repostTrack field.
+func (r *mutationResolver) RepostTrack(ctx context.Context, input model.NewRepost) (*model.Repost, error) {
+	panic(fmt.Errorf("not implemented: RepostTrack - repostTrack"))
 }
 
-// ListEntitiesByType is the resolver for the listEntitiesByType field.
-func (r *queryResolver) ListEntitiesByType(ctx context.Context, entityType string) ([]*model.ManageEntity, error) {
-	panic(fmt.Errorf("not implemented: ListEntitiesByType - listEntitiesByType"))
+// UnfollowUser is the resolver for the unfollowUser field.
+func (r *mutationResolver) UnfollowUser(ctx context.Context, input model.NewUnfollow) (bool, error) {
+	panic(fmt.Errorf("not implemented: UnfollowUser - unfollowUser"))
 }
 
-// SearchManageEntities is the resolver for the searchManageEntities field.
-func (r *queryResolver) SearchManageEntities(ctx context.Context, filter *model.ManageEntityFilter) ([]*model.ManageEntity, error) {
-	panic(fmt.Errorf("not implemented: SearchManageEntities - searchManageEntities"))
+// UnrepostTrack is the resolver for the unrepostTrack field.
+func (r *mutationResolver) UnrepostTrack(ctx context.Context, input model.NewUnrepost) (bool, error) {
+	panic(fmt.Errorf("not implemented: UnrepostTrack - unrepostTrack"))
 }
 
-// ManageEntities is the resolver for the manageEntities field.
-func (r *subscriptionResolver) ManageEntities(ctx context.Context) (<-chan *model.ManageEntity, error) {
-	ems := make(chan *model.ManageEntity)
-	go func() {
-		defer close(ems)
-		manageEntities := r.core.Pubsub().EntityManagerPubsub.Subscribe()
-		for {
-			select {
-			case em, ok := <-manageEntities:
-				if !ok {
-					return
-				}
-				newEm := InnerToAPI(em)
-				ems <- newEm
-			case <-ctx.Done():
-				return
-			}
-		}
-	}()
-	return ems, nil
+// GetUsers is the resolver for the getUsers field.
+func (r *queryResolver) GetUsers(ctx context.Context) ([]*model.User, error) {
+	panic(fmt.Errorf("not implemented: GetUsers - getUsers"))
+}
+
+// GetTracks is the resolver for the getTracks field.
+func (r *queryResolver) GetTracks(ctx context.Context) ([]*model.Track, error) {
+	panic(fmt.Errorf("not implemented: GetTracks - getTracks"))
+}
+
+// GetUser is the resolver for the getUser field.
+func (r *queryResolver) GetUser(ctx context.Context, handle string) (*model.User, error) {
+	panic(fmt.Errorf("not implemented: GetUser - getUser"))
+}
+
+// GetTrack is the resolver for the getTrack field.
+func (r *queryResolver) GetTrack(ctx context.Context, title string) (*model.Track, error) {
+	panic(fmt.Errorf("not implemented: GetTrack - getTrack"))
+}
+
+// Tracks is the resolver for the tracks field.
+func (r *subscriptionResolver) Tracks(ctx context.Context) (<-chan *model.Track, error) {
+	panic(fmt.Errorf("not implemented: Tracks - tracks"))
+}
+
+// Users is the resolver for the users field.
+func (r *subscriptionResolver) Users(ctx context.Context) (<-chan *model.User, error) {
+	panic(fmt.Errorf("not implemented: Users - users"))
+}
+
+// Follows is the resolver for the follows field.
+func (r *subscriptionResolver) Follows(ctx context.Context) (<-chan *model.Follow, error) {
+	panic(fmt.Errorf("not implemented: Follows - follows"))
+}
+
+// Reposts is the resolver for the reposts field.
+func (r *subscriptionResolver) Reposts(ctx context.Context) (<-chan *model.Repost, error) {
+	panic(fmt.Errorf("not implemented: Reposts - reposts"))
 }
 
 // Mutation returns MutationResolver implementation.
