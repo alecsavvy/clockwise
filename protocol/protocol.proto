@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 package protocol;
+import "google/protobuf/any.proto";
 
 option go_package = "./gen;gen";
 
@@ -15,17 +16,17 @@ enum MessageType {
 }
 
 message Envelope {
+  Headers headers = 1;
+  google.protobuf.Any data = 2;
+}
+
+message Headers {
   string signature = 1;
   MessageType message_type = 2;
 }
 
-// used for deserialization
-message Base {
-  Envelope envelope = 1;
-}
-
 message CreateUser {
-  Envelope envelope = 1;
+  Headers headers = 1;
   Data data = 2;
   message Data {
     string id = 1;
@@ -36,7 +37,7 @@ message CreateUser {
 }
 
 message FollowUser {
-  Envelope envelope = 1;
+  Headers headers = 1;
   Data data = 2;
   message Data {
     string follower_id = 1;
@@ -45,7 +46,7 @@ message FollowUser {
 }
 
 message UnfollowUser {
-  Envelope envelope = 1;
+  Headers headers = 1;
   Data data = 2;
   message Data {
     string follower_id = 1;
@@ -54,7 +55,7 @@ message UnfollowUser {
 }
 
 message CreateTrack {
-  Envelope envelope = 1;
+  Headers headers = 1;
   Data data = 2;
   message Data {
     string id = 1;
@@ -66,7 +67,7 @@ message CreateTrack {
 }
 
 message RepostTrack {
-  Envelope envelope = 1;
+  Headers headers = 1;
   Data data = 2;
   message Data {
     string track_id = 1;
@@ -75,7 +76,7 @@ message RepostTrack {
 }
 
 message UnrepostTrack {
-  Envelope envelope = 1;
+  Headers headers = 1;
   Data data = 2;
   message Data {
     string id = 1;

@@ -17,7 +17,7 @@ import (
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
 	msg := &gen.CreateUser{
-		Envelope: &gen.Envelope{
+		Headers: &gen.Headers{
 			Signature:   "sig",
 			MessageType: gen.MessageType_MESSAGE_TYPE_CREATE_USER,
 		},
@@ -49,7 +49,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 // CreateTrack is the resolver for the createTrack field.
 func (r *mutationResolver) CreateTrack(ctx context.Context, input model.NewTrack) (*model.Track, error) {
 	msg := &gen.CreateTrack{
-		Envelope: &gen.Envelope{
+		Headers: &gen.Headers{
 			Signature:   "sig",
 			MessageType: gen.MessageType_MESSAGE_TYPE_CREATE_TRACK,
 		},

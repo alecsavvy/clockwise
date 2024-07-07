@@ -5,10 +5,10 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-func deserializeEnvelope(data []byte) (*gen.Envelope, error) {
-	envelope := &gen.Base{}
+func deserializeEnvelope(data []byte) (*gen.Headers, error) {
+	envelope := &gen.Envelope{}
 	err := proto.Unmarshal(data, envelope)
-	return envelope.GetEnvelope(), err
+	return envelope.GetHeaders(), err
 }
 
 func deserializeCreateUser(data []byte) (*gen.CreateUser, error) {
