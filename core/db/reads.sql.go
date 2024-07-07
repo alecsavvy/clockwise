@@ -37,6 +37,32 @@ func (q *Queries) GetFollowersByHandle(ctx context.Context, handle string) ([]Us
 	return items, nil
 }
 
+const getTrackReposts = `-- name: GetTrackReposts :many
+select reposter_id, track_id
+from reposts
+where track_id = $1
+`
+
+func (q *Queries) GetTrackReposts(ctx context.Context, trackID string) ([]Repost, error) {
+	rows, err := q.db.Query(ctx, getTrackReposts, trackID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Repost
+	for rows.Next() {
+		var i Repost
+		if err := rows.Scan(&i.ReposterID, &i.TrackID); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getTracks = `-- name: GetTracks :many
 select id, title, stream_url, description, user_id
 from tracks
@@ -69,6 +95,20 @@ func (q *Queries) GetTracks(ctx context.Context) ([]Track, error) {
 	return items, nil
 }
 
+const getUser = `-- name: GetUser :one
+select id, handle, bio
+from users
+where id = $1
+limit 1
+`
+
+func (q *Queries) GetUser(ctx context.Context, id string) (User, error) {
+	row := q.db.QueryRow(ctx, getUser, id)
+	var i User
+	err := row.Scan(&i.ID, &i.Handle, &i.Bio)
+	return i, err
+}
+
 const getUserByHandle = `-- name: GetUserByHandle :one
 select id, handle, bio
 from users
@@ -81,6 +121,116 @@ func (q *Queries) GetUserByHandle(ctx context.Context, handle string) (User, err
 	var i User
 	err := row.Scan(&i.ID, &i.Handle, &i.Bio)
 	return i, err
+}
+
+const getUserFollowers = `-- name: GetUserFollowers :many
+select follower_id, following_id
+from follows
+where following_id = $1
+`
+
+func (q *Queries) GetUserFollowers(ctx context.Context, followingID string) ([]Follow, error) {
+	rows, err := q.db.Query(ctx, getUserFollowers, followingID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Follow
+	for rows.Next() {
+		var i Follow
+		if err := rows.Scan(&i.FollowerID, &i.FollowingID); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getUserFollowing = `-- name: GetUserFollowing :many
+select follower_id, following_id
+from follows
+where follower_id = $1
+`
+
+func (q *Queries) GetUserFollowing(ctx context.Context, followerID string) ([]Follow, error) {
+	rows, err := q.db.Query(ctx, getUserFollowing, followerID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Follow
+	for rows.Next() {
+		var i Follow
+		if err := rows.Scan(&i.FollowerID, &i.FollowingID); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getUserReposts = `-- name: GetUserReposts :many
+select reposter_id, track_id
+from reposts
+where reposter_id = $1
+`
+
+func (q *Queries) GetUserReposts(ctx context.Context, reposterID string) ([]Repost, error) {
+	rows, err := q.db.Query(ctx, getUserReposts, reposterID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Repost
+	for rows.Next() {
+		var i Repost
+		if err := rows.Scan(&i.ReposterID, &i.TrackID); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getUserTracks = `-- name: GetUserTracks :many
+select id, title, stream_url, description, user_id
+from tracks
+where user_id = $1
+`
+
+func (q *Queries) GetUserTracks(ctx context.Context, userID string) ([]Track, error) {
+	rows, err := q.db.Query(ctx, getUserTracks, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Track
+	for rows.Next() {
+		var i Track
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.StreamUrl,
+			&i.Description,
+			&i.UserID,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getUsers = `-- name: GetUsers :many
