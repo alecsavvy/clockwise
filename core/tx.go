@@ -3,60 +3,50 @@ package core
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"time"
 
-	"github.com/cometbft/cometbft/types"
+	"github.com/alecsavvy/clockwise/utils"
+	abcitypes "github.com/cometbft/cometbft/abci/types"
+	"github.com/cometbft/cometbft/rpc/client/local"
+	"google.golang.org/protobuf/proto"
 )
 
-func (c *Core) Send(tx interface{}) (*ManageEntity, error) {
+// returns the original
+func SendTx[T proto.Message](logger *utils.Logger, rpc *local.Local, msg T) error {
 	ctx := context.Background()
-	rpc := c.rpc
 
-	txBytes, err := c.toTxBytes(tx)
-	if err != nil {
-		return nil, err
-	}
-
-	result, err := rpc.BroadcastTxSync(ctx, txBytes)
-	if err != nil {
-		return nil, err
-	}
-
-	txChan, err := rpc.Subscribe(ctx, "tx-subscriber", fmt.Sprintf("tm.event = 'Tx' AND tx.hash = '%X'", result.Hash))
-	if err != nil {
-		return nil, err
-	}
-
-	select {
-	case tx := <-txChan:
-		etx := tx.Data.(types.EventDataTx)
-		var res ManageEntity
-		err := c.fromTxBytes(etx.Tx, &res)
-		if err != nil {
-			return nil, err
-		}
-		return &res, nil
-	case <-time.After(30 * time.Second):
-		return nil, errors.New("tx waiting timeout")
-	}
-}
-
-func (c *Core) toTxBytes(tx interface{}) ([]byte, error) {
-	txBytes, err := json.Marshal(tx)
-	if err != nil {
-		return nil, err
-	}
-	return txBytes, nil
-}
-
-func (c *Core) fromTxBytes(jsonBytes []byte, result interface{}) error {
-	err := json.Unmarshal(jsonBytes, result)
+	tx, err := proto.Marshal(msg)
 	if err != nil {
 		return err
 	}
 
-	return nil
+	result, err := rpc.BroadcastTxSync(ctx, tx)
+	if err != nil {
+		return err
+	}
+
+	if result.Code != abcitypes.CodeTypeOK {
+		return errors.New(result.Log)
+	}
+
+	txChan, err := rpc.Subscribe(ctx, "tx-subscriber", fmt.Sprintf("tm.event = 'Tx' AND tx.hash = '%X'", result.Hash))
+	if err != nil {
+		return err
+	}
+
+	defer func() {
+		if err := rpc.Unsubscribe(ctx, "tx-subscriber", fmt.Sprintf("tm.event = 'Tx' AND tx.hash = '%X'", result.Hash)); err != nil {
+			// Handle the unsubscribe error if necessary
+			fmt.Println("Failed to unsubscribe:", err)
+		}
+	}()
+
+	select {
+	case _ = <-txChan:
+		return nil
+	case <-time.After(30 * time.Second):
+		return errors.New("tx waiting timeout")
+	}
 }

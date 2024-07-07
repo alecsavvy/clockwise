@@ -66,6 +66,9 @@ func NewCore(logger *utils.Logger, pool *pgxpool.Pool, retainBlocks int64) *Core
 	indexRoutes[gen.MessageType_MESSAGE_TYPE_FOLLOW_USER] = core.indexFollowUser
 	indexRoutes[gen.MessageType_MESSAGE_TYPE_UNFOLLOW_USER] = core.indexUnfollowUser
 
+	core.validationRoutes = validateRoutes
+	core.indexingRoutes = indexRoutes
+
 	return core
 }
 

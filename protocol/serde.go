@@ -6,9 +6,9 @@ import (
 )
 
 func deserializeEnvelope(data []byte) (*gen.Envelope, error) {
-	envelope := &gen.Envelope{}
+	envelope := &gen.Base{}
 	err := proto.Unmarshal(data, envelope)
-	return envelope, err
+	return envelope.GetEnvelope(), err
 }
 
 func deserializeCreateUser(data []byte) (*gen.CreateUser, error) {

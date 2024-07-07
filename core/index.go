@@ -4,7 +4,9 @@ import (
 	"context"
 	"errors"
 
+	"github.com/alecsavvy/clockwise/core/db"
 	"github.com/alecsavvy/clockwise/protocol"
+	"github.com/alecsavvy/clockwise/protocol/gen"
 	abcitypes "github.com/cometbft/cometbft/abci/types"
 	"google.golang.org/protobuf/proto"
 )
@@ -28,7 +30,30 @@ func (c *Core) indexTxs(ctx context.Context, rfb *abcitypes.RequestFinalizeBlock
 }
 
 func (c *Core) indexCreateUser(msg proto.Message) error {
-	return errors.New("unimplemented")
+	ctx := context.Background()
+	logger := c.logger
+	qtx := c.getDb()
+
+	tx, ok := msg.(*gen.CreateUser)
+	if !ok {
+		return errors.New("invalid msg passed to validator")
+	}
+
+	data := tx.GetData()
+
+	args := db.CreateUserParams{
+		ID:      data.Id,
+		Handle:  data.Handle,
+		Address: data.Address,
+		Bio:     data.Bio,
+	}
+
+	if err := qtx.CreateUser(ctx, args); err != nil {
+		logger.Error("error persisting new user", "user", args, "error", err)
+		return err
+	}
+
+	return nil
 }
 
 func (c *Core) indexFollowUser(msg proto.Message) error {

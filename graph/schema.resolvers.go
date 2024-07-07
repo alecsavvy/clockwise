@@ -8,12 +8,44 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/alecsavvy/clockwise/core"
 	"github.com/alecsavvy/clockwise/graph/model"
+	"github.com/alecsavvy/clockwise/protocol/gen"
+	"github.com/google/uuid"
 )
 
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: CreateUser - createUser"))
+	logger := r.logger
+
+	msg := &gen.CreateUser{
+		Envelope: &gen.Envelope{
+			Signature:   "sig",
+			MessageType: gen.MessageType_MESSAGE_TYPE_CREATE_USER,
+		},
+		Data: &gen.CreateUser_Data{
+			Id:      uuid.NewString(),
+			Handle:  input.Handle,
+			Address: input.Address,
+			Bio:     input.Bio,
+		},
+	}
+
+	err := core.SendTx(logger, r.core.Rpc(), msg)
+	if err != nil {
+		return nil, err
+	}
+
+	resData := msg.GetData()
+
+	user := &model.User{
+		ID:      resData.Id,
+		Handle:  resData.Handle,
+		Address: resData.Address,
+		Bio:     resData.Bio,
+	}
+
+	return user, nil
 }
 
 // CreateTrack is the resolver for the createTrack field.

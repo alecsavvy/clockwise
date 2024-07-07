@@ -47,9 +47,7 @@ func (c *Core) RunPubsub() error {
 			txs := block.Block.Txs
 			for _, tx := range txs {
 				// publish manage entities to listeners
-				var me ManageEntity
-				c.fromTxBytes(tx, &me)
-				c.pubsub.EntityManagerPubsub.Publish(&me)
+				c.logger.Info("publishing", "tx", tx)
 			}
 		case <-ctx.Done():
 			return nil

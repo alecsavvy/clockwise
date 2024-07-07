@@ -9,6 +9,7 @@ import (
 )
 
 func (c *Core) validateTx(msg []byte) error {
+	c.logger.Info("validating tx", "routes", len(c.validationRoutes))
 	return protocol.MessageRouter(c.validationRoutes, msg)
 }
 
@@ -20,9 +21,15 @@ func (c *Core) getSender(*gen.Envelope) (string, error) {
 func (c *Core) validateSignature() {}
 
 func (c *Core) validateCreateUser(msg proto.Message) error {
-	msg, ok := msg.(*gen.CreateUser)
+
+	message, ok := msg.(*gen.CreateUser)
+	c.logger.Info("validating create user", "message", message)
 	if !ok {
 		return errors.New("invalid msg passed to validator")
+	}
+
+	if len(message.GetData().GetHandle()) > 8 {
+		return errors.New("handle is too long")
 	}
 
 	return nil
