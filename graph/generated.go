@@ -66,7 +66,7 @@ type ComplexityRoot struct {
 	Query struct {
 		GetTrack  func(childComplexity int, title string) int
 		GetTracks func(childComplexity int) int
-		GetUser   func(childComplexity int, handle string) int
+		GetUser   func(childComplexity int, input model.GetUser) int
 		GetUsers  func(childComplexity int) int
 	}
 
@@ -113,7 +113,7 @@ type MutationResolver interface {
 type QueryResolver interface {
 	GetUsers(ctx context.Context) ([]*model.User, error)
 	GetTracks(ctx context.Context) ([]*model.Track, error)
-	GetUser(ctx context.Context, handle string) (*model.User, error)
+	GetUser(ctx context.Context, input model.GetUser) (*model.User, error)
 	GetTrack(ctx context.Context, title string) (*model.Track, error)
 }
 type SubscriptionResolver interface {
@@ -257,7 +257,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.GetUser(childComplexity, args["handle"].(string)), true
+		return e.complexity.Query.GetUser(childComplexity, args["input"].(model.GetUser)), true
 
 	case "Query.getUsers":
 		if e.complexity.Query.GetUsers == nil {
@@ -407,6 +407,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	rc := graphql.GetOperationContext(ctx)
 	ec := executionContext{rc, e, 0, 0, make(chan graphql.DeferredResult)}
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
+		ec.unmarshalInputGetUser,
 		ec.unmarshalInputNewFollow,
 		ec.unmarshalInputNewRepost,
 		ec.unmarshalInputNewTrack,
@@ -669,15 +670,15 @@ func (ec *executionContext) field_Query_getTrack_args(ctx context.Context, rawAr
 func (ec *executionContext) field_Query_getUser_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["handle"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("handle"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+	var arg0 model.GetUser
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNGetUser2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐGetUser(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["handle"] = arg0
+	args["input"] = arg0
 	return args, nil
 }
 
@@ -1311,7 +1312,7 @@ func (ec *executionContext) _Query_getUser(ctx context.Context, field graphql.Co
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetUser(rctx, fc.Args["handle"].(string))
+		return ec.resolvers.Query().GetUser(rctx, fc.Args["input"].(model.GetUser))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4305,6 +4306,40 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputGetUser(ctx context.Context, obj interface{}) (model.GetUser, error) {
+	var it model.GetUser
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"handle", "address"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "handle":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("handle"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Handle = data
+		case "address":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("address"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Address = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputNewFollow(ctx context.Context, obj interface{}) (model.NewFollow, error) {
 	var it model.NewFollow
 	asMap := map[string]interface{}{}
@@ -5392,6 +5427,11 @@ func (ec *executionContext) marshalNFollow2ᚖgithubᚗcomᚋalecsavvyᚋclockwi
 		return graphql.Null
 	}
 	return ec._Follow(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNGetUser2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐGetUser(ctx context.Context, v interface{}) (model.GetUser, error) {
+	res, err := ec.unmarshalInputGetUser(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNNewFollow2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐNewFollow(ctx context.Context, v interface{}) (model.NewFollow, error) {

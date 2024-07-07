@@ -6,6 +6,7 @@ package graph
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/alecsavvy/clockwise/core"
@@ -107,8 +108,30 @@ func (r *queryResolver) GetTracks(ctx context.Context) ([]*model.Track, error) {
 }
 
 // GetUser is the resolver for the getUser field.
-func (r *queryResolver) GetUser(ctx context.Context, handle string) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: GetUser - getUser"))
+func (r *queryResolver) GetUser(ctx context.Context, input model.GetUser) (*model.User, error) {
+	if input.Address == nil && input.Handle == nil {
+		return nil, errors.New("address or handle required")
+	}
+
+	handle := input.Handle
+	address := input.Address
+
+	if handle != nil {
+		u, err := r.queries.GetUserByHandle(ctx, *handle)
+		if err != nil {
+			return nil, err
+		}
+
+		address = &u.ID
+	}
+
+	userData, err := r.queries.GetUserData(ctx, *address)
+	if err != nil {
+		return nil, err
+	}
+
+	user := dbUserToUserModel(userData)
+	return user, nil
 }
 
 // GetTrack is the resolver for the getTrack field.

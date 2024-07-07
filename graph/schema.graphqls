@@ -60,10 +60,15 @@ input NewUnrepost {
   trackId: String!
 }
 
+input GetUser {
+  handle: String
+  address: String
+}
+
 type Query {
   getUsers: [User]!
   getTracks: [Track]!
-  getUser(handle: String!): User
+  getUser(input: GetUser!): User
   getTrack(title: String!): Track
 }
 

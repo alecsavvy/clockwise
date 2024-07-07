@@ -7,6 +7,11 @@ type Follow struct {
 	FolloweeID string `json:"followeeId"`
 }
 
+type GetUser struct {
+	Handle  *string `json:"handle,omitempty"`
+	Address *string `json:"address,omitempty"`
+}
+
 type Mutation struct {
 }
 
