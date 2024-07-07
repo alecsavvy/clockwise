@@ -29,10 +29,9 @@ message CreateUser {
   Headers headers = 1;
   Data data = 2;
   message Data {
-    string id = 1;
-    string address = 2;
-    string handle = 3;
-    string bio = 4;
+    string address = 1;
+    string handle = 2;
+    string bio = 3;
   }
 }
 

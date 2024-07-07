@@ -23,8 +23,7 @@ type Track struct {
 }
 
 type User struct {
-	ID      string
-	Handle  string
-	Address string
-	Bio     string
+	ID     string
+	Handle string
+	Bio    string
 }

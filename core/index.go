@@ -42,10 +42,9 @@ func (c *Core) indexCreateUser(msg proto.Message) error {
 	data := tx.GetData()
 
 	args := db.CreateUserParams{
-		ID:      data.Id,
-		Handle:  data.Handle,
-		Address: data.Address,
-		Bio:     data.Bio,
+		ID:     data.Address,
+		Handle: data.Handle,
+		Bio:    data.Bio,
 	}
 
 	if err := qtx.CreateUser(ctx, args); err != nil {

@@ -64,24 +64,18 @@ func (q *Queries) CreateTrack(ctx context.Context, arg CreateTrackParams) error 
 }
 
 const createUser = `-- name: CreateUser :exec
-insert into users (id, handle, address, bio)
-values ($1, $2, $3, $4)
+insert into users (id, handle, bio)
+values ($1, $2, $3)
 `
 
 type CreateUserParams struct {
-	ID      string
-	Handle  string
-	Address string
-	Bio     string
+	ID     string
+	Handle string
+	Bio    string
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) error {
-	_, err := q.db.Exec(ctx, createUser,
-		arg.ID,
-		arg.Handle,
-		arg.Address,
-		arg.Bio,
-	)
+	_, err := q.db.Exec(ctx, createUser, arg.ID, arg.Handle, arg.Bio)
 	return err
 }
 

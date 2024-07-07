@@ -10,7 +10,7 @@ import (
 )
 
 const getFollowersByHandle = `-- name: GetFollowersByHandle :many
-select u2.id, u2.handle, u2.address, u2.bio
+select u2.id, u2.handle, u2.bio
 from users u1
     join follows f on u1.id = f.following_id
     join users u2 on f.follower_id = u2.id
@@ -26,12 +26,7 @@ func (q *Queries) GetFollowersByHandle(ctx context.Context, handle string) ([]Us
 	var items []User
 	for rows.Next() {
 		var i User
-		if err := rows.Scan(
-			&i.ID,
-			&i.Handle,
-			&i.Address,
-			&i.Bio,
-		); err != nil {
+		if err := rows.Scan(&i.ID, &i.Handle, &i.Bio); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -75,7 +70,7 @@ func (q *Queries) GetTracks(ctx context.Context) ([]Track, error) {
 }
 
 const getUserByHandle = `-- name: GetUserByHandle :one
-select id, handle, address, bio
+select id, handle, bio
 from users
 where handle = $1
 limit 1
@@ -84,17 +79,12 @@ limit 1
 func (q *Queries) GetUserByHandle(ctx context.Context, handle string) (User, error) {
 	row := q.db.QueryRow(ctx, getUserByHandle, handle)
 	var i User
-	err := row.Scan(
-		&i.ID,
-		&i.Handle,
-		&i.Address,
-		&i.Bio,
-	)
+	err := row.Scan(&i.ID, &i.Handle, &i.Bio)
 	return i, err
 }
 
 const getUsers = `-- name: GetUsers :many
-select id, handle, address, bio
+select id, handle, bio
 from users
 order by handle
 `
@@ -108,12 +98,7 @@ func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
 	var items []User
 	for rows.Next() {
 		var i User
-		if err := rows.Scan(
-			&i.ID,
-			&i.Handle,
-			&i.Address,
-			&i.Bio,
-		); err != nil {
+		if err := rows.Scan(&i.ID, &i.Handle, &i.Bio); err != nil {
 			return nil, err
 		}
 		items = append(items, i)

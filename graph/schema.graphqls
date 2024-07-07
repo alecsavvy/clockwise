@@ -1,5 +1,4 @@
 type User {
-  id: String!
   handle: String!
   address: String!
   bio: String!
@@ -29,8 +28,8 @@ type Repost {
 }
 
 input NewUser {
-  handle: String!
   address: String!
+  handle: String!
   bio: String!
 }
 

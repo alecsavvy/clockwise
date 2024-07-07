@@ -38,8 +38,8 @@ type NewUnrepost struct {
 }
 
 type NewUser struct {
-	Handle  string `json:"handle"`
 	Address string `json:"address"`
+	Handle  string `json:"handle"`
 	Bio     string `json:"bio"`
 }
 
@@ -64,7 +64,6 @@ type Track struct {
 }
 
 type User struct {
-	ID        string    `json:"id"`
 	Handle    string    `json:"handle"`
 	Address   string    `json:"address"`
 	Bio       string    `json:"bio"`

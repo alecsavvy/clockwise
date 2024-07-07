@@ -22,7 +22,6 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 			MessageType: gen.MessageType_MESSAGE_TYPE_CREATE_USER,
 		},
 		Data: &gen.CreateUser_Data{
-			Id:      uuid.NewString(),
 			Handle:  input.Handle,
 			Address: input.Address,
 			Bio:     input.Bio,
@@ -37,7 +36,6 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 	resData := msg.GetData()
 
 	user := &model.User{
-		ID:      resData.Id,
 		Handle:  resData.Handle,
 		Address: resData.Address,
 		Bio:     resData.Bio,
