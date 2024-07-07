@@ -33,14 +33,12 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 		return nil, err
 	}
 
-	resData := msg.GetData()
-
-	user := &model.User{
-		Handle:  resData.Handle,
-		Address: resData.Address,
-		Bio:     resData.Bio,
+	resData, err := r.queries.GetUserData(ctx, input.Address)
+	if err != nil {
+		return nil, err
 	}
 
+	user := dbUserToUserModel(resData)
 	return user, nil
 }
 

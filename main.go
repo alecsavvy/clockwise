@@ -61,7 +61,7 @@ func run() error {
 	}
 
 	// graphql setup
-	gqlResolver := graph.NewResolver(logger, coreApp)
+	gqlResolver := graph.NewResolver(logger, coreApp, pool)
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: gqlResolver}))
 	queryHandler := func(c echo.Context) error {
 		srv.ServeHTTP(c.Response(), c.Request())
