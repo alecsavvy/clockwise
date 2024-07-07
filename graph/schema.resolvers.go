@@ -16,8 +16,6 @@ import (
 
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
-	logger := r.logger
-
 	msg := &gen.CreateUser{
 		Envelope: &gen.Envelope{
 			Signature:   "sig",
@@ -31,7 +29,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 		},
 	}
 
-	err := core.SendTx(logger, r.core.Rpc(), msg)
+	err := core.SendTx(r.logger, r.core.Rpc(), msg)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +48,36 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 
 // CreateTrack is the resolver for the createTrack field.
 func (r *mutationResolver) CreateTrack(ctx context.Context, input model.NewTrack) (*model.Track, error) {
-	panic(fmt.Errorf("not implemented: CreateTrack - createTrack"))
+	msg := &gen.CreateTrack{
+		Envelope: &gen.Envelope{
+			Signature:   "sig",
+			MessageType: gen.MessageType_MESSAGE_TYPE_CREATE_TRACK,
+		},
+		Data: &gen.CreateTrack_Data{
+			Id:          uuid.NewString(),
+			Title:       input.Title,
+			StreamUrl:   input.StreamURL,
+			Description: input.Description,
+			UserId:      input.UserID,
+		},
+	}
+
+	err := core.SendTx(r.logger, r.core.Rpc(), msg)
+	if err != nil {
+		return nil, err
+	}
+
+	resData := msg.GetData()
+
+	track := &model.Track{
+		ID:          resData.Id,
+		Title:       resData.Title,
+		StreamURL:   resData.StreamUrl,
+		Description: resData.Description,
+		UserID:      resData.UserId,
+	}
+
+	return track, nil
 }
 
 // FollowUser is the resolver for the followUser field.

@@ -56,15 +56,39 @@ func (c *Core) indexCreateUser(msg proto.Message) error {
 	return nil
 }
 
+func (c *Core) indexCreateTrack(msg proto.Message) error {
+	ctx := context.Background()
+	logger := c.logger
+	qtx := c.getDb()
+
+	tx, ok := msg.(*gen.CreateTrack)
+	if !ok {
+		return errors.New("invalid msg passed to validator")
+	}
+
+	data := tx.GetData()
+
+	args := db.CreateTrackParams{
+		ID:          data.Id,
+		Title:       data.Title,
+		StreamUrl:   data.StreamUrl,
+		Description: data.Description,
+		UserID:      data.UserId,
+	}
+
+	if err := qtx.CreateTrack(ctx, args); err != nil {
+		logger.Error("error persisting new track", "track", args, "error", err)
+		return err
+	}
+
+	return nil
+}
+
 func (c *Core) indexFollowUser(msg proto.Message) error {
 	return errors.New("unimplemented")
 }
 
 func (c *Core) indexUnfollowUser(msg proto.Message) error {
-	return errors.New("unimplemented")
-}
-
-func (c *Core) indexCreateTrack(msg proto.Message) error {
 	return errors.New("unimplemented")
 }
 

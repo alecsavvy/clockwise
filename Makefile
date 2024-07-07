@@ -2,7 +2,7 @@ default:
 	make down
 	make gen
 	make up
-	open http://localhost:8080/
+	open http://localhost:6603/graphiql
 
 up:
 	cd infra && docker compose up --build -d
