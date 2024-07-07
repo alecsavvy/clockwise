@@ -21,7 +21,6 @@ func (c *Core) getSender(*gen.Envelope) (string, error) {
 func (c *Core) validateSignature() {}
 
 func (c *Core) validateCreateUser(msg proto.Message) error {
-
 	message, ok := msg.(*gen.CreateUser)
 	c.logger.Info("validating create user", "message", message)
 	if !ok {
