@@ -12,7 +12,7 @@ make
 
 Once the cluster starts up, head to your favorite node at `http://localhost:66{0-6}3/graphiql`.
 
-You can then copy some of the graphql
+You can then copy some of the graphql queries from the [examples](./examples/movies.gql) into the interface to get started.
 
 ## architecture
 
