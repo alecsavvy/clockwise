@@ -35,7 +35,7 @@ func (c *Core) indexCreateUser(ctx context.Context, msg proto.Message) error {
 
 	tx, ok := msg.(*gen.CreateUser)
 	if !ok {
-		return errors.New("invalid msg passed to validator")
+		return errors.New("invalid msg passed to indexer")
 	}
 
 	data := tx.GetData()
@@ -60,7 +60,7 @@ func (c *Core) indexCreateTrack(ctx context.Context, msg proto.Message) error {
 
 	tx, ok := msg.(*gen.CreateTrack)
 	if !ok {
-		return errors.New("invalid msg passed to validator")
+		return errors.New("invalid msg passed to indexer")
 	}
 
 	data := tx.GetData()
@@ -82,17 +82,85 @@ func (c *Core) indexCreateTrack(ctx context.Context, msg proto.Message) error {
 }
 
 func (c *Core) indexFollowUser(ctx context.Context, msg proto.Message) error {
-	return errors.New("unimplemented")
+	tx, ok := msg.(*gen.FollowUser)
+	if !ok {
+		return errors.New("invalid msg passed to indexer")
+	}
+
+	qtx := c.getDb()
+
+	args := db.CreateFollowParams{
+		FollowerID:  tx.Data.FollowerId,
+		FollowingID: tx.Data.FolloweeId,
+	}
+
+	if err := qtx.CreateFollow(ctx, args); err != nil {
+		c.logger.Error("error persisting new follow", "follow", args, "error", err)
+		return err
+	}
+
+	return nil
 }
 
 func (c *Core) indexUnfollowUser(ctx context.Context, msg proto.Message) error {
-	return errors.New("unimplemented")
+	tx, ok := msg.(*gen.UnfollowUser)
+	if !ok {
+		return errors.New("invalid msg passed to indexer")
+	}
+
+	qtx := c.getDb()
+
+	args := db.RemoveFollowParams{
+		FollowerID:  tx.Data.FollowerId,
+		FollowingID: tx.Data.FolloweeId,
+	}
+
+	if err := qtx.RemoveFollow(ctx, args); err != nil {
+		c.logger.Error("error removing follow", "follow", args, "error", err)
+		return err
+	}
+
+	return nil
 }
 
 func (c *Core) indexRepostTrack(ctx context.Context, msg proto.Message) error {
-	return errors.New("unimplemented")
+	tx, ok := msg.(*gen.RepostTrack)
+	if !ok {
+		return errors.New("invalid msg passed to indexer")
+	}
+
+	qtx := c.getDb()
+
+	args := db.CreateRepostParams{
+		ReposterID: tx.Data.ReposterId,
+		TrackID:    tx.Data.TrackId,
+	}
+
+	if err := qtx.CreateRepost(ctx, args); err != nil {
+		c.logger.Error("error persisting new repost", "repost", args, "error", err)
+		return err
+	}
+
+	return nil
 }
 
 func (c *Core) indexUnrepostTrack(ctx context.Context, msg proto.Message) error {
-	return errors.New("unimplemented")
+	tx, ok := msg.(*gen.UnrepostTrack)
+	if !ok {
+		return errors.New("invalid msg passed to indexer")
+	}
+
+	qtx := c.getDb()
+
+	args := db.RemoveRepostParams{
+		ReposterID: tx.Data.ReposterId,
+		TrackID:    tx.Data.TrackId,
+	}
+
+	if err := qtx.RemoveRepost(ctx, args); err != nil {
+		c.logger.Error("error removing repost", "repost", args, "error", err)
+		return err
+	}
+
+	return nil
 }
