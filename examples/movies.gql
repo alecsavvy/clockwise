@@ -1,0 +1,147 @@
+mutation users {
+  maxine: createUser(
+    input: { handle: "maxine", address: "0x1985", bio: "a movie star" }
+  ) {
+    handle
+    address
+    bio
+  }
+  pearl: createUser(
+    input: { handle: "pearl", address: "0x1918", bio: "a wannabe movie star" }
+  ) {
+    handle
+    address
+    bio
+  }
+  teddy: createUser(
+    input: { handle: "teddy", address: "0x1973", bio: "maxine's agent" }
+  ) {
+    handle
+    address
+    bio
+  }
+}
+
+mutation tracks {
+  maxineTheme: createTrack(
+    input: {
+      title: "maxine's theme"
+      streamUrl: "contentnode/file.mp3"
+      userId: "0x1985"
+      description: "a powerful anthemic song"
+    }
+  ) {
+    id
+    title
+    description
+    streamUrl
+    userId
+  }
+  pearlTheme: createTrack(
+    input: {
+      title: "pearl's theme"
+      streamUrl: "contentnode/file_2.mp3"
+      userId: "0x1918"
+      description: "a somber orchestral track"
+    }
+  ) {
+    id
+    title
+    description
+    streamUrl
+    userId
+  }
+}
+
+mutation action {
+  teddyRepostOne: repostTrack(
+    input: {
+      trackId: "6ca92f14-c942-4579-8a46-f0f3fb70a111"
+      reposterId: "0x1973"
+    }
+  ) {
+    trackId
+    reposterId
+  }
+  teddyRepostTwo: repostTrack(
+    input: {
+      trackId: "8dfb95d4-7df6-4ddd-913a-7641a17c5704"
+      reposterId: "0x1973"
+    }
+  ) {
+    trackId
+    reposterId
+  }
+  teddyFollowMaxine: followUser(
+    input: { followerId: "0x1973", followeeId: "0x1985" }
+  ) {
+    followerId
+    followeeId
+  }
+  pearlFollowMaxine: followUser(
+    input: { followerId: "0x1918", followeeId: "0x1985" }
+  ) {
+    followerId
+    followeeId
+  }
+}
+
+query getusers {
+  maxine: getUser(input: { address: "0x1985" }) {
+    handle
+    address
+    bio
+    tracks {
+      title
+      userId
+      streamUrl
+    }
+    followers {
+      followerId
+    }
+    following {
+      followeeId
+    }
+    reposts {
+      trackId
+    }
+  }
+  pearl: getUser(input: { address: "0x1918" }) {
+    handle
+    address
+    bio
+    tracks {
+      title
+      userId
+      streamUrl
+    }
+    followers {
+      followerId
+    }
+    following {
+      followeeId
+    }
+    reposts {
+      trackId
+    }
+  }
+  teddy: getUser(input: { address: "0x1973" }) {
+    handle
+    address
+    bio
+    tracks {
+      title
+      userId
+      streamUrl
+    }
+    followers {
+      followerId
+    }
+    following {
+      followeeId
+    }
+    reposts {
+      trackId
+    }
+  }
+}
