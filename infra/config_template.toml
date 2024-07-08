@@ -1,7 +1,8 @@
 log_level = "main:info,state:warn,statesync:warn,*:error"
+proxy_app = ""
 
 [rpc]
-laddr = "tcp://0.0.0.0:26657"
+laddr = ""
 
 [p2p]
 laddr = "tcp://0.0.0.0:26656"

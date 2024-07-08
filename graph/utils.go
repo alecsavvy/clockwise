@@ -22,6 +22,7 @@ func dbTrackToTrackModel(tracks []db.Track) []*model.Track {
 	return utils.Map(tracks, func(t db.Track) *model.Track {
 		return &model.Track{
 			ID:          t.ID,
+			Title:       t.Title,
 			StreamURL:   t.StreamUrl,
 			Description: t.Description,
 			UserID:      t.UserID,
