@@ -10,6 +10,10 @@ To run the local cluster on your machine with a running loadtest, all you need t
 make
 ```
 
+Once the cluster starts up, head to your favorite node at `http://localhost:66{0-6}3/graphiql`.
+
+You can then copy some of the graphql
+
 ## architecture
 
 ### core
@@ -19,10 +23,6 @@ Where the embedded chain node is ran from as well as the abci for said node is i
 ### pubsub
 
 A generic pubsub module that uses channels to publish to multiple subscribers.
-
-### api
-
-Generic rest apis for clockwise, this where a `/relay` endpoint would live. Also has a
 
 ### graph
 
