@@ -65,14 +65,17 @@ func (r *mutationResolver) CreateTrack(ctx context.Context, input model.NewTrack
 		return nil, err
 	}
 
-	resData := msg.GetData()
+	trackRecord, err := r.queries.GetTrack(ctx, msg.Data.Id)
+	if err != nil {
+		return nil, err
+	}
 
 	track := &model.Track{
-		ID:          resData.Id,
-		Title:       resData.Title,
-		StreamURL:   resData.StreamUrl,
-		Description: resData.Description,
-		UserID:      resData.UserId,
+		ID:          trackRecord.ID,
+		Title:       trackRecord.Title,
+		StreamURL:   trackRecord.StreamUrl,
+		Description: trackRecord.Description,
+		UserID:      trackRecord.UserID,
 	}
 
 	return track, nil
