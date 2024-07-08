@@ -83,22 +83,92 @@ func (r *mutationResolver) CreateTrack(ctx context.Context, input model.NewTrack
 
 // FollowUser is the resolver for the followUser field.
 func (r *mutationResolver) FollowUser(ctx context.Context, input model.NewFollow) (*model.Follow, error) {
-	panic(fmt.Errorf("not implemented: FollowUser - followUser"))
+	msg := &gen.FollowUser{
+		Headers: &gen.Headers{
+			Signature:   "sig",
+			MessageType: gen.MessageType_MESSAGE_TYPE_FOLLOW_USER,
+		},
+		Data: &gen.FollowUser_Data{
+			FollowerId: input.FollowerID,
+			FolloweeId: input.FolloweeID,
+		},
+	}
+
+	err := core.SendTx(r.logger, r.core.Rpc(), msg)
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.Follow{
+		FollowerID: msg.Data.FollowerId,
+		FolloweeID: msg.Data.FolloweeId,
+	}, nil
 }
 
 // RepostTrack is the resolver for the repostTrack field.
 func (r *mutationResolver) RepostTrack(ctx context.Context, input model.NewRepost) (*model.Repost, error) {
-	panic(fmt.Errorf("not implemented: RepostTrack - repostTrack"))
+	msg := &gen.RepostTrack{
+		Headers: &gen.Headers{
+			Signature:   "sig",
+			MessageType: gen.MessageType_MESSAGE_TYPE_REPOST_TRACK,
+		},
+		Data: &gen.RepostTrack_Data{
+			ReposterId: input.ReposterID,
+			TrackId:    input.TrackID,
+		},
+	}
+
+	err := core.SendTx(r.logger, r.core.Rpc(), msg)
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.Repost{
+		ReposterID: msg.Data.ReposterId,
+		TrackID:    msg.Data.TrackId,
+	}, nil
 }
 
 // UnfollowUser is the resolver for the unfollowUser field.
 func (r *mutationResolver) UnfollowUser(ctx context.Context, input model.NewUnfollow) (bool, error) {
-	panic(fmt.Errorf("not implemented: UnfollowUser - unfollowUser"))
+	msg := &gen.UnfollowUser{
+		Headers: &gen.Headers{
+			Signature:   "sig",
+			MessageType: gen.MessageType_MESSAGE_TYPE_UNFOLLOW_USER,
+		},
+		Data: &gen.UnfollowUser_Data{
+			FollowerId: input.FollowerID,
+			FolloweeId: input.FolloweeID,
+		},
+	}
+
+	err := core.SendTx(r.logger, r.core.Rpc(), msg)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
 }
 
 // UnrepostTrack is the resolver for the unrepostTrack field.
 func (r *mutationResolver) UnrepostTrack(ctx context.Context, input model.NewUnrepost) (bool, error) {
-	panic(fmt.Errorf("not implemented: UnrepostTrack - unrepostTrack"))
+	msg := &gen.UnrepostTrack{
+		Headers: &gen.Headers{
+			Signature:   "sig",
+			MessageType: gen.MessageType_MESSAGE_TYPE_UNREPOST_TRACK,
+		},
+		Data: &gen.UnrepostTrack_Data{
+			ReposterId: input.ReposterID,
+			TrackId:    input.TrackID,
+		},
+	}
+
+	err := core.SendTx(r.logger, r.core.Rpc(), msg)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
 }
 
 // GetUsers is the resolver for the getUsers field.

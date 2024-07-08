@@ -78,6 +78,7 @@ message UnrepostTrack {
   Headers headers = 1;
   Data data = 2;
   message Data {
-    string id = 1;
+    string track_id = 1;
+    string reposter_id = 2;
   }
 }
