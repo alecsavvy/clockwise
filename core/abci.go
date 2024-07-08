@@ -24,7 +24,7 @@ func (c *Core) InitChain(context.Context, *abcitypes.RequestInitChain) (*abcityp
 // Performs validation on a proposed transaction, should be very performant as this check
 // gets called a lot (per the cometbft docs)
 func (c *Core) CheckTx(ctx context.Context, req *abcitypes.RequestCheckTx) (*abcitypes.ResponseCheckTx, error) {
-	if err := c.validateTx(req.GetTx()); err != nil {
+	if err := c.validateTx(ctx, req.GetTx()); err != nil {
 		c.logger.Error("error in check tx", "error", err)
 		return &abcitypes.ResponseCheckTx{Code: CodeTypeNotOK, Log: err.Error()}, nil
 	}

@@ -17,7 +17,7 @@ func (c *Core) indexTxs(ctx context.Context, rfb *abcitypes.RequestFinalizeBlock
 	var txResults = make([]*abcitypes.ExecTxResult, len(rfb.Txs))
 	for i, tx := range rfb.Txs {
 		txStatusCode := abcitypes.CodeTypeOK
-		if err := protocol.MessageRouter(c.indexingRoutes, tx); err != nil {
+		if err := protocol.MessageRouter(ctx, c.indexingRoutes, tx); err != nil {
 			// if certain errors not ok code, in others block consensus (halt)
 			txStatusCode = CodeTypeNotOK
 		}
@@ -29,8 +29,7 @@ func (c *Core) indexTxs(ctx context.Context, rfb *abcitypes.RequestFinalizeBlock
 	return txResults, nil
 }
 
-func (c *Core) indexCreateUser(msg proto.Message) error {
-	ctx := context.Background()
+func (c *Core) indexCreateUser(ctx context.Context, msg proto.Message) error {
 	logger := c.logger
 	qtx := c.getDb()
 
@@ -55,8 +54,7 @@ func (c *Core) indexCreateUser(msg proto.Message) error {
 	return nil
 }
 
-func (c *Core) indexCreateTrack(msg proto.Message) error {
-	ctx := context.Background()
+func (c *Core) indexCreateTrack(ctx context.Context, msg proto.Message) error {
 	logger := c.logger
 	qtx := c.getDb()
 
@@ -83,18 +81,18 @@ func (c *Core) indexCreateTrack(msg proto.Message) error {
 	return nil
 }
 
-func (c *Core) indexFollowUser(msg proto.Message) error {
+func (c *Core) indexFollowUser(ctx context.Context, msg proto.Message) error {
 	return errors.New("unimplemented")
 }
 
-func (c *Core) indexUnfollowUser(msg proto.Message) error {
+func (c *Core) indexUnfollowUser(ctx context.Context, msg proto.Message) error {
 	return errors.New("unimplemented")
 }
 
-func (c *Core) indexRepostTrack(msg proto.Message) error {
+func (c *Core) indexRepostTrack(ctx context.Context, msg proto.Message) error {
 	return errors.New("unimplemented")
 }
 
-func (c *Core) indexUnrepostTrack(msg proto.Message) error {
+func (c *Core) indexUnrepostTrack(ctx context.Context, msg proto.Message) error {
 	return errors.New("unimplemented")
 }

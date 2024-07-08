@@ -1,6 +1,7 @@
 package core
 
 import (
+	"context"
 	"errors"
 
 	"github.com/alecsavvy/clockwise/protocol"
@@ -8,9 +9,9 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-func (c *Core) validateTx(msg []byte) error {
+func (c *Core) validateTx(ctx context.Context, msg []byte) error {
 	c.logger.Info("validating tx", "routes", len(c.validationRoutes))
-	return protocol.MessageRouter(c.validationRoutes, msg)
+	return protocol.MessageRouter(ctx, c.validationRoutes, msg)
 }
 
 func (c *Core) getSender(*gen.Envelope) (string, error) {
@@ -20,7 +21,7 @@ func (c *Core) getSender(*gen.Envelope) (string, error) {
 
 func (c *Core) validateSignature() {}
 
-func (c *Core) validateCreateUser(msg proto.Message) error {
+func (c *Core) validateCreateUser(ctx context.Context, msg proto.Message) error {
 	message, ok := msg.(*gen.CreateUser)
 	c.logger.Info("validating create user", "message", message)
 	if !ok {
@@ -34,7 +35,7 @@ func (c *Core) validateCreateUser(msg proto.Message) error {
 	return nil
 }
 
-func (c *Core) validateCreateTrack(msg proto.Message) error {
+func (c *Core) validateCreateTrack(ctx context.Context, msg proto.Message) error {
 	msg, ok := msg.(*gen.CreateTrack)
 	if !ok {
 		return errors.New("invalid msg passed to validator")
@@ -42,7 +43,7 @@ func (c *Core) validateCreateTrack(msg proto.Message) error {
 	return nil
 }
 
-func (c *Core) validateRepostTrack(msg proto.Message) error {
+func (c *Core) validateRepostTrack(ctx context.Context, msg proto.Message) error {
 	msg, ok := msg.(*gen.RepostTrack)
 	if !ok {
 		return errors.New("invalid msg passed to validator")
@@ -50,7 +51,7 @@ func (c *Core) validateRepostTrack(msg proto.Message) error {
 	return nil
 }
 
-func (c *Core) validateUnRepostTrack(msg proto.Message) error {
+func (c *Core) validateUnRepostTrack(ctx context.Context, msg proto.Message) error {
 	msg, ok := msg.(*gen.UnrepostTrack)
 	if !ok {
 		return errors.New("invalid msg passed to validator")
@@ -58,7 +59,7 @@ func (c *Core) validateUnRepostTrack(msg proto.Message) error {
 	return nil
 }
 
-func (c *Core) validateFollowUser(msg proto.Message) error {
+func (c *Core) validateFollowUser(ctx context.Context, msg proto.Message) error {
 	msg, ok := msg.(*gen.FollowUser)
 	if !ok {
 		return errors.New("invalid msg passed to validator")
@@ -66,7 +67,7 @@ func (c *Core) validateFollowUser(msg proto.Message) error {
 	return nil
 }
 
-func (c *Core) validateUnfollowUser(msg proto.Message) error {
+func (c *Core) validateUnfollowUser(ctx context.Context, msg proto.Message) error {
 	msg, ok := msg.(*gen.UnfollowUser)
 	if !ok {
 		return errors.New("invalid msg passed to validator")
