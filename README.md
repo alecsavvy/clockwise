@@ -20,6 +20,10 @@ You can then copy some of the graphql queries from the [examples](./examples/mov
 
 Where the embedded chain node is ran from as well as the abci for said node is implemented.
 
+### protocol
+
+This is the internal protocol that lives forever. To run compatible nodes this is what you'd have to implement alongside cometbft.
+
 ### pubsub
 
 A generic pubsub module that uses channels to publish to multiple subscribers.
