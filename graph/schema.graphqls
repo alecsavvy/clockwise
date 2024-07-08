@@ -69,7 +69,7 @@ type Query {
   getUsers: [User]!
   getTracks: [Track]!
   getUser(input: GetUser!): User
-  getTrack(title: String!): Track
+  getTrack(id: String!): Track
 }
 
 type Mutation {

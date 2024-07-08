@@ -10,6 +10,7 @@ import (
 	"fmt"
 
 	"github.com/alecsavvy/clockwise/core"
+	"github.com/alecsavvy/clockwise/core/db"
 	"github.com/alecsavvy/clockwise/graph/model"
 	"github.com/alecsavvy/clockwise/protocol/gen"
 	"github.com/google/uuid"
@@ -39,7 +40,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 		return nil, err
 	}
 
-	user := dbUserToUserModel(resData)
+	user := dbUserDataToUserModel(resData)
 	return user, nil
 }
 
@@ -99,12 +100,20 @@ func (r *mutationResolver) UnrepostTrack(ctx context.Context, input model.NewUnr
 
 // GetUsers is the resolver for the getUsers field.
 func (r *queryResolver) GetUsers(ctx context.Context) ([]*model.User, error) {
-	panic(fmt.Errorf("not implemented: GetUsers - getUsers"))
+	users, err := r.queries.GetUsers(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return dbUserToUserModel(users), nil
 }
 
 // GetTracks is the resolver for the getTracks field.
 func (r *queryResolver) GetTracks(ctx context.Context) ([]*model.Track, error) {
-	panic(fmt.Errorf("not implemented: GetTracks - getTracks"))
+	tracks, err := r.queries.GetTracks(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return dbTrackToTrackModel(tracks), nil
 }
 
 // GetUser is the resolver for the getUser field.
@@ -130,13 +139,17 @@ func (r *queryResolver) GetUser(ctx context.Context, input model.GetUser) (*mode
 		return nil, err
 	}
 
-	user := dbUserToUserModel(userData)
+	user := dbUserDataToUserModel(userData)
 	return user, nil
 }
 
 // GetTrack is the resolver for the getTrack field.
-func (r *queryResolver) GetTrack(ctx context.Context, title string) (*model.Track, error) {
-	panic(fmt.Errorf("not implemented: GetTrack - getTrack"))
+func (r *queryResolver) GetTrack(ctx context.Context, id string) (*model.Track, error) {
+	track, err := r.queries.GetTrack(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return dbTrackToTrackModel([]db.Track{track})[0], nil
 }
 
 // Tracks is the resolver for the tracks field.

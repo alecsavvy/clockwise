@@ -64,7 +64,7 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		GetTrack  func(childComplexity int, title string) int
+		GetTrack  func(childComplexity int, id string) int
 		GetTracks func(childComplexity int) int
 		GetUser   func(childComplexity int, input model.GetUser) int
 		GetUsers  func(childComplexity int) int
@@ -114,7 +114,7 @@ type QueryResolver interface {
 	GetUsers(ctx context.Context) ([]*model.User, error)
 	GetTracks(ctx context.Context) ([]*model.Track, error)
 	GetUser(ctx context.Context, input model.GetUser) (*model.User, error)
-	GetTrack(ctx context.Context, title string) (*model.Track, error)
+	GetTrack(ctx context.Context, id string) (*model.Track, error)
 }
 type SubscriptionResolver interface {
 	Tracks(ctx context.Context) (<-chan *model.Track, error)
@@ -238,7 +238,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.GetTrack(childComplexity, args["title"].(string)), true
+		return e.complexity.Query.GetTrack(childComplexity, args["id"].(string)), true
 
 	case "Query.getTracks":
 		if e.complexity.Query.GetTracks == nil {
@@ -656,14 +656,14 @@ func (ec *executionContext) field_Query_getTrack_args(ctx context.Context, rawAr
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["title"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
 		arg0, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["title"] = arg0
+	args["id"] = arg0
 	return args, nil
 }
 
@@ -1380,7 +1380,7 @@ func (ec *executionContext) _Query_getTrack(ctx context.Context, field graphql.C
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetTrack(rctx, fc.Args["title"].(string))
+		return ec.resolvers.Query().GetTrack(rctx, fc.Args["id"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)

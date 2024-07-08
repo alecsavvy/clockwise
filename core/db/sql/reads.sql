@@ -45,9 +45,7 @@ select *
 from reposts
 where track_id = $1;
 
--- name: GetFollowersByHandle :many
-select u2.*
-from users u1
-    join follows f on u1.id = f.following_id
-    join users u2 on f.follower_id = u2.id
-where u1.handle = $1;
+-- name: GetTrack :one
+select *
+from tracks
+where id = $1;

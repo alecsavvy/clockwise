@@ -6,7 +6,7 @@ import (
 	"github.com/alecsavvy/clockwise/utils"
 )
 
-func dbUserToUserModel(user *db.UserData) *model.User {
+func dbUserDataToUserModel(user *db.UserData) *model.User {
 	return &model.User{
 		Address:   user.ID,
 		Handle:    user.Handle,
@@ -16,6 +16,16 @@ func dbUserToUserModel(user *db.UserData) *model.User {
 		Following: dbFollowToFollowModel(user.Following),
 		Reposts:   dbRepostToRepostModel(user.Reposts),
 	}
+}
+
+func dbUserToUserModel(users []db.User) []*model.User {
+	return utils.Map(users, func(user db.User) *model.User {
+		return &model.User{
+			Address: user.ID,
+			Handle:  user.Handle,
+			Bio:     user.Bio,
+		}
+	})
 }
 
 func dbTrackToTrackModel(tracks []db.Track) []*model.Track {

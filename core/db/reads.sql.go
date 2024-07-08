@@ -9,32 +9,23 @@ import (
 	"context"
 )
 
-const getFollowersByHandle = `-- name: GetFollowersByHandle :many
-select u2.id, u2.handle, u2.bio
-from users u1
-    join follows f on u1.id = f.following_id
-    join users u2 on f.follower_id = u2.id
-where u1.handle = $1
+const getTrack = `-- name: GetTrack :one
+select id, title, stream_url, description, user_id
+from tracks
+where id = $1
 `
 
-func (q *Queries) GetFollowersByHandle(ctx context.Context, handle string) ([]User, error) {
-	rows, err := q.db.Query(ctx, getFollowersByHandle, handle)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []User
-	for rows.Next() {
-		var i User
-		if err := rows.Scan(&i.ID, &i.Handle, &i.Bio); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
+func (q *Queries) GetTrack(ctx context.Context, id string) (Track, error) {
+	row := q.db.QueryRow(ctx, getTrack, id)
+	var i Track
+	err := row.Scan(
+		&i.ID,
+		&i.Title,
+		&i.StreamUrl,
+		&i.Description,
+		&i.UserID,
+	)
+	return i, err
 }
 
 const getTrackReposts = `-- name: GetTrackReposts :many
