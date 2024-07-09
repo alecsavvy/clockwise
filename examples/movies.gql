@@ -147,25 +147,24 @@ query getusers {
 }
 
 subscription subs {
-  users {
-    address
-    handle
-    bio
+  entityUpdates {
+    ... on User {
+      address
+      handle
+      bio
+    }
+    ... on Track {
+      title
+      description
+      streamUrl
+    }
+    ... on Repost {
+      reposterId
+      trackId
+    }
+    ... on Follow {
+      followerId
+      followeeId
+    }
   }
-
-  #   tracks {
-  #     title
-  #     description
-  #     streamUrl
-  #   }
-
-  #   reposts {
-  #     reposterId
-  #     trackId
-  #   }
-
-  #   follows {
-  #     followerId
-  #     followeeId
-  #   }
 }

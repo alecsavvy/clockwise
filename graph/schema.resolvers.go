@@ -312,6 +312,51 @@ func (r *subscriptionResolver) Reposts(ctx context.Context) (<-chan *model.Repos
 	return repostsChannel, nil
 }
 
+// EntityUpdates is the resolver for the entityUpdates field.
+func (r *subscriptionResolver) EntityUpdates(ctx context.Context) (<-chan model.Entity, error) {
+	entitiesChannel := make(chan model.Entity)
+	go func() {
+		defer close(entitiesChannel)
+
+		newUsers := r.core.Pubsub().CreateUserPubsub.Subscribe()
+		newTracks := r.core.Pubsub().CreateTrackPubsub.Subscribe()
+		newFollows := r.core.Pubsub().FollowUserPubsub.Subscribe()
+		newReposts := r.core.Pubsub().RepostTrackPubsub.Subscribe()
+
+		for {
+			select {
+			case e, ok := <-newUsers:
+				if !ok {
+					continue
+				}
+				newEntity := protoToUserModel([]*gen.CreateUser{e})[0]
+				entitiesChannel <- newEntity
+			case e, ok := <-newTracks:
+				if !ok {
+					continue
+				}
+				newEntity := protoToTrackModel([]*gen.CreateTrack{e})[0]
+				entitiesChannel <- newEntity
+			case e, ok := <-newFollows:
+				if !ok {
+					continue
+				}
+				newEntity := protoToFollowModel([]*gen.FollowUser{e})[0]
+				entitiesChannel <- newEntity
+			case e, ok := <-newReposts:
+				if !ok {
+					continue
+				}
+				newEntity := protoToRepostModel([]*gen.RepostTrack{e})[0]
+				entitiesChannel <- newEntity
+			case <-ctx.Done():
+				return
+			}
+		}
+	}()
+	return entitiesChannel, nil
+}
+
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 

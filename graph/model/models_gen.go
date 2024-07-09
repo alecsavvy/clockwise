@@ -2,10 +2,16 @@
 
 package model
 
+type Entity interface {
+	IsEntity()
+}
+
 type Follow struct {
 	FollowerID string `json:"followerId"`
 	FolloweeID string `json:"followeeId"`
 }
+
+func (Follow) IsEntity() {}
 
 type GetUser struct {
 	Handle  *string `json:"handle,omitempty"`
@@ -56,6 +62,8 @@ type Repost struct {
 	TrackID    string `json:"trackId"`
 }
 
+func (Repost) IsEntity() {}
+
 type Subscription struct {
 }
 
@@ -68,6 +76,8 @@ type Track struct {
 	Reposts     []*Repost `json:"reposts"`
 }
 
+func (Track) IsEntity() {}
+
 type User struct {
 	Handle    string    `json:"handle"`
 	Address   string    `json:"address"`
@@ -77,3 +87,5 @@ type User struct {
 	Reposts   []*Repost `json:"reposts"`
 	Tracks    []*Track  `json:"tracks"`
 }
+
+func (User) IsEntity() {}

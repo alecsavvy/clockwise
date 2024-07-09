@@ -65,6 +65,8 @@ input GetUser {
   address: String
 }
 
+union Entity = Track | User | Follow | Repost
+
 type Query {
   getUsers: [User]!
   getTracks: [Track]!
@@ -86,4 +88,5 @@ type Subscription {
   users: User!
   follows: Follow!
   reposts: Repost!
+  entityUpdates: Entity!
 }

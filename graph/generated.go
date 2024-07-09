@@ -76,10 +76,11 @@ type ComplexityRoot struct {
 	}
 
 	Subscription struct {
-		Follows func(childComplexity int) int
-		Reposts func(childComplexity int) int
-		Tracks  func(childComplexity int) int
-		Users   func(childComplexity int) int
+		EntityUpdates func(childComplexity int) int
+		Follows       func(childComplexity int) int
+		Reposts       func(childComplexity int) int
+		Tracks        func(childComplexity int) int
+		Users         func(childComplexity int) int
 	}
 
 	Track struct {
@@ -121,6 +122,7 @@ type SubscriptionResolver interface {
 	Users(ctx context.Context) (<-chan *model.User, error)
 	Follows(ctx context.Context) (<-chan *model.Follow, error)
 	Reposts(ctx context.Context) (<-chan *model.Repost, error)
+	EntityUpdates(ctx context.Context) (<-chan model.Entity, error)
 }
 
 type executableSchema struct {
@@ -279,6 +281,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Repost.TrackID(childComplexity), true
+
+	case "Subscription.entityUpdates":
+		if e.complexity.Subscription.EntityUpdates == nil {
+			break
+		}
+
+		return e.complexity.Subscription.EntityUpdates(childComplexity), true
 
 	case "Subscription.follows":
 		if e.complexity.Subscription.Follows == nil {
@@ -1918,6 +1927,64 @@ func (ec *executionContext) fieldContext_Subscription_reposts(ctx context.Contex
 				return ec.fieldContext_Repost_trackId(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Repost", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Subscription_entityUpdates(ctx context.Context, field graphql.CollectedField) (ret func(ctx context.Context) graphql.Marshaler) {
+	fc, err := ec.fieldContext_Subscription_entityUpdates(ctx, field)
+	if err != nil {
+		return nil
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = nil
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Subscription().EntityUpdates(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return nil
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return nil
+	}
+	return func(ctx context.Context) graphql.Marshaler {
+		select {
+		case res, ok := <-resTmp.(<-chan model.Entity):
+			if !ok {
+				return nil
+			}
+			return graphql.WriterFunc(func(w io.Writer) {
+				w.Write([]byte{'{'})
+				graphql.MarshalString(field.Alias).MarshalGQL(w)
+				w.Write([]byte{':'})
+				ec.marshalNEntity2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐEntity(ctx, field.Selections, res).MarshalGQL(w)
+				w.Write([]byte{'}'})
+			})
+		case <-ctx.Done():
+			return nil
+		}
+	}
+}
+
+func (ec *executionContext) fieldContext_Subscription_entityUpdates(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Subscription",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Entity does not have child fields")
 		},
 	}
 	return fc, nil
@@ -4569,11 +4636,48 @@ func (ec *executionContext) unmarshalInputNewUser(ctx context.Context, obj inter
 
 // region    ************************** interface.gotpl ***************************
 
+func (ec *executionContext) _Entity(ctx context.Context, sel ast.SelectionSet, obj model.Entity) graphql.Marshaler {
+	switch obj := (obj).(type) {
+	case nil:
+		return graphql.Null
+	case model.Track:
+		return ec._Track(ctx, sel, &obj)
+	case *model.Track:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._Track(ctx, sel, obj)
+	case model.User:
+		return ec._User(ctx, sel, &obj)
+	case *model.User:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._User(ctx, sel, obj)
+	case model.Follow:
+		return ec._Follow(ctx, sel, &obj)
+	case *model.Follow:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._Follow(ctx, sel, obj)
+	case model.Repost:
+		return ec._Repost(ctx, sel, &obj)
+	case *model.Repost:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._Repost(ctx, sel, obj)
+	default:
+		panic(fmt.Errorf("unexpected type %T", obj))
+	}
+}
+
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
 
-var followImplementors = []string{"Follow"}
+var followImplementors = []string{"Follow", "Entity"}
 
 func (ec *executionContext) _Follow(ctx context.Context, sel ast.SelectionSet, obj *model.Follow) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, followImplementors)
@@ -4833,7 +4937,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 	return out
 }
 
-var repostImplementors = []string{"Repost"}
+var repostImplementors = []string{"Repost", "Entity"}
 
 func (ec *executionContext) _Repost(ctx context.Context, sel ast.SelectionSet, obj *model.Repost) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, repostImplementors)
@@ -4898,12 +5002,14 @@ func (ec *executionContext) _Subscription(ctx context.Context, sel ast.Selection
 		return ec._Subscription_follows(ctx, fields[0])
 	case "reposts":
 		return ec._Subscription_reposts(ctx, fields[0])
+	case "entityUpdates":
+		return ec._Subscription_entityUpdates(ctx, fields[0])
 	default:
 		panic("unknown field " + strconv.Quote(fields[0].Name))
 	}
 }
 
-var trackImplementors = []string{"Track"}
+var trackImplementors = []string{"Track", "Entity"}
 
 func (ec *executionContext) _Track(ctx context.Context, sel ast.SelectionSet, obj *model.Track) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, trackImplementors)
@@ -4967,7 +5073,7 @@ func (ec *executionContext) _Track(ctx context.Context, sel ast.SelectionSet, ob
 	return out
 }
 
-var userImplementors = []string{"User"}
+var userImplementors = []string{"User", "Entity"}
 
 func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj *model.User) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, userImplementors)
@@ -5375,6 +5481,16 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) marshalNEntity2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐEntity(ctx context.Context, sel ast.SelectionSet, v model.Entity) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Entity(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNFollow2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐFollow(ctx context.Context, sel ast.SelectionSet, v model.Follow) graphql.Marshaler {
