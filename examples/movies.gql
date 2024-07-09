@@ -145,3 +145,27 @@ query getusers {
     }
   }
 }
+
+subscription subs {
+  users {
+    address
+    handle
+    bio
+  }
+
+  #   tracks {
+  #     title
+  #     description
+  #     streamUrl
+  #   }
+
+  #   reposts {
+  #     reposterId
+  #     trackId
+  #   }
+
+  #   follows {
+  #     followerId
+  #     followeeId
+  #   }
+}
