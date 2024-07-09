@@ -7,7 +7,6 @@ package graph
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	"github.com/alecsavvy/clockwise/core"
 	"github.com/alecsavvy/clockwise/core/db"
@@ -227,22 +226,90 @@ func (r *queryResolver) GetTrack(ctx context.Context, id string) (*model.Track, 
 
 // Tracks is the resolver for the tracks field.
 func (r *subscriptionResolver) Tracks(ctx context.Context) (<-chan *model.Track, error) {
-	panic(fmt.Errorf("not implemented: Tracks - tracks"))
+	tracksChannel := make(chan *model.Track)
+	go func() {
+		defer close(tracksChannel)
+		newTracks := r.core.Pubsub().CreateTrackPubsub.Subscribe()
+		for {
+			select {
+			case t, ok := <-newTracks:
+				if !ok {
+					return
+				}
+				newTrack := protoToTrackModel([]*gen.CreateTrack{t})[0]
+				tracksChannel <- newTrack
+			case <-ctx.Done():
+				return
+			}
+		}
+	}()
+	return tracksChannel, nil
 }
 
 // Users is the resolver for the users field.
 func (r *subscriptionResolver) Users(ctx context.Context) (<-chan *model.User, error) {
-	panic(fmt.Errorf("not implemented: Users - users"))
+	usersChannel := make(chan *model.User)
+	go func() {
+		defer close(usersChannel)
+		newUsers := r.core.Pubsub().CreateUserPubsub.Subscribe()
+		for {
+			select {
+			case t, ok := <-newUsers:
+				if !ok {
+					return
+				}
+				newUser := protoToUserModel([]*gen.CreateUser{t})[0]
+				usersChannel <- newUser
+			case <-ctx.Done():
+				return
+			}
+		}
+	}()
+	return usersChannel, nil
 }
 
 // Follows is the resolver for the follows field.
 func (r *subscriptionResolver) Follows(ctx context.Context) (<-chan *model.Follow, error) {
-	panic(fmt.Errorf("not implemented: Follows - follows"))
+	followsChannel := make(chan *model.Follow)
+	go func() {
+		defer close(followsChannel)
+		newFollows := r.core.Pubsub().FollowUserPubsub.Subscribe()
+		for {
+			select {
+			case t, ok := <-newFollows:
+				if !ok {
+					return
+				}
+				newFollow := protoToFollowModel([]*gen.FollowUser{t})[0]
+				followsChannel <- newFollow
+			case <-ctx.Done():
+				return
+			}
+		}
+	}()
+	return followsChannel, nil
 }
 
 // Reposts is the resolver for the reposts field.
 func (r *subscriptionResolver) Reposts(ctx context.Context) (<-chan *model.Repost, error) {
-	panic(fmt.Errorf("not implemented: Reposts - reposts"))
+	repostsChannel := make(chan *model.Repost)
+	go func() {
+		defer close(repostsChannel)
+		newReposts := r.core.Pubsub().RepostTrackPubsub.Subscribe()
+		for {
+			select {
+			case t, ok := <-newReposts:
+				if !ok {
+					return
+				}
+				newRepost := protoToRepostModel([]*gen.RepostTrack{t})[0]
+				repostsChannel <- newRepost
+			case <-ctx.Done():
+				return
+			}
+		}
+	}()
+	return repostsChannel, nil
 }
 
 // Mutation returns MutationResolver implementation.

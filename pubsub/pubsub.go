@@ -1,6 +1,9 @@
 package pubsub
 
-import "sync"
+import (
+	"context"
+	"sync"
+)
 
 type Pubsub[Message any] struct {
 	subscribers map[chan Message]struct{}
@@ -30,7 +33,7 @@ func (ps *Pubsub[Message]) Unsubscribe(ch chan Message) {
 	close(ch)
 }
 
-func (ps *Pubsub[Message]) Publish(msg Message) {
+func (ps *Pubsub[Message]) Publish(ctx context.Context, msg Message) {
 	ps.mu.RLock()
 	defer ps.mu.RUnlock()
 
