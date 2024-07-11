@@ -16,13 +16,26 @@ func (c *Core) indexTxs(ctx context.Context, rfb *abcitypes.RequestFinalizeBlock
 
 	var txResults = make([]*abcitypes.ExecTxResult, len(rfb.Txs))
 	for i, tx := range rfb.Txs {
-		txStatusCode := abcitypes.CodeTypeOK
+		// check validation again before indexing
+		if err := protocol.MessageRouter(ctx, c.validationRoutes, tx); err != nil {
+			txResults[i] = &abcitypes.ExecTxResult{
+				Code: CodeTypeNotOK,
+				Log: err.Error(),
+			}
+			continue
+		}
+
+		// index transaction after secondary validation
 		if err := protocol.MessageRouter(ctx, c.indexingRoutes, tx); err != nil {
 			// if certain errors not ok code, in others block consensus (halt)
-			txStatusCode = CodeTypeNotOK
+			txResults[i] = &abcitypes.ExecTxResult{
+				Code: CodeTypeNotOK,
+				Log: err.Error(),
+			}
+			continue
 		}
 		txResults[i] = &abcitypes.ExecTxResult{
-			Code: txStatusCode,
+			Code: abcitypes.CodeTypeOK,
 		}
 	}
 
