@@ -15,6 +15,19 @@ enum MessageType {
   MESSAGE_TYPE_UNREPOST_TRACK = 6;
 }
 
+message EnvelopeV2 {
+  bytes data = 1;
+  // sha256 hash of data bytes
+  bytes hash = 2;
+  // ECDSA signature of the hash
+  bytes signature = 3;
+}
+
+message CreateUserV2 {
+  string handle = 1;
+  string bio = 2;
+}
+
 message Envelope {
   Headers headers = 1;
   google.protobuf.Any data = 2;

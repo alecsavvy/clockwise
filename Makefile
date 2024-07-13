@@ -10,6 +10,9 @@ down:
 	cd infra && docker compose down
 	rm -rf testnet-home
 
+test:
+	go test ./...
+
 init:
 	cometbft init --home ./cmt-home
 
