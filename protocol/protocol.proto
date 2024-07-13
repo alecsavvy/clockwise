@@ -5,6 +5,10 @@ import "google/protobuf/any.proto";
 
 option go_package = "./gen;gen";
 
+service ClockwiseService {
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+}
+
 enum MessageType {
   MESSAGE_TYPE_UNSPECIFIED = 0;
   MESSAGE_TYPE_CREATE_USER = 1;
@@ -21,11 +25,41 @@ message EnvelopeV2 {
   bytes hash = 2;
   // ECDSA signature of the hash
   bytes signature = 3;
+  // hint for message type
+  MessageType message_type = 4;
 }
 
-message CreateUserV2 {
-  string handle = 1;
-  string bio = 2;
+message RequestHeaders {
+  // sha256 hash of data bytes
+  bytes hash = 1;
+  // ECDSA signature of the hash
+  bytes signature = 2;
+  // hint for message type
+  MessageType message_type = 3;
+}
+
+message ResponseHeaders {
+  bytes tx_hash = 1;
+  bytes signature = 2;
+}
+
+message CreateUserRequest {
+  RequestHeaders headers = 1;
+  Data data = 2;
+  message Data {
+    string handle = 1;
+    string bio = 2;
+  }
+}
+
+message CreateUserResponse {
+  ResponseHeaders headers = 1;
+  Data data = 2;
+  message Data {
+    string address = 1;
+    string handle = 2;
+    string bio = 3;
+  }
 }
 
 message Envelope {
