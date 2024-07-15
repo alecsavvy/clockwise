@@ -19,14 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	ClockwiseService_CreateUser_FullMethodName = "/protocol.ClockwiseService/CreateUser"
+	ClockwiseService_SubmitTransaction_FullMethodName = "/protocol.ClockwiseService/SubmitTransaction"
 )
 
 // ClockwiseServiceClient is the client API for ClockwiseService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ClockwiseServiceClient interface {
-	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
+	SubmitTransaction(ctx context.Context, in *Transaction, opts ...grpc.CallOption) (*TransactionResult, error)
 }
 
 type clockwiseServiceClient struct {
@@ -37,9 +37,9 @@ func NewClockwiseServiceClient(cc grpc.ClientConnInterface) ClockwiseServiceClie
 	return &clockwiseServiceClient{cc}
 }
 
-func (c *clockwiseServiceClient) CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error) {
-	out := new(CreateUserResponse)
-	err := c.cc.Invoke(ctx, ClockwiseService_CreateUser_FullMethodName, in, out, opts...)
+func (c *clockwiseServiceClient) SubmitTransaction(ctx context.Context, in *Transaction, opts ...grpc.CallOption) (*TransactionResult, error) {
+	out := new(TransactionResult)
+	err := c.cc.Invoke(ctx, ClockwiseService_SubmitTransaction_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (c *clockwiseServiceClient) CreateUser(ctx context.Context, in *CreateUserR
 // All implementations must embed UnimplementedClockwiseServiceServer
 // for forward compatibility
 type ClockwiseServiceServer interface {
-	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
+	SubmitTransaction(context.Context, *Transaction) (*TransactionResult, error)
 	mustEmbedUnimplementedClockwiseServiceServer()
 }
 
@@ -58,8 +58,8 @@ type ClockwiseServiceServer interface {
 type UnimplementedClockwiseServiceServer struct {
 }
 
-func (UnimplementedClockwiseServiceServer) CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
+func (UnimplementedClockwiseServiceServer) SubmitTransaction(context.Context, *Transaction) (*TransactionResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitTransaction not implemented")
 }
 func (UnimplementedClockwiseServiceServer) mustEmbedUnimplementedClockwiseServiceServer() {}
 
@@ -74,20 +74,20 @@ func RegisterClockwiseServiceServer(s grpc.ServiceRegistrar, srv ClockwiseServic
 	s.RegisterService(&ClockwiseService_ServiceDesc, srv)
 }
 
-func _ClockwiseService_CreateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateUserRequest)
+func _ClockwiseService_SubmitTransaction_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Transaction)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ClockwiseServiceServer).CreateUser(ctx, in)
+		return srv.(ClockwiseServiceServer).SubmitTransaction(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ClockwiseService_CreateUser_FullMethodName,
+		FullMethod: ClockwiseService_SubmitTransaction_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ClockwiseServiceServer).CreateUser(ctx, req.(*CreateUserRequest))
+		return srv.(ClockwiseServiceServer).SubmitTransaction(ctx, req.(*Transaction))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -100,8 +100,8 @@ var ClockwiseService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ClockwiseServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CreateUser",
-			Handler:    _ClockwiseService_CreateUser_Handler,
+			MethodName: "SubmitTransaction",
+			Handler:    _ClockwiseService_SubmitTransaction_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
