@@ -31,7 +31,7 @@ func getBlock(c echo.Context) error {
 	endpoint := fmt.Sprintf("http://node-%s:26657", option)
 
 	// create rpc connection
-	client, err := http.New(endpoint, "/")
+	client, err := http.New(endpoint)
 	if err != nil {
 		logger.Error(err, "could not create rpc")
 		return err
