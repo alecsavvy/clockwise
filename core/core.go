@@ -73,11 +73,12 @@ func NewCore(logger *utils.Logger, pool *pgxpool.Pool, retainBlocks int64) *Core
 	return core
 }
 
-func NewNode(logger *utils.Logger, homeDir string, app abcitypes.Application) (*node.Node, error) {
+func NewNode(logger *utils.Logger, homeDir string, psqlConn string, app abcitypes.Application) (*node.Node, error) {
 	config := cfg.DefaultConfig()
 	config.SetRoot(homeDir)
 	viper.SetConfigFile(fmt.Sprintf("%s/%s", homeDir, "config/config.toml"))
 
+	// replace this with go config?
 	if err := viper.ReadInConfig(); err != nil {
 		return nil, utils.AppError("Reading config", err)
 	}
@@ -88,6 +89,7 @@ func NewNode(logger *utils.Logger, homeDir string, app abcitypes.Application) (*
 		return nil, utils.AppError("Chain config validation", err)
 	}
 
+	// load priv key, this will be replaced by SP derived key
 	pv := privval.LoadFilePV(
 		config.PrivValidatorKeyFile(),
 		config.PrivValidatorStateFile(),
@@ -97,6 +99,10 @@ func NewNode(logger *utils.Logger, homeDir string, app abcitypes.Application) (*
 	if err != nil {
 		return nil, utils.AppError("Error loading p2p key", err)
 	}
+
+	// set up postgres indexing instead of kv store
+	config.TxIndex.Indexer = "psql"
+	config.TxIndex.PsqlConn = psqlConn
 
 	node, err := node.NewNode(
 		context.Background(),

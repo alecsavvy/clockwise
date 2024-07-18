@@ -4,6 +4,50 @@
 
 package db
 
+import (
+	"github.com/jackc/pgx/v5/pgtype"
+)
+
+type Attribute struct {
+	EventID      int64
+	Key          string
+	CompositeKey string
+	Value        pgtype.Text
+}
+
+type Block struct {
+	Rowid     int64
+	Height    int64
+	ChainID   string
+	CreatedAt pgtype.Timestamptz
+}
+
+type BlockEvent struct {
+	BlockID      int64
+	Height       int64
+	ChainID      string
+	Type         string
+	Key          pgtype.Text
+	CompositeKey pgtype.Text
+	Value        pgtype.Text
+}
+
+type Event struct {
+	Rowid   int64
+	BlockID int64
+	TxID    pgtype.Int8
+	Type    string
+}
+
+type EventAttribute struct {
+	BlockID      int64
+	TxID         pgtype.Int8
+	Type         string
+	Key          pgtype.Text
+	CompositeKey pgtype.Text
+	Value        pgtype.Text
+}
+
 type Follow struct {
 	FollowerID  string
 	FollowingID string
@@ -20,6 +64,26 @@ type Track struct {
 	StreamUrl   string
 	Description string
 	UserID      string
+}
+
+type TxEvent struct {
+	Height       int64
+	Index        int32
+	ChainID      string
+	Type         string
+	Key          pgtype.Text
+	CompositeKey pgtype.Text
+	Value        pgtype.Text
+	CreatedAt    pgtype.Timestamptz
+}
+
+type TxResult struct {
+	Rowid     int64
+	BlockID   int64
+	Index     int32
+	CreatedAt pgtype.Timestamptz
+	TxHash    string
+	TxResult  []byte
 }
 
 type User struct {

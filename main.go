@@ -54,8 +54,9 @@ func run() error {
 	homeDir := "./cmt-home"
 
 	// only keep last 100 blocks after successful indexing
+	// move this to a .env config or node type "archive", "service", or something
 	coreApp := core.NewCore(logger, pool, 100)
-	node, err := core.NewNode(logger, homeDir, coreApp)
+	node, err := core.NewNode(logger, homeDir, pgConnectionString, coreApp)
 	if err != nil {
 		return utils.AppError("failure to init chain", err)
 	}
