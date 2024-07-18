@@ -86,6 +86,24 @@ func (q *Queries) GetTracks(ctx context.Context) ([]Track, error) {
 	return items, nil
 }
 
+const getTxResult = `-- name: GetTxResult :one
+select rowid, block_id, index, created_at, tx_hash, tx_result from tx_results where tx_hash = $1
+`
+
+func (q *Queries) GetTxResult(ctx context.Context, txHash string) (TxResult, error) {
+	row := q.db.QueryRow(ctx, getTxResult, txHash)
+	var i TxResult
+	err := row.Scan(
+		&i.Rowid,
+		&i.BlockID,
+		&i.Index,
+		&i.CreatedAt,
+		&i.TxHash,
+		&i.TxResult,
+	)
+	return i, err
+}
+
 const getUser = `-- name: GetUser :one
 select id, handle, bio
 from users

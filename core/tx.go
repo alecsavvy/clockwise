@@ -37,6 +37,8 @@ func SendTx[T proto.Message](logger *utils.Logger, rpc *local.Local, msg T) erro
 		return err
 	}
 
+	logger.Info("txhash", result.Hash.String())
+
 	defer func() {
 		if err := rpc.Unsubscribe(ctx, "tx-subscriber", fmt.Sprintf("tm.event = 'Tx' AND tx.hash = '%X'", result.Hash)); err != nil {
 			// Handle the unsubscribe error if necessary
