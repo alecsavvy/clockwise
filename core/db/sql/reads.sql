@@ -49,3 +49,6 @@ where track_id = $1;
 select *
 from tracks
 where id = $1;
+
+-- name: GetTxResult :one
+select * from tx_results where tx_hash = $1;

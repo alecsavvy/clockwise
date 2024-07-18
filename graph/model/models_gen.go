@@ -86,6 +86,7 @@ type User struct {
 	Following []*Follow `json:"following"`
 	Reposts   []*Repost `json:"reposts"`
 	Tracks    []*Track  `json:"tracks"`
+	Txhash    string    `json:"txhash"`
 }
 
 func (User) IsEntity() {}

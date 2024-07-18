@@ -51,11 +51,13 @@ type EventAttribute struct {
 type Follow struct {
 	FollowerID  string
 	FollowingID string
+	TxHash      string
 }
 
 type Repost struct {
 	ReposterID string
 	TrackID    string
+	TxHash     string
 }
 
 type Track struct {
@@ -64,6 +66,7 @@ type Track struct {
 	StreamUrl   string
 	Description string
 	UserID      string
+	TxHash      string
 }
 
 type TxEvent struct {
@@ -90,4 +93,5 @@ type User struct {
 	ID     string
 	Handle string
 	Bio    string
+	TxHash string
 }

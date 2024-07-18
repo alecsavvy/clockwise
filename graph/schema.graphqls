@@ -6,6 +6,7 @@ type User {
   following: [Follow]!
   reposts: [Repost]!
   tracks: [Track]!
+  txhash: String!
 }
 
 type Track {

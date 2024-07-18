@@ -45,6 +45,10 @@ func (c *Core) indexTxs(ctx context.Context, rfb *abcitypes.FinalizeBlockRequest
 func (c *Core) indexCreateUser(ctx context.Context, msg proto.Message) error {
 	logger := c.logger
 	qtx := c.getDb()
+	txhash, err := ToTxHash(msg)
+	if err != nil {
+		return errors.Join(errors.New("could not create tx hash"), err)
+	}
 
 	tx, ok := msg.(*gen.CreateUser)
 	if !ok {
@@ -57,6 +61,7 @@ func (c *Core) indexCreateUser(ctx context.Context, msg proto.Message) error {
 		ID:     data.Address,
 		Handle: data.Handle,
 		Bio:    data.Bio,
+		TxHash: txhash,
 	}
 
 	if err := qtx.CreateUser(ctx, args); err != nil {
@@ -70,6 +75,10 @@ func (c *Core) indexCreateUser(ctx context.Context, msg proto.Message) error {
 func (c *Core) indexCreateTrack(ctx context.Context, msg proto.Message) error {
 	logger := c.logger
 	qtx := c.getDb()
+	txhash, err := ToTxHash(msg)
+	if err != nil {
+		return errors.Join(errors.New("could not create tx hash"), err)
+	}
 
 	tx, ok := msg.(*gen.CreateTrack)
 	if !ok {
@@ -84,6 +93,7 @@ func (c *Core) indexCreateTrack(ctx context.Context, msg proto.Message) error {
 		StreamUrl:   data.StreamUrl,
 		Description: data.Description,
 		UserID:      data.UserId,
+		TxHash: txhash,
 	}
 
 	if err := qtx.CreateTrack(ctx, args); err != nil {
@@ -95,6 +105,11 @@ func (c *Core) indexCreateTrack(ctx context.Context, msg proto.Message) error {
 }
 
 func (c *Core) indexFollowUser(ctx context.Context, msg proto.Message) error {
+	txhash, err := ToTxHash(msg)
+	if err != nil {
+		return errors.Join(errors.New("could not create tx hash"), err)
+	}
+
 	tx, ok := msg.(*gen.FollowUser)
 	if !ok {
 		return errors.New("invalid msg passed to indexer")
@@ -105,6 +120,7 @@ func (c *Core) indexFollowUser(ctx context.Context, msg proto.Message) error {
 	args := db.CreateFollowParams{
 		FollowerID:  tx.Data.FollowerId,
 		FollowingID: tx.Data.FolloweeId,
+		TxHash: txhash,
 	}
 
 	if err := qtx.CreateFollow(ctx, args); err != nil {
@@ -137,6 +153,11 @@ func (c *Core) indexUnfollowUser(ctx context.Context, msg proto.Message) error {
 }
 
 func (c *Core) indexRepostTrack(ctx context.Context, msg proto.Message) error {
+	txhash, err := ToTxHash(msg)
+	if err != nil {
+		return errors.Join(errors.New("could not create tx hash"), err)
+	}
+
 	tx, ok := msg.(*gen.RepostTrack)
 	if !ok {
 		return errors.New("invalid msg passed to indexer")
@@ -147,6 +168,7 @@ func (c *Core) indexRepostTrack(ctx context.Context, msg proto.Message) error {
 	args := db.CreateRepostParams{
 		ReposterID: tx.Data.ReposterId,
 		TrackID:    tx.Data.TrackId,
+		TxHash: txhash,
 	}
 
 	if err := qtx.CreateRepost(ctx, args); err != nil {

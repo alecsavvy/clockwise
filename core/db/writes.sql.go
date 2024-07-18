@@ -10,38 +10,40 @@ import (
 )
 
 const createFollow = `-- name: CreateFollow :exec
-insert into follows (follower_id, following_id)
-values ($1, $2)
+insert into follows (follower_id, following_id, tx_hash)
+values ($1, $2, $3)
 `
 
 type CreateFollowParams struct {
 	FollowerID  string
 	FollowingID string
+	TxHash      string
 }
 
 func (q *Queries) CreateFollow(ctx context.Context, arg CreateFollowParams) error {
-	_, err := q.db.Exec(ctx, createFollow, arg.FollowerID, arg.FollowingID)
+	_, err := q.db.Exec(ctx, createFollow, arg.FollowerID, arg.FollowingID, arg.TxHash)
 	return err
 }
 
 const createRepost = `-- name: CreateRepost :exec
-insert into reposts (track_id, reposter_id)
-values ($1, $2)
+insert into reposts (track_id, reposter_id, tx_hash)
+values ($1, $2, $3)
 `
 
 type CreateRepostParams struct {
 	TrackID    string
 	ReposterID string
+	TxHash     string
 }
 
 func (q *Queries) CreateRepost(ctx context.Context, arg CreateRepostParams) error {
-	_, err := q.db.Exec(ctx, createRepost, arg.TrackID, arg.ReposterID)
+	_, err := q.db.Exec(ctx, createRepost, arg.TrackID, arg.ReposterID, arg.TxHash)
 	return err
 }
 
 const createTrack = `-- name: CreateTrack :exec
-insert into tracks (id, title, stream_url, description, user_id)
-values ($1, $2, $3, $4, $5)
+insert into tracks (id, title, stream_url, description, user_id, tx_hash)
+values ($1, $2, $3, $4, $5, $6)
 `
 
 type CreateTrackParams struct {
@@ -50,6 +52,7 @@ type CreateTrackParams struct {
 	StreamUrl   string
 	Description string
 	UserID      string
+	TxHash      string
 }
 
 func (q *Queries) CreateTrack(ctx context.Context, arg CreateTrackParams) error {
@@ -59,23 +62,30 @@ func (q *Queries) CreateTrack(ctx context.Context, arg CreateTrackParams) error 
 		arg.StreamUrl,
 		arg.Description,
 		arg.UserID,
+		arg.TxHash,
 	)
 	return err
 }
 
 const createUser = `-- name: CreateUser :exec
-insert into users (id, handle, bio)
-values ($1, $2, $3)
+insert into users (id, handle, bio, tx_hash)
+values ($1, $2, $3, $4)
 `
 
 type CreateUserParams struct {
 	ID     string
 	Handle string
 	Bio    string
+	TxHash string
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) error {
-	_, err := q.db.Exec(ctx, createUser, arg.ID, arg.Handle, arg.Bio)
+	_, err := q.db.Exec(ctx, createUser,
+		arg.ID,
+		arg.Handle,
+		arg.Bio,
+		arg.TxHash,
+	)
 	return err
 }
 
