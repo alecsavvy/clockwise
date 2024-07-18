@@ -1,6 +1,7 @@
 package core
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/alecsavvy/clockwise/core/db"
@@ -98,6 +99,7 @@ func NewNode(logger *utils.Logger, homeDir string, app abcitypes.Application) (*
 	}
 
 	node, err := node.NewNode(
+		context.Background(),
 		config,
 		pv,
 		nodeKey,

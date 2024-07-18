@@ -11,7 +11,7 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-func (c *Core) indexTxs(ctx context.Context, rfb *abcitypes.RequestFinalizeBlock) ([]*abcitypes.ExecTxResult, error) {
+func (c *Core) indexTxs(ctx context.Context, rfb *abcitypes.FinalizeBlockRequest) ([]*abcitypes.ExecTxResult, error) {
 	c.startInProgressTx(ctx)
 
 	var txResults = make([]*abcitypes.ExecTxResult, len(rfb.Txs))
