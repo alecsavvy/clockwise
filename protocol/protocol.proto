@@ -9,15 +9,6 @@ service ClockwiseService {
   rpc SubmitTransaction(Transaction) returns (TransactionResult);
 }
 
-enum MessageType {
-  MESSAGE_TYPE_UNSPECIFIED = 0;
-  MESSAGE_TYPE_CREATE_USER = 1;
-  MESSAGE_TYPE_FOLLOW_USER = 2;
-  MESSAGE_TYPE_UNFOLLOW_USER = 3;
-  MESSAGE_TYPE_CREATE_TRACK = 4;
-  MESSAGE_TYPE_REPOST_TRACK = 5;
-  MESSAGE_TYPE_UNREPOST_TRACK = 6;
-}
 
 message EnvelopeV2 {
   bytes data = 1;
@@ -43,7 +34,7 @@ message Relay {
   }
 }
 
-message Transaction {
+message Event {
   // sha256 hash of the event
   bytes hash = 1;
   // ecdsa signature by the sender of this transaction
@@ -79,7 +70,15 @@ message Track {
   string title = 3;
 }
 
-
+enum MessageType {
+  MESSAGE_TYPE_UNSPECIFIED = 0;
+  MESSAGE_TYPE_CREATE_USER = 1;
+  MESSAGE_TYPE_FOLLOW_USER = 2;
+  MESSAGE_TYPE_UNFOLLOW_USER = 3;
+  MESSAGE_TYPE_CREATE_TRACK = 4;
+  MESSAGE_TYPE_REPOST_TRACK = 5;
+  MESSAGE_TYPE_UNREPOST_TRACK = 6;
+}
 
 message Envelope {
   Headers headers = 1;
@@ -147,4 +146,11 @@ message UnrepostTrack {
     string track_id = 1;
     string reposter_id = 2;
   }
+}
+
+message Purchase {
+    string trackid = 1;
+    string userid  = 2;
+    bytes fullTx = 3;
+    string expectedSolSig = 4;
 }
