@@ -39,7 +39,13 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 		return nil, err
 	}
 
+	txhash, err := core.ToTxHash(msg)
+	if err != nil {
+		return nil, err
+	}
+
 	user := dbUserDataToUserModel(resData)
+	user.Txhash = txhash
 	return user, nil
 }
 

@@ -5,6 +5,7 @@ mutation users {
     handle
     address
     bio
+    txhash
   }
   pearl: createUser(
     input: { handle: "pearl", address: "0x1918", bio: "a wannabe movie star" }
@@ -12,6 +13,7 @@ mutation users {
     handle
     address
     bio
+    txhash
   }
   teddy: createUser(
     input: { handle: "teddy", address: "0x1973", bio: "maxine's agent" }
@@ -19,6 +21,7 @@ mutation users {
     handle
     address
     bio
+    txhash
   }
 }
 
@@ -56,7 +59,7 @@ mutation tracks {
 mutation action {
   teddyRepostOne: repostTrack(
     input: {
-      trackId: "6ca92f14-c942-4579-8a46-f0f3fb70a111"
+      trackId: "ae4dea03-eef2-4999-bb69-e237cf8a595e"
       reposterId: "0x1973"
     }
   ) {
@@ -65,7 +68,7 @@ mutation action {
   }
   teddyRepostTwo: repostTrack(
     input: {
-      trackId: "8dfb95d4-7df6-4ddd-913a-7641a17c5704"
+      trackId: "08671323-efe7-4f7c-adc2-d055c31b0cb7"
       reposterId: "0x1973"
     }
   ) {

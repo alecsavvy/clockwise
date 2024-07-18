@@ -10,7 +10,7 @@ import (
 )
 
 const getTrack = `-- name: GetTrack :one
-select id, title, stream_url, description, user_id
+select id, title, stream_url, description, user_id, tx_hash
 from tracks
 where id = $1
 `
@@ -24,12 +24,13 @@ func (q *Queries) GetTrack(ctx context.Context, id string) (Track, error) {
 		&i.StreamUrl,
 		&i.Description,
 		&i.UserID,
+		&i.TxHash,
 	)
 	return i, err
 }
 
 const getTrackReposts = `-- name: GetTrackReposts :many
-select reposter_id, track_id
+select reposter_id, track_id, tx_hash
 from reposts
 where track_id = $1
 `
@@ -43,7 +44,7 @@ func (q *Queries) GetTrackReposts(ctx context.Context, trackID string) ([]Repost
 	var items []Repost
 	for rows.Next() {
 		var i Repost
-		if err := rows.Scan(&i.ReposterID, &i.TrackID); err != nil {
+		if err := rows.Scan(&i.ReposterID, &i.TrackID, &i.TxHash); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -55,7 +56,7 @@ func (q *Queries) GetTrackReposts(ctx context.Context, trackID string) ([]Repost
 }
 
 const getTracks = `-- name: GetTracks :many
-select id, title, stream_url, description, user_id
+select id, title, stream_url, description, user_id, tx_hash
 from tracks
 order by title
 `
@@ -75,6 +76,7 @@ func (q *Queries) GetTracks(ctx context.Context) ([]Track, error) {
 			&i.StreamUrl,
 			&i.Description,
 			&i.UserID,
+			&i.TxHash,
 		); err != nil {
 			return nil, err
 		}
@@ -105,7 +107,7 @@ func (q *Queries) GetTxResult(ctx context.Context, txHash string) (TxResult, err
 }
 
 const getUser = `-- name: GetUser :one
-select id, handle, bio
+select id, handle, bio, tx_hash
 from users
 where id = $1
 limit 1
@@ -114,12 +116,17 @@ limit 1
 func (q *Queries) GetUser(ctx context.Context, id string) (User, error) {
 	row := q.db.QueryRow(ctx, getUser, id)
 	var i User
-	err := row.Scan(&i.ID, &i.Handle, &i.Bio)
+	err := row.Scan(
+		&i.ID,
+		&i.Handle,
+		&i.Bio,
+		&i.TxHash,
+	)
 	return i, err
 }
 
 const getUserByHandle = `-- name: GetUserByHandle :one
-select id, handle, bio
+select id, handle, bio, tx_hash
 from users
 where handle = $1
 limit 1
@@ -128,12 +135,17 @@ limit 1
 func (q *Queries) GetUserByHandle(ctx context.Context, handle string) (User, error) {
 	row := q.db.QueryRow(ctx, getUserByHandle, handle)
 	var i User
-	err := row.Scan(&i.ID, &i.Handle, &i.Bio)
+	err := row.Scan(
+		&i.ID,
+		&i.Handle,
+		&i.Bio,
+		&i.TxHash,
+	)
 	return i, err
 }
 
 const getUserFollowers = `-- name: GetUserFollowers :many
-select follower_id, following_id
+select follower_id, following_id, tx_hash
 from follows
 where following_id = $1
 `
@@ -147,7 +159,7 @@ func (q *Queries) GetUserFollowers(ctx context.Context, followingID string) ([]F
 	var items []Follow
 	for rows.Next() {
 		var i Follow
-		if err := rows.Scan(&i.FollowerID, &i.FollowingID); err != nil {
+		if err := rows.Scan(&i.FollowerID, &i.FollowingID, &i.TxHash); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -159,7 +171,7 @@ func (q *Queries) GetUserFollowers(ctx context.Context, followingID string) ([]F
 }
 
 const getUserFollowing = `-- name: GetUserFollowing :many
-select follower_id, following_id
+select follower_id, following_id, tx_hash
 from follows
 where follower_id = $1
 `
@@ -173,7 +185,7 @@ func (q *Queries) GetUserFollowing(ctx context.Context, followerID string) ([]Fo
 	var items []Follow
 	for rows.Next() {
 		var i Follow
-		if err := rows.Scan(&i.FollowerID, &i.FollowingID); err != nil {
+		if err := rows.Scan(&i.FollowerID, &i.FollowingID, &i.TxHash); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -185,7 +197,7 @@ func (q *Queries) GetUserFollowing(ctx context.Context, followerID string) ([]Fo
 }
 
 const getUserReposts = `-- name: GetUserReposts :many
-select reposter_id, track_id
+select reposter_id, track_id, tx_hash
 from reposts
 where reposter_id = $1
 `
@@ -199,7 +211,7 @@ func (q *Queries) GetUserReposts(ctx context.Context, reposterID string) ([]Repo
 	var items []Repost
 	for rows.Next() {
 		var i Repost
-		if err := rows.Scan(&i.ReposterID, &i.TrackID); err != nil {
+		if err := rows.Scan(&i.ReposterID, &i.TrackID, &i.TxHash); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -211,7 +223,7 @@ func (q *Queries) GetUserReposts(ctx context.Context, reposterID string) ([]Repo
 }
 
 const getUserTracks = `-- name: GetUserTracks :many
-select id, title, stream_url, description, user_id
+select id, title, stream_url, description, user_id, tx_hash
 from tracks
 where user_id = $1
 `
@@ -231,6 +243,7 @@ func (q *Queries) GetUserTracks(ctx context.Context, userID string) ([]Track, er
 			&i.StreamUrl,
 			&i.Description,
 			&i.UserID,
+			&i.TxHash,
 		); err != nil {
 			return nil, err
 		}
@@ -243,7 +256,7 @@ func (q *Queries) GetUserTracks(ctx context.Context, userID string) ([]Track, er
 }
 
 const getUsers = `-- name: GetUsers :many
-select id, handle, bio
+select id, handle, bio, tx_hash
 from users
 order by handle
 `
@@ -257,7 +270,12 @@ func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
 	var items []User
 	for rows.Next() {
 		var i User
-		if err := rows.Scan(&i.ID, &i.Handle, &i.Bio); err != nil {
+		if err := rows.Scan(
+			&i.ID,
+			&i.Handle,
+			&i.Bio,
+			&i.TxHash,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
