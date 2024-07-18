@@ -48,7 +48,7 @@ func SendTx[T proto.Message](logger *utils.Logger, rpc *local.Local, msg T) erro
 	case txRes := <-txChan:
 		etx := txRes.Data.(types.EventDataTx)
 		if etx.TxResult.Result.Code != abcitypes.CodeTypeOK {
-			return errors.New(fmt.Sprintf("tx %s failed to index", result.Hash))
+			return fmt.Errorf("tx %s failed to index", result.Hash)
 		}
 		return nil
 	case <-time.After(30 * time.Second):

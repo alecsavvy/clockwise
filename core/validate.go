@@ -14,13 +14,6 @@ func (c *Core) validateTx(ctx context.Context, msg []byte) error {
 	return protocol.MessageRouter(ctx, c.validationRoutes, msg)
 }
 
-func (c *Core) getSender(*gen.Envelope) (string, error) {
-	// get sender via signature
-	return "", nil
-}
-
-func (c *Core) validateSignature() {}
-
 func (c *Core) validateCreateUser(ctx context.Context, msg proto.Message) error {
 	message, ok := msg.(*gen.CreateUser)
 	c.logger.Info("validating create user", "message", message)
