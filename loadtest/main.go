@@ -24,9 +24,9 @@ var block_templ *template.Template
 var health_templ *template.Template
 
 // config
-var interval = 500
-var parallelRequests = 2
-var statsBuffer = 10000
+var interval = 250
+var parallelRequests = 10
+var statsBuffer = 100000
 
 func init() {
 	var err error
