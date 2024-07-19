@@ -3,6 +3,8 @@
 package main
 
 import (
+	"time"
+
 	"github.com/labstack/echo/v4"
 )
 
@@ -17,6 +19,8 @@ type Stats struct {
 	NodeTotalSuccesses          map[string]int
 	NodeTotalFailures           map[string]int
 	updateChan                  chan StatsUpdate
+	TimeElapsed                 int
+	startTime                   time.Time
 }
 
 type StatsUpdate struct {
@@ -30,19 +34,21 @@ func NewStats() *Stats {
 		TotalNodeCount:              len(discprovUrls),
 		TransactionIntervalMillis:   interval,
 		ParallelRequests:            parallelRequests,
-		RPS:                         calculateRPS(),
+		RPS:                         0,
 		NodeTotalAttempted:          map[string]int{},
 		NodeTotalSuccesses:          map[string]int{},
 		NodeTotalFailures:           map[string]int{},
 		updateChan:                  make(chan StatsUpdate, statsBuffer),
+		startTime:                   time.Now(),
 	}
 	go stats.runUpdater()
 	return stats
 }
 
-func calculateRPS() int {
-	intervalSeconds := float64(interval) / 1000
-	return int(float64(parallelRequests) / intervalSeconds)
+func (s *Stats) GetRPS() {
+	timeElapsed := time.Since(s.startTime).Seconds()
+	s.TimeElapsed = int(timeElapsed)
+	s.RPS = int(float64(s.TotalSuccessfulTransactions) / timeElapsed)
 }
 
 // run the update listener
@@ -61,11 +67,12 @@ func (s *Stats) runUpdater() {
 }
 
 // send update down channel
-func (s *Stats) recordStat(node string, wasError bool) {
-	s.updateChan <- StatsUpdate{Node: node, WasError: wasError}
+func (s *Stats) recordStat(node string, err error) {
+	s.updateChan <- StatsUpdate{Node: node, WasError: err != nil}
 }
 
 // route that serves the stats ui
 func (s *Stats) statsHandler(c echo.Context) error {
+	s.GetRPS()
 	return stats_templ.ExecuteTemplate(c.Response().Writer, "stats", s)
 }

@@ -7,7 +7,7 @@ up:
 	cd infra && docker compose up --build -d
 
 down:
-	cd infra && docker compose down
+	cd infra && docker compose --profile loadtest down
 	rm -rf testnet-home
 
 init:
@@ -32,7 +32,13 @@ deps:
 	go install github.com/cometbft/cometbft/cmd/cometbft@v0.38.9
 
 lt:
-	make default
+	@if [ "$(shell docker ps -q -f name=moshpit)" ]; then \
+			docker stop moshpit; \
+	fi
+	@if [ "$(shell docker ps -a -q -f name=moshpit)" ]; then \
+			docker rm moshpit; \
+	fi
+	cd infra && docker compose --profile loadtest up --build -d --no-recreate
 	open http://localhost:8080/
 
 mosh:

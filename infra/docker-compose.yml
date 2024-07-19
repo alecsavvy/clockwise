@@ -172,6 +172,8 @@ services:
       - node-4
       - node-5
       - node-6
+    profiles:
+      - loadtest
 
   geth:
     container_name: ethereum.docker.co
