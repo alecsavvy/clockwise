@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"strconv"
 
@@ -48,15 +47,15 @@ func getBlock(c echo.Context) error {
 
 	// parse out em txs
 	var manageEntities []*core.ManageEntity
-	for _, tx := range block.Block.Txs {
-		var em core.ManageEntity
-		err := json.Unmarshal(tx, &em)
-		if err != nil {
-			logger.Error(err, "uh oh")
-			return err
-		}
-		manageEntities = append(manageEntities, &em)
-	}
+	// for _, tx := range block.Block.Txs {
+	// 	var em core.ManageEntity
+	// 	err := json.Unmarshal(tx, &em)
+	// 	if err != nil {
+	// 		logger.Error(err, "uh oh")
+	// 		return err
+	// 	}
+	// 	manageEntities = append(manageEntities, &em)
+	// }
 
 	// render page with template
 	b := &Block{
@@ -64,7 +63,7 @@ func getBlock(c echo.Context) error {
 		BlockNumber:    blockNumber,
 		BlockHash:      blockHash,
 		TotalTxs:       len(manageEntities),
-		ManageEntities: manageEntities[:20],
+		ManageEntities: manageEntities,
 	}
 	return block_templ.ExecuteTemplate(c.Response().Writer, "block", b)
 }
