@@ -14,6 +14,7 @@ import (
 	"github.com/alecsavvy/clockwise/utils"
 	"github.com/bxcodec/faker/v3"
 	"github.com/labstack/echo/v4"
+	"golang.org/x/sync/errgroup"
 )
 
 //go:embed templates/*
@@ -23,8 +24,8 @@ var block_templ *template.Template
 var health_templ *template.Template
 
 // config
-var interval = 250
-var parallelRequests = 5
+var interval = 500
+var parallelRequests = 2
 var statsBuffer = 10000
 
 func init() {
@@ -56,10 +57,25 @@ func main() {
 	go func() {
 		defer wg.Done()
 		for {
+			start := time.Now()
+		
+			var g errgroup.Group
 			for i := 0; i < parallelRequests; i++ {
-				// go sendRandomRequest(logger, stats)
+				g.Go(func() error {
+					return sendRandomRequest(logger, stats)
+				})
 			}
-			time.Sleep(time.Duration(interval) * time.Millisecond)
+	
+			if err := g.Wait(); err != nil {
+				logger.Error("Error in request:", err)
+			}
+	
+			elapsed := time.Since(start)
+			sleepDuration := time.Duration(interval)*time.Millisecond - elapsed
+	
+			if sleepDuration > 0 {
+				time.Sleep(sleepDuration)
+			}
 		}
 	}()
 
@@ -89,7 +105,7 @@ func main() {
 	wg.Wait()
 }
 
-func sendRandomRequest(logger *utils.Logger, stats *Stats) {
+func sendRandomRequest(logger *utils.Logger, stats *Stats) error {
 	node := randomDiscprov()
 	sdk := sdk.NewSdk(fmt.Sprintf("%s/query", node))
 
@@ -106,11 +122,12 @@ func sendRandomRequest(logger *utils.Logger, stats *Stats) {
 	)
 
 	wasError := err != nil
+	stats.recordStat(node, wasError)
 
 	if wasError {
-		logger.Error("error sending create user", "error", err)
+		return err
 	}
-	stats.recordStat(node, wasError)
+	return nil
 }
 
 var discprovUrls = []string{"http://node-0:26659", "http://node-1:26659", "http://node-2:26659", "http://node-3:26659", "http://node-4:26659", "http://node-5:26659", "http://node-6:26659"}

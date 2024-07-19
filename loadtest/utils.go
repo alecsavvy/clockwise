@@ -9,7 +9,7 @@ import (
 )
 
 func generateWallet() (accounts.Account, *keystore.KeyStore) {
-	ks := keystore.NewKeyStore("", keystore.StandardScryptN, keystore.StandardScryptP)
+	ks := keystore.NewKeyStore("./tmp/lt/ks", keystore.StandardScryptN, keystore.StandardScryptP)
 	password := uuid.New().String()
 	account, err := ks.NewAccount(password)
 	if err != nil {
