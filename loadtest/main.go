@@ -92,6 +92,7 @@ func main() {
 		e := echo.New()
 		e.HideBanner = true
 		e.GET("/stats", stats.statsHandler)
+		e.GET("/health_stats", getHealthStats)
 		e.POST("/get_block", getBlock)
 		e.GET("/", htmlTemplates)
 
