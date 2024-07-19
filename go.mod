@@ -7,6 +7,7 @@ require (
 	github.com/Khan/genqlient v0.7.0
 	github.com/bxcodec/faker/v3 v3.8.1
 	github.com/cometbft/cometbft v1.0.0-rc1
+	github.com/onsi/ginkgo/v2 v2.19.0
 	github.com/spf13/viper v1.19.0
 	github.com/vektah/gqlparser/v2 v2.5.11
 )
@@ -49,7 +50,6 @@ require (
 	github.com/linxGnu/grocksdb v1.8.14 // indirect
 	github.com/mmcloughlin/addchain v0.4.0 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
-	github.com/onsi/ginkgo/v2 v2.19.0 // indirect
 	github.com/rogpeppe/go-internal v1.11.0 // indirect
 	github.com/supranational/blst v0.3.11 // indirect
 	go.opencensus.io v0.24.0 // indirect
@@ -96,7 +96,7 @@ require (
 	github.com/spf13/afero v1.11.0 // indirect
 	github.com/spf13/cast v1.6.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/stretchr/testify v1.9.0 // indirect
+	github.com/stretchr/testify v1.9.0
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7 // indirect
 	github.com/urfave/cli/v2 v2.27.1 // indirect

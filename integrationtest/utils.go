@@ -24,7 +24,7 @@ func newSdk() *sdk.ClockwiseSdk {
 	return sdk
 }
 
-var ks = keystore.NewKeyStore("/tmp/it/keystore", keystore.StandardScryptN, keystore.StandardScryptP)
+var ks = keystore.NewKeyStore("./tmp/it/ks", keystore.StandardScryptN, keystore.StandardScryptP)
 
 func generateWallet() (accounts.Account, *keystore.KeyStore) {
 	password := uuid.New().String()

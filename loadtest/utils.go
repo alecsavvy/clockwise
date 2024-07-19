@@ -8,9 +8,8 @@ import (
 	"github.com/google/uuid"
 )
 
-var ks = keystore.NewKeyStore("/tmp/lt/keystore", keystore.StandardScryptN, keystore.StandardScryptP)
-
 func generateWallet() (accounts.Account, *keystore.KeyStore) {
+	ks := keystore.NewKeyStore("", keystore.StandardScryptN, keystore.StandardScryptP)
 	password := uuid.New().String()
 	account, err := ks.NewAccount(password)
 	if err != nil {
