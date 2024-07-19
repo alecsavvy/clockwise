@@ -12,7 +12,7 @@ import (
 
 	"github.com/alecsavvy/clockwise/sdk"
 	"github.com/alecsavvy/clockwise/utils"
-	"github.com/google/uuid"
+	"github.com/bxcodec/faker/v3"
 	"github.com/labstack/echo/v4"
 )
 
@@ -45,7 +45,6 @@ func init() {
 	}
 }
 
-// sends random entity manager transations to random nodes
 func main() {
 	logger := utils.NewLogger(nil)
 
@@ -58,7 +57,7 @@ func main() {
 		defer wg.Done()
 		for {
 			for i := 0; i < parallelRequests; i++ {
-				// go sendRandomRequest(logger, stats)
+				go sendRandomRequest(logger, stats)
 			}
 			time.Sleep(time.Duration(interval) * time.Millisecond)
 		}
@@ -94,28 +93,22 @@ func sendRandomRequest(logger *utils.Logger, stats *Stats) {
 	node := randomDiscprov()
 	sdk := sdk.NewSdk(fmt.Sprintf("%s/query", node))
 
-	requestId := uuid.NewString()
-	userId := randomIntID()
-	entityId := randomIntID()
-	signer := uuid.NewString()
-	entityType := randomEntity()
-	action := randomAction()
-	metadata := "metadata"
+	account, _ := generateWallet()
 
-	_, err := sdk.ManageEntity(
-		requestId,
-		userId,
-		signer,
-		entityType,
-		entityId,
-		metadata,
-		action,
+	handle := faker.Username()
+	address := account.Address.Hex()
+	bio := faker.Sentence()
+
+	_, err := sdk.CreateUser(
+		handle,
+		address,
+		bio,
 	)
 
 	wasError := err != nil
 
 	if wasError {
-		logger.Error("error sending manage entity", "error", err)
+		logger.Error("error sending create user", "error", err)
 	}
 	stats.recordStat(node, wasError)
 }
@@ -125,21 +118,4 @@ var discprovUrls = []string{"http://node-0:26659", "http://node-1:26659", "http:
 func randomDiscprov() string {
 	randomIndex := rand.IntN(len(discprovUrls))
 	return discprovUrls[randomIndex]
-}
-
-var entities = []string{"User", "Track", "Playlist"}
-var actions = []string{"Create", "Update", "Repost", "Follow", "Unfollow", "Unrepost", "Delete"}
-
-func randomEntity() string {
-	randomIndex := rand.IntN(len(entities))
-	return entities[randomIndex]
-}
-
-func randomAction() string {
-	randomIndex := rand.IntN(len(actions))
-	return actions[randomIndex]
-}
-
-func randomIntID() int {
-	return rand.Int()
 }

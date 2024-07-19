@@ -18,8 +18,9 @@ init-testnet:
 
 gen:
 	cd core/db && sqlc generate
-	go generate ./...
 	protoc --go_out=./protocol --go-grpc_out=./protocol ./protocol/protocol.proto
+	go run github.com/99designs/gqlgen generate
+	go run github.com/Khan/genqlient
 	make init-testnet
 	go mod tidy
 
@@ -30,9 +31,16 @@ deps:
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 	go install github.com/cometbft/cometbft/cmd/cometbft@v0.38.9
 
+lt:
+	make default
+	open http://localhost:8080/
+
 mosh:
 	docker start moshpit
 	open http://localhost:8080/
 
 chill:
 	docker stop moshpit
+
+test:
+	go test -count=1 ./...

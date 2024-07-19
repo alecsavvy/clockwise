@@ -73,6 +73,7 @@ type Query {
   getTracks: [Track]!
   getUser(input: GetUser!): User
   getTrack(id: String!): Track
+  getTransaction(hash: String!): Entity
 }
 
 type Mutation {
