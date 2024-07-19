@@ -1,15 +1,16 @@
 {{define "stats"}}
 <div>
   <h1 class="text-3xl font-bold mt-4 mb-2">🎸 Moshpit Dashboard 🤘</h1>
+  <p><strong>Total Node Count:</strong> {{.TotalNodeCount}}</p>
+  <p>
+    <strong>Wave Interval (ms):</strong> {{.TransactionIntervalMillis}}
+  </p>
+  <p><strong>Sequences Per Interval:</strong> {{.ParallelRequests}}</p>
   <p>
     <strong>Total Successful Transactions:</strong>
     {{.TotalSuccessfulTransactions}}
   </p>
-  <p><strong>Total Node Count:</strong> {{.TotalNodeCount}}</p>
-  <p>
-    <strong>Transaction Interval (ms):</strong> {{.TransactionIntervalMillis}}
-  </p>
-  <p><strong>Requests Per Interval:</strong> {{.ParallelRequests}}</p>
+  <p><strong>Test Time Length:</strong> {{.TimeElapsed}}</p>
   <p><strong>Requests Per Second:</strong> {{.RPS}}</p>
   <table class="min-w-full leading-normal">
     <thead>
