@@ -22,6 +22,7 @@ var embeddedFiles embed.FS
 var stats_templ *template.Template
 var block_templ *template.Template
 var health_templ *template.Template
+var error_templ *template.Template
 
 // config
 var interval = 250
@@ -41,6 +42,11 @@ func init() {
 	}
 
 	health_templ, err = template.ParseFS(embeddedFiles, "templates/health_template.html")
+	if err != nil {
+		panic(err)
+	}
+
+	error_templ, err = template.ParseFS(embeddedFiles, "templates/error_template.html")
 	if err != nil {
 		panic(err)
 	}
@@ -95,6 +101,7 @@ func main() {
 		e.GET("/health_stats", getHealthStats)
 		e.POST("/get_block", getBlock)
 		e.GET("/", htmlTemplates)
+		e.Use(errorMiddleware)
 
 		err = e.Start("0.0.0.0:8080")
 		if err != nil {
@@ -136,4 +143,16 @@ var discprovUrls = []string{"http://node-0:26659", "http://node-1:26659", "http:
 func randomDiscprov() string {
 	randomIndex := rand.IntN(len(discprovUrls))
 	return discprovUrls[randomIndex]
+}
+
+func errorMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		err := next(c)
+		if err != nil {
+			return error_templ.ExecuteTemplate(c.Response().Writer, "error", map[string]interface{}{
+				"Error": err.Error(),
+			})
+		}
+		return nil
+	}
 }
