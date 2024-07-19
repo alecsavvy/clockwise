@@ -106,7 +106,7 @@ func main() {
 	wg.Wait()
 }
 
-func sendRandomRequest(logger *utils.Logger, stats *Stats) error {
+func sendRandomRequest(_ *utils.Logger, stats *Stats) error {
 	node := randomDiscprov()
 	sdk := sdk.NewSdk(fmt.Sprintf("%s/query", node))
 
