@@ -19,12 +19,6 @@ func NewSdk(gqlEndpoint string) *ClockwiseSdk {
 	}
 }
 
-func (sdk *ClockwiseSdk) ManageEntity(requestId string,
-	userId int,
-	signer string,
-	entityType string,
-	entityId int,
-	metadata string,
-	action string) (*gqlclient.ManageEntityResponse, error) {
-	return gqlclient.ManageEntity(context.Background(), *sdk.client, requestId, userId, signer, entityType, entityId, metadata, action)
+func (sdk *ClockwiseSdk) CreateUser(handle, address, bio string) (*gqlclient.CreateUserResponse, error) {
+	return gqlclient.CreateUser(context.Background(), *sdk.client, handle, address, bio)
 }

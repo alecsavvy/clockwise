@@ -8,120 +8,81 @@ import (
 	"github.com/Khan/genqlient/graphql"
 )
 
-// ManageEntityManageEntity includes the requested fields of the GraphQL type ManageEntity.
-type ManageEntityManageEntity struct {
-	RequestId  string `json:"requestId"`
-	UserId     int    `json:"userId"`
-	Signer     string `json:"signer"`
-	EntityType string `json:"entityType"`
-	EntityId   int    `json:"entityId"`
-	Metadata   string `json:"metadata"`
-	Action     string `json:"action"`
+// CreateUserCreateUser includes the requested fields of the GraphQL type User.
+type CreateUserCreateUser struct {
+	Handle  string `json:"handle"`
+	Address string `json:"address"`
+	Bio     string `json:"bio"`
+	Txhash  string `json:"txhash"`
 }
 
-// GetRequestId returns ManageEntityManageEntity.RequestId, and is useful for accessing the field via an interface.
-func (v *ManageEntityManageEntity) GetRequestId() string { return v.RequestId }
+// GetHandle returns CreateUserCreateUser.Handle, and is useful for accessing the field via an interface.
+func (v *CreateUserCreateUser) GetHandle() string { return v.Handle }
 
-// GetUserId returns ManageEntityManageEntity.UserId, and is useful for accessing the field via an interface.
-func (v *ManageEntityManageEntity) GetUserId() int { return v.UserId }
+// GetAddress returns CreateUserCreateUser.Address, and is useful for accessing the field via an interface.
+func (v *CreateUserCreateUser) GetAddress() string { return v.Address }
 
-// GetSigner returns ManageEntityManageEntity.Signer, and is useful for accessing the field via an interface.
-func (v *ManageEntityManageEntity) GetSigner() string { return v.Signer }
+// GetBio returns CreateUserCreateUser.Bio, and is useful for accessing the field via an interface.
+func (v *CreateUserCreateUser) GetBio() string { return v.Bio }
 
-// GetEntityType returns ManageEntityManageEntity.EntityType, and is useful for accessing the field via an interface.
-func (v *ManageEntityManageEntity) GetEntityType() string { return v.EntityType }
+// GetTxhash returns CreateUserCreateUser.Txhash, and is useful for accessing the field via an interface.
+func (v *CreateUserCreateUser) GetTxhash() string { return v.Txhash }
 
-// GetEntityId returns ManageEntityManageEntity.EntityId, and is useful for accessing the field via an interface.
-func (v *ManageEntityManageEntity) GetEntityId() int { return v.EntityId }
-
-// GetMetadata returns ManageEntityManageEntity.Metadata, and is useful for accessing the field via an interface.
-func (v *ManageEntityManageEntity) GetMetadata() string { return v.Metadata }
-
-// GetAction returns ManageEntityManageEntity.Action, and is useful for accessing the field via an interface.
-func (v *ManageEntityManageEntity) GetAction() string { return v.Action }
-
-// ManageEntityResponse is returned by ManageEntity on success.
-type ManageEntityResponse struct {
-	ManageEntity ManageEntityManageEntity `json:"manageEntity"`
+// CreateUserResponse is returned by CreateUser on success.
+type CreateUserResponse struct {
+	CreateUser CreateUserCreateUser `json:"createUser"`
 }
 
-// GetManageEntity returns ManageEntityResponse.ManageEntity, and is useful for accessing the field via an interface.
-func (v *ManageEntityResponse) GetManageEntity() ManageEntityManageEntity { return v.ManageEntity }
+// GetCreateUser returns CreateUserResponse.CreateUser, and is useful for accessing the field via an interface.
+func (v *CreateUserResponse) GetCreateUser() CreateUserCreateUser { return v.CreateUser }
 
-// __ManageEntityInput is used internally by genqlient
-type __ManageEntityInput struct {
-	RequestId  string `json:"requestId"`
-	UserId     int    `json:"userId"`
-	Signer     string `json:"signer"`
-	EntityType string `json:"entityType"`
-	EntityId   int    `json:"entityId"`
-	Metadata   string `json:"metadata"`
-	Action     string `json:"action"`
+// __CreateUserInput is used internally by genqlient
+type __CreateUserInput struct {
+	Handle  string `json:"handle"`
+	Address string `json:"address"`
+	Bio     string `json:"bio"`
 }
 
-// GetRequestId returns __ManageEntityInput.RequestId, and is useful for accessing the field via an interface.
-func (v *__ManageEntityInput) GetRequestId() string { return v.RequestId }
+// GetHandle returns __CreateUserInput.Handle, and is useful for accessing the field via an interface.
+func (v *__CreateUserInput) GetHandle() string { return v.Handle }
 
-// GetUserId returns __ManageEntityInput.UserId, and is useful for accessing the field via an interface.
-func (v *__ManageEntityInput) GetUserId() int { return v.UserId }
+// GetAddress returns __CreateUserInput.Address, and is useful for accessing the field via an interface.
+func (v *__CreateUserInput) GetAddress() string { return v.Address }
 
-// GetSigner returns __ManageEntityInput.Signer, and is useful for accessing the field via an interface.
-func (v *__ManageEntityInput) GetSigner() string { return v.Signer }
+// GetBio returns __CreateUserInput.Bio, and is useful for accessing the field via an interface.
+func (v *__CreateUserInput) GetBio() string { return v.Bio }
 
-// GetEntityType returns __ManageEntityInput.EntityType, and is useful for accessing the field via an interface.
-func (v *__ManageEntityInput) GetEntityType() string { return v.EntityType }
-
-// GetEntityId returns __ManageEntityInput.EntityId, and is useful for accessing the field via an interface.
-func (v *__ManageEntityInput) GetEntityId() int { return v.EntityId }
-
-// GetMetadata returns __ManageEntityInput.Metadata, and is useful for accessing the field via an interface.
-func (v *__ManageEntityInput) GetMetadata() string { return v.Metadata }
-
-// GetAction returns __ManageEntityInput.Action, and is useful for accessing the field via an interface.
-func (v *__ManageEntityInput) GetAction() string { return v.Action }
-
-// The query or mutation executed by ManageEntity.
-const ManageEntity_Operation = `
-mutation ManageEntity ($requestId: String!, $userId: Int!, $signer: String!, $entityType: String!, $entityId: Int!, $metadata: String!, $action: String!) {
-	manageEntity(manageEntity: {requestId:$requestId,userId:$userId,signer:$signer,entityType:$entityType,entityId:$entityId,metadata:$metadata,action:$action}) {
-		requestId
-		userId
-		signer
-		entityType
-		entityId
-		metadata
-		action
+// The query or mutation executed by CreateUser.
+const CreateUser_Operation = `
+mutation CreateUser ($handle: String!, $address: String!, $bio: String!) {
+	createUser(input: {handle:$handle,address:$address,bio:$bio}) {
+		handle
+		address
+		bio
+		txhash
 	}
 }
 `
 
-func ManageEntity(
+func CreateUser(
 	ctx_ context.Context,
 	client_ graphql.Client,
-	requestId string,
-	userId int,
-	signer string,
-	entityType string,
-	entityId int,
-	metadata string,
-	action string,
-) (*ManageEntityResponse, error) {
+	handle string,
+	address string,
+	bio string,
+) (*CreateUserResponse, error) {
 	req_ := &graphql.Request{
-		OpName: "ManageEntity",
-		Query:  ManageEntity_Operation,
-		Variables: &__ManageEntityInput{
-			RequestId:  requestId,
-			UserId:     userId,
-			Signer:     signer,
-			EntityType: entityType,
-			EntityId:   entityId,
-			Metadata:   metadata,
-			Action:     action,
+		OpName: "CreateUser",
+		Query:  CreateUser_Operation,
+		Variables: &__CreateUserInput{
+			Handle:  handle,
+			Address: address,
+			Bio:     bio,
 		},
 	}
 	var err_ error
 
-	var data_ ManageEntityResponse
+	var data_ CreateUserResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(

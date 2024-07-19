@@ -2,15 +2,16 @@ log_level = "main:info,state:warn,statesync:warn,*:error"
 proxy_app = ""
 
 [rpc]
-laddr = ""
+laddr = "tcp://0.0.0.0:26657"
 
 [p2p]
 laddr = "tcp://0.0.0.0:26656"
 
 [mempool]
-size = 10000
-max_tx_bytes = 1024
-max_txs_bytes = 1073741824
+# 10 gigs total for mempool
+size = 10240
+max_tx_bytes = 1048576
+max_txs_bytes = 10737418240
 
 [instrumentation]
 prometheus = false

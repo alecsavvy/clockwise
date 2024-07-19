@@ -13,6 +13,7 @@ import (
 	"github.com/alecsavvy/clockwise/graph/model"
 	"github.com/alecsavvy/clockwise/protocol/gen"
 	"github.com/google/uuid"
+	"google.golang.org/protobuf/proto"
 )
 
 // CreateUser is the resolver for the createUser field.
@@ -228,6 +229,33 @@ func (r *queryResolver) GetTrack(ctx context.Context, id string) (*model.Track, 
 		return nil, err
 	}
 	return dbTrackToTrackModel([]db.Track{track})[0], nil
+}
+
+// GetTransaction is the resolver for the getTransaction field.
+func (r *queryResolver) GetTransaction(ctx context.Context, hash string) (model.Entity, error) {
+	rpc := r.core.Rpc()
+
+	resultTx, err := rpc.Tx(ctx, []byte(hash), true)
+	if err != nil {
+		return nil, err
+	}
+
+	tx := resultTx.Tx
+
+	var userTx gen.CreateUser
+	if err := proto.Unmarshal(tx, &userTx); err != nil {
+		return nil, err
+	}
+
+	userData := userTx.Data
+
+	userModel := model.User{
+		Handle:  userData.Handle,
+		Address: userData.Address,
+		Bio:     userData.Bio,
+	}
+
+	return userModel, nil
 }
 
 // Tracks is the resolver for the tracks field.

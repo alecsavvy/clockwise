@@ -22,32 +22,26 @@
         <th
           class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider text-center"
         >
-          Operation
+          Message Type
         </th>
         <th
           class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider text-center"
         >
-          User ID
+          Transaction Hash
         </th>
         <th
           class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider text-center"
         >
-          Entity ID
-        </th>
-        <th
-          class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider text-center"
-        >
-          Metadata
+          Signature
         </th>
       </tr>
     </thead>
     <tbody class="text-gray-700 px-5">
-      {{range $em := .ManageEntities}}
+      {{range $em := .Txs}}
       <tr>
-        <td class="text-center">{{$em.Action}}{{$em.EntityType}}</td>
-        <td class="text-center">{{$em.UserID}}</td>
-        <td class="text-center">{{$em.EntityID}}</td>
-        <td class="text-center">{{$em.Metadata}}</td>
+        <td class="text-center">{{$em.MessageType}}</td>
+        <td class="text-center">{{$em.TxHash}}</td>
+        <td class="text-center">{{$em.Signature}}</td>
       </tr>
       {{end}}
     </tbody>

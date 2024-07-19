@@ -12,8 +12,9 @@ import (
 
 	"github.com/alecsavvy/clockwise/sdk"
 	"github.com/alecsavvy/clockwise/utils"
-	"github.com/google/uuid"
+	"github.com/bxcodec/faker/v3"
 	"github.com/labstack/echo/v4"
+	"golang.org/x/sync/errgroup"
 )
 
 //go:embed templates/*
@@ -24,8 +25,8 @@ var health_templ *template.Template
 
 // config
 var interval = 250
-var parallelRequests = 5
-var statsBuffer = 10000
+var parallelRequests = 10
+var statsBuffer = 100000
 
 func init() {
 	var err error
@@ -45,7 +46,6 @@ func init() {
 	}
 }
 
-// sends random entity manager transations to random nodes
 func main() {
 	logger := utils.NewLogger(nil)
 
@@ -57,10 +57,25 @@ func main() {
 	go func() {
 		defer wg.Done()
 		for {
+			start := time.Now()
+		
+			var g errgroup.Group
 			for i := 0; i < parallelRequests; i++ {
-				// go sendRandomRequest(logger, stats)
+				g.Go(func() error {
+					return sendRandomRequest(logger, stats)
+				})
 			}
-			time.Sleep(time.Duration(interval) * time.Millisecond)
+	
+			if err := g.Wait(); err != nil {
+				logger.Error("Error in request:", err)
+			}
+	
+			elapsed := time.Since(start)
+			sleepDuration := time.Duration(interval)*time.Millisecond - elapsed
+	
+			if sleepDuration > 0 {
+				time.Sleep(sleepDuration)
+			}
 		}
 	}()
 
@@ -77,6 +92,7 @@ func main() {
 		e := echo.New()
 		e.HideBanner = true
 		e.GET("/stats", stats.statsHandler)
+		e.GET("/health_stats", getHealthStats)
 		e.POST("/get_block", getBlock)
 		e.GET("/", htmlTemplates)
 
@@ -90,34 +106,29 @@ func main() {
 	wg.Wait()
 }
 
-func sendRandomRequest(logger *utils.Logger, stats *Stats) {
+func sendRandomRequest(_ *utils.Logger, stats *Stats) error {
 	node := randomDiscprov()
 	sdk := sdk.NewSdk(fmt.Sprintf("%s/query", node))
 
-	requestId := uuid.NewString()
-	userId := randomIntID()
-	entityId := randomIntID()
-	signer := uuid.NewString()
-	entityType := randomEntity()
-	action := randomAction()
-	metadata := "metadata"
+	account, _ := generateWallet()
 
-	_, err := sdk.ManageEntity(
-		requestId,
-		userId,
-		signer,
-		entityType,
-		entityId,
-		metadata,
-		action,
+	handle := faker.Username()
+	address := account.Address.Hex()
+	bio := faker.Sentence()
+
+	_, err := sdk.CreateUser(
+		handle,
+		address,
+		bio,
 	)
 
 	wasError := err != nil
+	stats.recordStat(node, wasError)
 
 	if wasError {
-		logger.Error("error sending manage entity", "error", err)
+		return err
 	}
-	stats.recordStat(node, wasError)
+	return nil
 }
 
 var discprovUrls = []string{"http://node-0:26659", "http://node-1:26659", "http://node-2:26659", "http://node-3:26659", "http://node-4:26659", "http://node-5:26659", "http://node-6:26659"}
@@ -125,21 +136,4 @@ var discprovUrls = []string{"http://node-0:26659", "http://node-1:26659", "http:
 func randomDiscprov() string {
 	randomIndex := rand.IntN(len(discprovUrls))
 	return discprovUrls[randomIndex]
-}
-
-var entities = []string{"User", "Track", "Playlist"}
-var actions = []string{"Create", "Update", "Repost", "Follow", "Unfollow", "Unrepost", "Delete"}
-
-func randomEntity() string {
-	randomIndex := rand.IntN(len(entities))
-	return entities[randomIndex]
-}
-
-func randomAction() string {
-	randomIndex := rand.IntN(len(actions))
-	return actions[randomIndex]
-}
-
-func randomIntID() int {
-	return rand.Int()
 }

@@ -64,10 +64,11 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		GetTrack  func(childComplexity int, id string) int
-		GetTracks func(childComplexity int) int
-		GetUser   func(childComplexity int, input model.GetUser) int
-		GetUsers  func(childComplexity int) int
+		GetTrack       func(childComplexity int, id string) int
+		GetTracks      func(childComplexity int) int
+		GetTransaction func(childComplexity int, hash string) int
+		GetUser        func(childComplexity int, input model.GetUser) int
+		GetUsers       func(childComplexity int) int
 	}
 
 	Repost struct {
@@ -117,6 +118,7 @@ type QueryResolver interface {
 	GetTracks(ctx context.Context) ([]*model.Track, error)
 	GetUser(ctx context.Context, input model.GetUser) (*model.User, error)
 	GetTrack(ctx context.Context, id string) (*model.Track, error)
+	GetTransaction(ctx context.Context, hash string) (model.Entity, error)
 }
 type SubscriptionResolver interface {
 	Tracks(ctx context.Context) (<-chan *model.Track, error)
@@ -249,6 +251,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.GetTracks(childComplexity), true
+
+	case "Query.getTransaction":
+		if e.complexity.Query.GetTransaction == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getTransaction_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetTransaction(childComplexity, args["hash"].(string)), true
 
 	case "Query.getUser":
 		if e.complexity.Query.GetUser == nil {
@@ -681,6 +695,21 @@ func (ec *executionContext) field_Query_getTrack_args(ctx context.Context, rawAr
 		}
 	}
 	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getTransaction_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["hash"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hash"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["hash"] = arg0
 	return args, nil
 }
 
@@ -1449,6 +1478,58 @@ func (ec *executionContext) fieldContext_Query_getTrack(ctx context.Context, fie
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_getTrack_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getTransaction(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getTransaction(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetTransaction(rctx, fc.Args["hash"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(model.Entity)
+	fc.Result = res
+	return ec.marshalOEntity2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐEntity(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getTransaction(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Entity does not have child fields")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getTransaction_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -4966,6 +5047,25 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getTransaction":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getTransaction(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
 		case "__type":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Query___type(ctx, field)
@@ -6093,6 +6193,13 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	}
 	res := graphql.MarshalBoolean(*v)
 	return res
+}
+
+func (ec *executionContext) marshalOEntity2githubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐEntity(ctx context.Context, sel ast.SelectionSet, v model.Entity) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Entity(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOFollow2ᚖgithubᚗcomᚋalecsavvyᚋclockwiseᚋgraphᚋmodelᚐFollow(ctx context.Context, sel ast.SelectionSet, v *model.Follow) graphql.Marshaler {

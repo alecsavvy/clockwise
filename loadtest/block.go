@@ -1,21 +1,28 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"strconv"
 
 	"github.com/alecsavvy/clockwise/core"
+	"github.com/alecsavvy/clockwise/protocol/gen"
 	"github.com/cometbft/cometbft/rpc/client/http"
 	"github.com/labstack/echo/v4"
+	"google.golang.org/protobuf/proto"
 )
+
+type TxView struct {
+	MessageType string
+	Signature string
+	TxHash string
+}
 
 type Block struct {
 	Rpc            string
 	BlockNumber    int
 	BlockHash      string
 	TotalTxs       int
-	ManageEntities []*core.ManageEntity
+	Txs []*TxView
 }
 
 func getBlock(c echo.Context) error {
@@ -47,15 +54,28 @@ func getBlock(c echo.Context) error {
 	blockHash := block.Block.Hash().String()
 
 	// parse out em txs
-	var manageEntities []*core.ManageEntity
+	var txs []*TxView
 	for _, tx := range block.Block.Txs {
-		var em core.ManageEntity
-		err := json.Unmarshal(tx, &em)
+		var ev gen.Envelope
+		err := proto.Unmarshal(tx, &ev)
 		if err != nil {
 			logger.Error(err, "uh oh")
 			return err
 		}
-		manageEntities = append(manageEntities, &em)
+
+		txhash, err := core.ToTxHash(&ev)
+		if err != nil {
+			logger.Error(err, "uh oh")
+			return err
+		}
+
+		view := &TxView{
+			MessageType: ev.Headers.GetMessageType().String(),
+			TxHash: txhash,
+			Signature: ev.Headers.GetSignature(),
+		}
+
+		txs = append(txs, view)
 	}
 
 	// render page with template
@@ -63,8 +83,8 @@ func getBlock(c echo.Context) error {
 		Rpc:            endpoint,
 		BlockNumber:    blockNumber,
 		BlockHash:      blockHash,
-		TotalTxs:       len(manageEntities),
-		ManageEntities: manageEntities[:20],
+		TotalTxs:       len(txs),
+		Txs: txs,
 	}
 	return block_templ.ExecuteTemplate(c.Response().Writer, "block", b)
 }

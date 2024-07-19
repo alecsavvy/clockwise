@@ -15,6 +15,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
+	_ "github.com/Khan/genqlient/generate"
 	"github.com/alecsavvy/clockwise/core"
 	"github.com/alecsavvy/clockwise/core/db"
 	"github.com/alecsavvy/clockwise/graph"
