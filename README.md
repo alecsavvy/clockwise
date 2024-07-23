@@ -6,7 +6,8 @@ Clockwise is an entity manager implementation intended to upgrade the acdc netwo
 
 To run the local cluster on your machine with a running loadtest, all you need to do is run the make file. Make sure to have docker running and go installed.
 
-```
+```bash
+make deps # run only once
 make
 ```
 
