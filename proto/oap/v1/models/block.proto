@@ -1,0 +1,11 @@
+syntax = "proto3";
+package oap.v1.models;
+
+import "cometbft/types/v1/block.proto";
+
+option go_package = "github.com/alecsavvy/clockwise/api/oap/v1/models;models";
+
+// Block just wraps the CometBFT block
+message Block {
+  cometbft.types.v1.Block block = 1;
+}

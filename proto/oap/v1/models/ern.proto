@@ -1,0 +1,25 @@
+syntax = "proto3";
+package oap.v1.models;
+
+import "ddex/ern/v381/v381.proto";
+import "ddex/ern/v383/v383.proto";
+import "ddex/ern/v42/v42.proto";
+import "ddex/ern/v43/v43.proto";
+import "ddex/ern/v432/v432.proto";
+
+option go_package = "github.com/alecsavvy/clockwise/api/oap/v1/models;models";
+
+// ERN with version support
+message ERN {
+  string id = 1;
+  int64 created_at = 2;
+
+  // Support multiple ERN versions
+  oneof version {
+    ddex.ern.v381.NewReleaseMessage v381 = 10;
+    ddex.ern.v383.NewReleaseMessage v383 = 11;
+    ddex.ern.v42.NewReleaseMessage v42 = 12;
+    ddex.ern.v43.NewReleaseMessage v43 = 13;
+    ddex.ern.v432.NewReleaseMessage v432 = 14;
+  }
+}

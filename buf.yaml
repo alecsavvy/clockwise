@@ -1,0 +1,12 @@
+version: v2
+modules:
+  - path: proto
+deps:
+  - buf.build/openaudio/ddex:v0.4.0
+  - buf.build/cometbft/cometbft
+breaking:
+  use:
+    - FILE
+lint:
+  use:
+    - DEFAULT

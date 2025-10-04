@@ -1,0 +1,15 @@
+syntax = "proto3";
+package oap.v1.models;
+
+import "cometbft/abci/v1/types.proto";
+
+option go_package = "github.com/alecsavvy/clockwise/api/oap/v1/models;models";
+
+// Transaction with execution result
+message Transaction {
+  bytes tx = 1; // Raw transaction bytes
+  string hash = 2; // Transaction hash
+  int64 height = 3; // Block height
+  uint32 index = 4; // Index in block
+  cometbft.abci.v1.ExecTxResult result = 5; // Execution result with events
+}

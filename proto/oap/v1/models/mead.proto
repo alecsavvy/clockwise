@@ -1,0 +1,17 @@
+syntax = "proto3";
+package oap.v1.models;
+
+import "ddex/mead/v11/v11.proto";
+
+option go_package = "github.com/alecsavvy/clockwise/api/oap/v1/models;models";
+
+// MEAD with version support
+message MEAD {
+  string id = 1;
+  int64 created_at = 2;
+
+  // Support multiple MEAD versions (only v11 currently)
+  oneof version {
+    ddex.mead.v11.MeadMessage v11 = 10;
+  }
+}

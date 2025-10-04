@@ -1,0 +1,13 @@
+syntax = "proto3";
+package oap.v1.models;
+
+option go_package = "github.com/alecsavvy/clockwise/api/oap/v1/models;models";
+
+message Account {
+  string address = 1;
+  uint64 balance = 2;
+  uint64 nonce = 3;
+  bytes data = 4;
+  int64 created_at = 5;
+  int64 updated_at = 6;
+}
