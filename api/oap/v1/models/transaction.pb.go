@@ -7,7 +7,7 @@
 package models
 
 import (
-	v1 "github.com/alecsavvy/clockwise/api/cometbft/abci/v1"
+	v1 "github.com/cometbft/cometbft/api/cometbft/abci/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"

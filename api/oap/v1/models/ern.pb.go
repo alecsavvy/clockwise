@@ -7,11 +7,11 @@
 package models
 
 import (
-	v381 "github.com/alecsavvy/clockwise/api/ddex/ern/v381"
-	v383 "github.com/alecsavvy/clockwise/api/ddex/ern/v383"
-	v42 "github.com/alecsavvy/clockwise/api/ddex/ern/v42"
-	v43 "github.com/alecsavvy/clockwise/api/ddex/ern/v43"
-	v432 "github.com/alecsavvy/clockwise/api/ddex/ern/v432"
+	v381 "github.com/OpenAudio/ddex-proto/gen/ddex/ern/v381"
+	v383 "github.com/OpenAudio/ddex-proto/gen/ddex/ern/v383"
+	v42 "github.com/OpenAudio/ddex-proto/gen/ddex/ern/v42"
+	v43 "github.com/OpenAudio/ddex-proto/gen/ddex/ern/v43"
+	v432 "github.com/OpenAudio/ddex-proto/gen/ddex/ern/v432"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"

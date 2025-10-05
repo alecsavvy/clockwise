@@ -7,7 +7,7 @@
 package models
 
 import (
-	v10 "github.com/alecsavvy/clockwise/api/ddex/pie/v10"
+	v10 "github.com/OpenAudio/ddex-proto/gen/ddex/pie/v10"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
