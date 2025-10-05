@@ -2,6 +2,11 @@ version: v2
 managed:
   enabled: true
   override:
+    # Override for ddex module specifically
+    - file_option: go_package_prefix
+      module: buf.build/openaudio/ddex
+      value: github.com/OpenAudio/ddex-proto/gen
+    # Default override for everything else (your local protos)
     - file_option: go_package_prefix
       value: github.com/alecsavvy/clockwise/api
 inputs:

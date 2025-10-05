@@ -1,7 +1,8 @@
 module github.com/alecsavvy/clockwise
 
-go 1.22
+go 1.25.0
 
-replace github.com/alecsavvy/clockwise/api/ddex => github.com/OpenAudio/ddex-proto v0.4.0
-replace github.com/alecsavvy/clockwise/api/cometbft => github.com/cometbft/cometbft v1.0.0
-replace github.com/alecsavvy/clockwise/api/gogoproto => github.com/cosmos/gogoproto/gogoproto v1.7.0
+require (
+	github.com/OpenAudio/ddex-proto v0.9.0 // indirect
+	google.golang.org/protobuf v1.36.9 // indirect
+)

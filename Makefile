@@ -8,15 +8,12 @@ buf-generate:
 	@echo "generating protobuf code..."
 	buf generate
 
+buf-postprocessors:
+	@echo "protobuf postprocessors..."
+	protoc-gen-ddex --go-package-prefix github.com/alecsavvy/clockwise/api/ddex ./api/ddex
+
 buf-clean:
 	@echo "cleaning generated protobuf code..."
-	rm -rf api/
+	rm -rf api
 
-buf-regen: buf-clean buf-generate
-	@echo "regenerated protobuf code"
-
-proto-clean: buf-clean
-
-proto-gen: buf-generate
-
-proto: buf-regen
+gen: buf-clean buf-generate buf-postprocessors

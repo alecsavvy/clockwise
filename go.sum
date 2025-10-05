@@ -1,0 +1,6 @@
+github.com/OpenAudio/ddex-proto v0.8.0 h1:hiFq28J79rvKT2jxcDvT2TJKJlZeTxVfHrwiCWGCSoI=
+github.com/OpenAudio/ddex-proto v0.8.0/go.mod h1:RiQrWEd4s2XYpKP7pySRtOmyxcV6M1MAHKWz5eeDaW4=
+github.com/OpenAudio/ddex-proto v0.9.0 h1:7iKCw/rkUltenmGzdPPUiziYBKzpGSHsm13u3YlaoEc=
+github.com/OpenAudio/ddex-proto v0.9.0/go.mod h1:RiQrWEd4s2XYpKP7pySRtOmyxcV6M1MAHKWz5eeDaW4=
+google.golang.org/protobuf v1.36.9 h1:w2gp2mA27hUeUzj9Ex9FBjsBm40zfaDtEWow293U7Iw=
+google.golang.org/protobuf v1.36.9/go.mod h1:fuxRtAxBytpl4zzqUh6/eyUujkJdNiuEkXntxiD/uRU=

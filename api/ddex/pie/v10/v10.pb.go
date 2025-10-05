@@ -27,17 +27,17 @@ type PieMessage struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"MessageHeader"
-	MessageHeader *MessageHeader `protobuf:"bytes,1,opt,name=message_header,json=messageHeader,proto3" json:"message_header,omitempty"`
+	MessageHeader *MessageHeader `protobuf:"bytes,1,opt,name=message_header,json=messageHeader,proto3" json:"message_header,omitempty" xml:"MessageHeader"`
 	// @gotags: xml:"MetadataSourceList"
-	MetadataSourceList *MetadataSourceList `protobuf:"bytes,2,opt,name=metadata_source_list,json=metadataSourceList,proto3" json:"metadata_source_list,omitempty"`
+	MetadataSourceList *MetadataSourceList `protobuf:"bytes,2,opt,name=metadata_source_list,json=metadataSourceList,proto3" json:"metadata_source_list,omitempty" xml:"MetadataSourceList"`
 	// @gotags: xml:"PartyList"
-	PartyList *PartyList `protobuf:"bytes,3,opt,name=party_list,json=partyList,proto3" json:"party_list,omitempty"`
+	PartyList *PartyList `protobuf:"bytes,3,opt,name=party_list,json=partyList,proto3" json:"party_list,omitempty" xml:"PartyList"`
 	// @gotags: xml:"AvsVersionId,attr"
-	AvsVersionId string `protobuf:"bytes,4,opt,name=avs_version_id,json=avsVersionId,proto3" json:"avs_version_id,omitempty"`
+	AvsVersionId string `protobuf:"bytes,4,opt,name=avs_version_id,json=avsVersionId,proto3" json:"avs_version_id,omitempty" xml:"AvsVersionId,attr"`
 	// @gotags: xml:"LanguageAndScriptCode,attr"
-	LanguageAndScriptCode string `protobuf:"bytes,5,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty"`
+	LanguageAndScriptCode string `protobuf:"bytes,5,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty" xml:"LanguageAndScriptCode,attr"`
 	// @gotags: xml:"-"
-	NamespaceAttrs map[string]string `protobuf:"bytes,6,rep,name=namespace_attrs,json=namespaceAttrs,proto3" json:"namespace_attrs,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	NamespaceAttrs map[string]string `protobuf:"bytes,6,rep,name=namespace_attrs,json=namespaceAttrs,proto3" json:"namespace_attrs,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3" xml:"-"`
 }
 
 func (x *PieMessage) Reset() {
@@ -120,15 +120,15 @@ type PieRequestMessage struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"MessageHeader"
-	MessageHeader *MessageHeader `protobuf:"bytes,1,opt,name=message_header,json=messageHeader,proto3" json:"message_header,omitempty"`
+	MessageHeader *MessageHeader `protobuf:"bytes,1,opt,name=message_header,json=messageHeader,proto3" json:"message_header,omitempty" xml:"MessageHeader"`
 	// @gotags: xml:"RequestedParty"
-	RequestedParty []*RequestedParty `protobuf:"bytes,2,rep,name=requested_party,json=requestedParty,proto3" json:"requested_party,omitempty"`
+	RequestedParty []*RequestedParty `protobuf:"bytes,2,rep,name=requested_party,json=requestedParty,proto3" json:"requested_party,omitempty" xml:"RequestedParty"`
 	// @gotags: xml:"AvsVersionId,attr"
-	AvsVersionId string `protobuf:"bytes,3,opt,name=avs_version_id,json=avsVersionId,proto3" json:"avs_version_id,omitempty"`
+	AvsVersionId string `protobuf:"bytes,3,opt,name=avs_version_id,json=avsVersionId,proto3" json:"avs_version_id,omitempty" xml:"AvsVersionId,attr"`
 	// @gotags: xml:"LanguageAndScriptCode,attr"
-	LanguageAndScriptCode string `protobuf:"bytes,4,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty"`
+	LanguageAndScriptCode string `protobuf:"bytes,4,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty" xml:"LanguageAndScriptCode,attr"`
 	// @gotags: xml:"-"
-	NamespaceAttrs map[string]string `protobuf:"bytes,5,rep,name=namespace_attrs,json=namespaceAttrs,proto3" json:"namespace_attrs,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	NamespaceAttrs map[string]string `protobuf:"bytes,5,rep,name=namespace_attrs,json=namespaceAttrs,proto3" json:"namespace_attrs,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3" xml:"-"`
 }
 
 func (x *PieRequestMessage) Reset() {
@@ -204,33 +204,33 @@ type Feed struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"author"
-	Author []*Person `protobuf:"bytes,1,rep,name=author,proto3" json:"author,omitempty"`
+	Author []*Person `protobuf:"bytes,1,rep,name=author,proto3" json:"author,omitempty" xml:"author"`
 	// @gotags: xml:"category"
-	Category []*Category `protobuf:"bytes,2,rep,name=category,proto3" json:"category,omitempty"`
+	Category []*Category `protobuf:"bytes,2,rep,name=category,proto3" json:"category,omitempty" xml:"category"`
 	// @gotags: xml:"contributor"
-	Contributor []*Person `protobuf:"bytes,3,rep,name=contributor,proto3" json:"contributor,omitempty"`
+	Contributor []*Person `protobuf:"bytes,3,rep,name=contributor,proto3" json:"contributor,omitempty" xml:"contributor"`
 	// @gotags: xml:"generator"
-	Generator *Generator `protobuf:"bytes,4,opt,name=generator,proto3" json:"generator,omitempty"`
+	Generator *Generator `protobuf:"bytes,4,opt,name=generator,proto3" json:"generator,omitempty" xml:"generator"`
 	// @gotags: xml:"icon"
-	Icon *Icon `protobuf:"bytes,5,opt,name=icon,proto3" json:"icon,omitempty"`
+	Icon *Icon `protobuf:"bytes,5,opt,name=icon,proto3" json:"icon,omitempty" xml:"icon"`
 	// @gotags: xml:"id"
-	Id *Id `protobuf:"bytes,6,opt,name=id,proto3" json:"id,omitempty"`
+	Id *Id `protobuf:"bytes,6,opt,name=id,proto3" json:"id,omitempty" xml:"id"`
 	// @gotags: xml:"link"
-	Link []*Link `protobuf:"bytes,7,rep,name=link,proto3" json:"link,omitempty"`
+	Link []*Link `protobuf:"bytes,7,rep,name=link,proto3" json:"link,omitempty" xml:"link"`
 	// @gotags: xml:"logo"
-	Logo *Logo `protobuf:"bytes,8,opt,name=logo,proto3" json:"logo,omitempty"`
+	Logo *Logo `protobuf:"bytes,8,opt,name=logo,proto3" json:"logo,omitempty" xml:"logo"`
 	// @gotags: xml:"rights"
-	Rights *Text `protobuf:"bytes,9,opt,name=rights,proto3" json:"rights,omitempty"`
+	Rights *Text `protobuf:"bytes,9,opt,name=rights,proto3" json:"rights,omitempty" xml:"rights"`
 	// @gotags: xml:"subtitle"
-	Subtitle *Text `protobuf:"bytes,10,opt,name=subtitle,proto3" json:"subtitle,omitempty"`
+	Subtitle *Text `protobuf:"bytes,10,opt,name=subtitle,proto3" json:"subtitle,omitempty" xml:"subtitle"`
 	// @gotags: xml:"title"
-	Title *Text `protobuf:"bytes,11,opt,name=title,proto3" json:"title,omitempty"`
+	Title *Text `protobuf:"bytes,11,opt,name=title,proto3" json:"title,omitempty" xml:"title"`
 	// @gotags: xml:"updated"
-	Updated *DateTime `protobuf:"bytes,12,opt,name=updated,proto3" json:"updated,omitempty"`
+	Updated *DateTime `protobuf:"bytes,12,opt,name=updated,proto3" json:"updated,omitempty" xml:"updated"`
 	// @gotags: xml:"entry"
-	Entry []*Entry `protobuf:"bytes,13,rep,name=entry,proto3" json:"entry,omitempty"`
+	Entry []*Entry `protobuf:"bytes,13,rep,name=entry,proto3" json:"entry,omitempty" xml:"entry"`
 	// @gotags: xml:"-"
-	NamespaceAttrs map[string]string `protobuf:"bytes,14,rep,name=namespace_attrs,json=namespaceAttrs,proto3" json:"namespace_attrs,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	NamespaceAttrs map[string]string `protobuf:"bytes,14,rep,name=namespace_attrs,json=namespaceAttrs,proto3" json:"namespace_attrs,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3" xml:"-"`
 }
 
 func (x *Feed) Reset() {
@@ -369,15 +369,15 @@ type Contribution struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"Role"
-	Role []*ContributorRole `protobuf:"bytes,1,rep,name=role,proto3" json:"role,omitempty"`
+	Role []*ContributorRole `protobuf:"bytes,1,rep,name=role,proto3" json:"role,omitempty" xml:"Role"`
 	// @gotags: xml:"IsPrimaryRole"
-	IsPrimaryRole bool `protobuf:"varint,2,opt,name=is_primary_role,json=isPrimaryRole,proto3" json:"is_primary_role,omitempty"`
+	IsPrimaryRole bool `protobuf:"varint,2,opt,name=is_primary_role,json=isPrimaryRole,proto3" json:"is_primary_role,omitempty" xml:"IsPrimaryRole"`
 	// @gotags: xml:"HasMadeFeaturedContribution"
-	HasMadeFeaturedContribution bool `protobuf:"varint,3,opt,name=has_made_featured_contribution,json=hasMadeFeaturedContribution,proto3" json:"has_made_featured_contribution,omitempty"`
+	HasMadeFeaturedContribution bool `protobuf:"varint,3,opt,name=has_made_featured_contribution,json=hasMadeFeaturedContribution,proto3" json:"has_made_featured_contribution,omitempty" xml:"HasMadeFeaturedContribution"`
 	// @gotags: xml:"HasMadeContractedContribution"
-	HasMadeContractedContribution bool `protobuf:"varint,4,opt,name=has_made_contracted_contribution,json=hasMadeContractedContribution,proto3" json:"has_made_contracted_contribution,omitempty"`
+	HasMadeContractedContribution bool `protobuf:"varint,4,opt,name=has_made_contracted_contribution,json=hasMadeContractedContribution,proto3" json:"has_made_contracted_contribution,omitempty" xml:"HasMadeContractedContribution"`
 	// @gotags: xml:"Event"
-	Event *EventDate `protobuf:"bytes,5,opt,name=event,proto3" json:"event,omitempty"`
+	Event *EventDate `protobuf:"bytes,5,opt,name=event,proto3" json:"event,omitempty" xml:"Event"`
 }
 
 func (x *Contribution) Reset() {
@@ -453,11 +453,11 @@ type CreationDescription struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"Title"
-	Title []*TitleWithUDV `protobuf:"bytes,1,rep,name=title,proto3" json:"title,omitempty"`
+	Title []*TitleWithUDV `protobuf:"bytes,1,rep,name=title,proto3" json:"title,omitempty" xml:"Title"`
 	// @gotags: xml:"DisplayArtistName"
-	DisplayArtistName *DisplayArtistName `protobuf:"bytes,2,opt,name=display_artist_name,json=displayArtistName,proto3" json:"display_artist_name,omitempty"`
+	DisplayArtistName *DisplayArtistName `protobuf:"bytes,2,opt,name=display_artist_name,json=displayArtistName,proto3" json:"display_artist_name,omitempty" xml:"DisplayArtistName"`
 	// @gotags: xml:"PublicationDate"
-	PublicationDate *EventDate `protobuf:"bytes,3,opt,name=publication_date,json=publicationDate,proto3" json:"publication_date,omitempty"`
+	PublicationDate *EventDate `protobuf:"bytes,3,opt,name=publication_date,json=publicationDate,proto3" json:"publication_date,omitempty" xml:"PublicationDate"`
 }
 
 func (x *CreationDescription) Reset() {
@@ -519,19 +519,19 @@ type DetailedPartyIdForParty struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"ISNI"
-	ISNI string `protobuf:"bytes,1,opt,name=i_s_n_i,json=iSNI,proto3" json:"i_s_n_i,omitempty"`
+	ISNI string `protobuf:"bytes,1,opt,name=i_s_n_i,json=iSNI,proto3" json:"i_s_n_i,omitempty" xml:"ISNI"`
 	// @gotags: xml:"DPID"
-	DPID string `protobuf:"bytes,2,opt,name=d_p_i_d,json=dPID,proto3" json:"d_p_i_d,omitempty"`
+	DPID string `protobuf:"bytes,2,opt,name=d_p_i_d,json=dPID,proto3" json:"d_p_i_d,omitempty" xml:"DPID"`
 	// @gotags: xml:"IpiNameNumber"
-	IpiNameNumber string `protobuf:"bytes,3,opt,name=ipi_name_number,json=ipiNameNumber,proto3" json:"ipi_name_number,omitempty"`
+	IpiNameNumber string `protobuf:"bytes,3,opt,name=ipi_name_number,json=ipiNameNumber,proto3" json:"ipi_name_number,omitempty" xml:"IpiNameNumber"`
 	// @gotags: xml:"IPN"
-	IPN string `protobuf:"bytes,4,opt,name=i_p_n,json=iPN,proto3" json:"i_p_n,omitempty"`
+	IPN string `protobuf:"bytes,4,opt,name=i_p_n,json=iPN,proto3" json:"i_p_n,omitempty" xml:"IPN"`
 	// @gotags: xml:"CisacSocietyId"
-	CisacSocietyId string `protobuf:"bytes,5,opt,name=cisac_society_id,json=cisacSocietyId,proto3" json:"cisac_society_id,omitempty"`
+	CisacSocietyId string `protobuf:"bytes,5,opt,name=cisac_society_id,json=cisacSocietyId,proto3" json:"cisac_society_id,omitempty" xml:"CisacSocietyId"`
 	// @gotags: xml:"ProprietaryId"
-	ProprietaryId []*ProprietaryId `protobuf:"bytes,6,rep,name=proprietary_id,json=proprietaryId,proto3" json:"proprietary_id,omitempty"`
+	ProprietaryId []*ProprietaryId `protobuf:"bytes,6,rep,name=proprietary_id,json=proprietaryId,proto3" json:"proprietary_id,omitempty" xml:"ProprietaryId"`
 	// @gotags: xml:"IsDeprecated,attr"
-	IsDeprecated bool `protobuf:"varint,7,opt,name=is_deprecated,json=isDeprecated,proto3" json:"is_deprecated,omitempty"`
+	IsDeprecated bool `protobuf:"varint,7,opt,name=is_deprecated,json=isDeprecated,proto3" json:"is_deprecated,omitempty" xml:"IsDeprecated,attr"`
 }
 
 func (x *DetailedPartyIdForParty) Reset() {
@@ -621,35 +621,35 @@ type Entry struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"author"
-	Author []*Person `protobuf:"bytes,1,rep,name=author,proto3" json:"author,omitempty"`
+	Author []*Person `protobuf:"bytes,1,rep,name=author,proto3" json:"author,omitempty" xml:"author"`
 	// @gotags: xml:"category"
-	Category []*Category `protobuf:"bytes,2,rep,name=category,proto3" json:"category,omitempty"`
+	Category []*Category `protobuf:"bytes,2,rep,name=category,proto3" json:"category,omitempty" xml:"category"`
 	// @gotags: xml:"content"
-	Content *Content `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
+	Content *Content `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty" xml:"content"`
 	// @gotags: xml:"contributor"
-	Contributor []*Person `protobuf:"bytes,4,rep,name=contributor,proto3" json:"contributor,omitempty"`
+	Contributor []*Person `protobuf:"bytes,4,rep,name=contributor,proto3" json:"contributor,omitempty" xml:"contributor"`
 	// @gotags: xml:"id"
-	Id *Id `protobuf:"bytes,5,opt,name=id,proto3" json:"id,omitempty"`
+	Id *Id `protobuf:"bytes,5,opt,name=id,proto3" json:"id,omitempty" xml:"id"`
 	// @gotags: xml:"link"
-	Link []*Link `protobuf:"bytes,6,rep,name=link,proto3" json:"link,omitempty"`
+	Link []*Link `protobuf:"bytes,6,rep,name=link,proto3" json:"link,omitempty" xml:"link"`
 	// @gotags: xml:"published"
-	Published *DateTime `protobuf:"bytes,7,opt,name=published,proto3" json:"published,omitempty"`
+	Published *DateTime `protobuf:"bytes,7,opt,name=published,proto3" json:"published,omitempty" xml:"published"`
 	// @gotags: xml:"rights"
-	Rights *Text `protobuf:"bytes,8,opt,name=rights,proto3" json:"rights,omitempty"`
+	Rights *Text `protobuf:"bytes,8,opt,name=rights,proto3" json:"rights,omitempty" xml:"rights"`
 	// @gotags: xml:"source"
-	Source *Source `protobuf:"bytes,9,opt,name=source,proto3" json:"source,omitempty"`
+	Source *Source `protobuf:"bytes,9,opt,name=source,proto3" json:"source,omitempty" xml:"source"`
 	// @gotags: xml:"summary"
-	Summary *Text `protobuf:"bytes,10,opt,name=summary,proto3" json:"summary,omitempty"`
+	Summary *Text `protobuf:"bytes,10,opt,name=summary,proto3" json:"summary,omitempty" xml:"summary"`
 	// @gotags: xml:"title"
-	Title *Text `protobuf:"bytes,11,opt,name=title,proto3" json:"title,omitempty"`
+	Title *Text `protobuf:"bytes,11,opt,name=title,proto3" json:"title,omitempty" xml:"title"`
 	// @gotags: xml:"updated"
-	Updated *DateTime `protobuf:"bytes,12,opt,name=updated,proto3" json:"updated,omitempty"`
+	Updated *DateTime `protobuf:"bytes,12,opt,name=updated,proto3" json:"updated,omitempty" xml:"updated"`
 	// @gotags: xml:"SubscriptionId"
-	SubscriptionId string `protobuf:"bytes,13,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
+	SubscriptionId string `protobuf:"bytes,13,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty" xml:"SubscriptionId"`
 	// @gotags: xml:"Party"
-	Party *PartyDescriptorForEntry `protobuf:"bytes,14,opt,name=party,proto3" json:"party,omitempty"`
+	Party *PartyDescriptorForEntry `protobuf:"bytes,14,opt,name=party,proto3" json:"party,omitempty" xml:"Party"`
 	// @gotags: xml:"AvsVersionId,attr"
-	AvsVersionId string `protobuf:"bytes,15,opt,name=avs_version_id,json=avsVersionId,proto3" json:"avs_version_id,omitempty"`
+	AvsVersionId string `protobuf:"bytes,15,opt,name=avs_version_id,json=avsVersionId,proto3" json:"avs_version_id,omitempty" xml:"AvsVersionId,attr"`
 }
 
 func (x *Entry) Reset() {
@@ -795,17 +795,17 @@ type Event struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"MetadataSourceReference"
-	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty"`
+	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty" xml:"MetadataSourceReference"`
 	// @gotags: xml:"EventType"
-	EventType *EventType `protobuf:"bytes,2,opt,name=event_type,json=eventType,proto3" json:"event_type,omitempty"`
+	EventType *EventType `protobuf:"bytes,2,opt,name=event_type,json=eventType,proto3" json:"event_type,omitempty" xml:"EventType"`
 	// @gotags: xml:"EventDescription"
-	EventDescription []*Description `protobuf:"bytes,3,rep,name=event_description,json=eventDescription,proto3" json:"event_description,omitempty"`
+	EventDescription []*Description `protobuf:"bytes,3,rep,name=event_description,json=eventDescription,proto3" json:"event_description,omitempty" xml:"EventDescription"`
 	// @gotags: xml:"Date"
-	Date *EventDate `protobuf:"bytes,4,opt,name=date,proto3" json:"date,omitempty"`
+	Date *EventDate `protobuf:"bytes,4,opt,name=date,proto3" json:"date,omitempty" xml:"Date"`
 	// @gotags: xml:"StartDate"
-	StartDate *EventDate `protobuf:"bytes,5,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`
+	StartDate *EventDate `protobuf:"bytes,5,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty" xml:"StartDate"`
 	// @gotags: xml:"EndDate"
-	EndDate *EventDate `protobuf:"bytes,6,opt,name=end_date,json=endDate,proto3" json:"end_date,omitempty"`
+	EndDate *EventDate `protobuf:"bytes,6,opt,name=end_date,json=endDate,proto3" json:"end_date,omitempty" xml:"EndDate"`
 }
 
 func (x *Event) Reset() {
@@ -888,11 +888,11 @@ type EventType struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"Namespace,attr"
-	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty" xml:"Namespace,attr"`
 	// @gotags: xml:"UserDefinedValue,attr"
-	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty"`
+	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty" xml:"UserDefinedValue,attr"`
 }
 
 func (x *EventType) Reset() {
@@ -954,29 +954,29 @@ type Focus struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"MetadataSourceReference"
-	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty"`
+	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty" xml:"MetadataSourceReference"`
 	// @gotags: xml:"FocusTrack"
-	FocusTrack *ResourceSummary `protobuf:"bytes,2,opt,name=focus_track,json=focusTrack,proto3" json:"focus_track,omitempty"`
+	FocusTrack *ResourceSummary `protobuf:"bytes,2,opt,name=focus_track,json=focusTrack,proto3" json:"focus_track,omitempty" xml:"FocusTrack"`
 	// @gotags: xml:"FocusRelease"
-	FocusRelease *ReleaseSummary `protobuf:"bytes,3,opt,name=focus_release,json=focusRelease,proto3" json:"focus_release,omitempty"`
+	FocusRelease *ReleaseSummary `protobuf:"bytes,3,opt,name=focus_release,json=focusRelease,proto3" json:"focus_release,omitempty" xml:"FocusRelease"`
 	// @gotags: xml:"FocusWork"
-	FocusWork *WorkSummary `protobuf:"bytes,4,opt,name=focus_work,json=focusWork,proto3" json:"focus_work,omitempty"`
+	FocusWork *WorkSummary `protobuf:"bytes,4,opt,name=focus_work,json=focusWork,proto3" json:"focus_work,omitempty" xml:"FocusWork"`
 	// @gotags: xml:"DisplayArtistName"
-	DisplayArtistName []*DisplayArtistNameWithPronunciation `protobuf:"bytes,5,rep,name=display_artist_name,json=displayArtistName,proto3" json:"display_artist_name,omitempty"`
+	DisplayArtistName []*DisplayArtistNameWithPronunciation `protobuf:"bytes,5,rep,name=display_artist_name,json=displayArtistName,proto3" json:"display_artist_name,omitempty" xml:"DisplayArtistName"`
 	// @gotags: xml:"DisplayArtist"
-	DisplayArtist []*PartyDescriptorWithPronunciation `protobuf:"bytes,6,rep,name=display_artist,json=displayArtist,proto3" json:"display_artist,omitempty"`
+	DisplayArtist []*PartyDescriptorWithPronunciation `protobuf:"bytes,6,rep,name=display_artist,json=displayArtist,proto3" json:"display_artist,omitempty" xml:"DisplayArtist"`
 	// @gotags: xml:"Writer"
-	Writer []*PartyDescriptorWithPronunciation `protobuf:"bytes,7,rep,name=writer,proto3" json:"writer,omitempty"`
+	Writer []*PartyDescriptorWithPronunciation `protobuf:"bytes,7,rep,name=writer,proto3" json:"writer,omitempty" xml:"Writer"`
 	// @gotags: xml:"SequenceNumber"
-	SequenceNumber int32 `protobuf:"varint,8,opt,name=sequence_number,json=sequenceNumber,proto3" json:"sequence_number,omitempty"`
+	SequenceNumber int32 `protobuf:"varint,8,opt,name=sequence_number,json=sequenceNumber,proto3" json:"sequence_number,omitempty" xml:"SequenceNumber"`
 	// @gotags: xml:"PeriodOfBeingFocus"
-	PeriodOfBeingFocus []*PeriodWithTime `protobuf:"bytes,9,rep,name=period_of_being_focus,json=periodOfBeingFocus,proto3" json:"period_of_being_focus,omitempty"`
+	PeriodOfBeingFocus []*PeriodWithTime `protobuf:"bytes,9,rep,name=period_of_being_focus,json=periodOfBeingFocus,proto3" json:"period_of_being_focus,omitempty" xml:"PeriodOfBeingFocus"`
 	// @gotags: xml:"TerritoryOfBeingFocusTrackDescription"
-	TerritoryOfBeingFocusTrackDescription []string `protobuf:"bytes,10,rep,name=territory_of_being_focus_track_description,json=territoryOfBeingFocusTrackDescription,proto3" json:"territory_of_being_focus_track_description,omitempty"`
+	TerritoryOfBeingFocusTrackDescription []string `protobuf:"bytes,10,rep,name=territory_of_being_focus_track_description,json=territoryOfBeingFocusTrackDescription,proto3" json:"territory_of_being_focus_track_description,omitempty" xml:"TerritoryOfBeingFocusTrackDescription"`
 	// @gotags: xml:"Comment"
-	Comment []*TextWithoutTerritory `protobuf:"bytes,11,rep,name=comment,proto3" json:"comment,omitempty"`
+	Comment []*TextWithoutTerritory `protobuf:"bytes,11,rep,name=comment,proto3" json:"comment,omitempty" xml:"Comment"`
 	// @gotags: xml:"IsDefault,attr"
-	IsDefault bool `protobuf:"varint,12,opt,name=is_default,json=isDefault,proto3" json:"is_default,omitempty"`
+	IsDefault bool `protobuf:"varint,12,opt,name=is_default,json=isDefault,proto3" json:"is_default,omitempty" xml:"IsDefault,attr"`
 }
 
 func (x *Focus) Reset() {
@@ -1101,11 +1101,11 @@ type Gender struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"MetadataSourceReference"
-	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty"`
+	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty" xml:"MetadataSourceReference"`
 	// @gotags: xml:"Value"
-	Value *GenderValue `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	Value *GenderValue `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty" xml:"Value"`
 	// @gotags: xml:"DoNotDisplay,attr"
-	DoNotDisplay bool `protobuf:"varint,3,opt,name=do_not_display,json=doNotDisplay,proto3" json:"do_not_display,omitempty"`
+	DoNotDisplay bool `protobuf:"varint,3,opt,name=do_not_display,json=doNotDisplay,proto3" json:"do_not_display,omitempty" xml:"DoNotDisplay,attr"`
 }
 
 func (x *Gender) Reset() {
@@ -1167,11 +1167,11 @@ type GenderValue struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"Namespace,attr"
-	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty" xml:"Namespace,attr"`
 	// @gotags: xml:"UserDefinedValue,attr"
-	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty"`
+	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty" xml:"UserDefinedValue,attr"`
 }
 
 func (x *GenderValue) Reset() {
@@ -1233,9 +1233,9 @@ type NameWithPronunciation struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"Name"
-	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty" xml:"Name"`
 	// @gotags: xml:"Pronunciation"
-	Pronunciation []*PronunciationForParty `protobuf:"bytes,2,rep,name=pronunciation,proto3" json:"pronunciation,omitempty"`
+	Pronunciation []*PronunciationForParty `protobuf:"bytes,2,rep,name=pronunciation,proto3" json:"pronunciation,omitempty" xml:"Pronunciation"`
 }
 
 func (x *NameWithPronunciation) Reset() {
@@ -1290,9 +1290,9 @@ type NameWithScriptCode struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"Name"
-	Name *Name `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Name *Name `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty" xml:"Name"`
 	// @gotags: xml:"Pronunciation"
-	Pronunciation []*PronunciationForParty `protobuf:"bytes,2,rep,name=pronunciation,proto3" json:"pronunciation,omitempty"`
+	Pronunciation []*PronunciationForParty `protobuf:"bytes,2,rep,name=pronunciation,proto3" json:"pronunciation,omitempty" xml:"Pronunciation"`
 }
 
 func (x *NameWithScriptCode) Reset() {
@@ -1347,9 +1347,9 @@ type Nationality struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"MetadataSourceReference"
-	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty"`
+	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty" xml:"MetadataSourceReference"`
 	// @gotags: xml:"Value"
-	Value *AllTerritoryCode `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	Value *AllTerritoryCode `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty" xml:"Value"`
 }
 
 func (x *Nationality) Reset() {
@@ -1404,49 +1404,49 @@ type Party struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"PartyReference"
-	PartyReference string `protobuf:"bytes,1,opt,name=party_reference,json=partyReference,proto3" json:"party_reference,omitempty"`
+	PartyReference string `protobuf:"bytes,1,opt,name=party_reference,json=partyReference,proto3" json:"party_reference,omitempty" xml:"PartyReference"`
 	// @gotags: xml:"PartyId"
-	PartyId []*DetailedPartyIdForParty `protobuf:"bytes,2,rep,name=party_id,json=partyId,proto3" json:"party_id,omitempty"`
+	PartyId []*DetailedPartyIdForParty `protobuf:"bytes,2,rep,name=party_id,json=partyId,proto3" json:"party_id,omitempty" xml:"PartyId"`
 	// @gotags: xml:"PartyName"
-	PartyName []*PartyName `protobuf:"bytes,3,rep,name=party_name,json=partyName,proto3" json:"party_name,omitempty"`
+	PartyName []*PartyName `protobuf:"bytes,3,rep,name=party_name,json=partyName,proto3" json:"party_name,omitempty" xml:"PartyName"`
 	// @gotags: xml:"PartyType"
-	PartyType *PartyType `protobuf:"bytes,4,opt,name=party_type,json=partyType,proto3" json:"party_type,omitempty"`
+	PartyType *PartyType `protobuf:"bytes,4,opt,name=party_type,json=partyType,proto3" json:"party_type,omitempty" xml:"PartyType"`
 	// @gotags: xml:"Event"
-	Event []*Event `protobuf:"bytes,5,rep,name=event,proto3" json:"event,omitempty"`
+	Event []*Event `protobuf:"bytes,5,rep,name=event,proto3" json:"event,omitempty" xml:"Event"`
 	// @gotags: xml:"RelatedParty"
-	RelatedParty []*RelatedParty `protobuf:"bytes,6,rep,name=related_party,json=relatedParty,proto3" json:"related_party,omitempty"`
+	RelatedParty []*RelatedParty `protobuf:"bytes,6,rep,name=related_party,json=relatedParty,proto3" json:"related_party,omitempty" xml:"RelatedParty"`
 	// @gotags: xml:"RelatedCreation"
-	RelatedCreation []*RelatedCreationForParty `protobuf:"bytes,7,rep,name=related_creation,json=relatedCreation,proto3" json:"related_creation,omitempty"`
+	RelatedCreation []*RelatedCreationForParty `protobuf:"bytes,7,rep,name=related_creation,json=relatedCreation,proto3" json:"related_creation,omitempty" xml:"RelatedCreation"`
 	// @gotags: xml:"Gender"
-	Gender *Gender `protobuf:"bytes,8,opt,name=gender,proto3" json:"gender,omitempty"`
+	Gender *Gender `protobuf:"bytes,8,opt,name=gender,proto3" json:"gender,omitempty" xml:"Gender"`
 	// @gotags: xml:"Nationality"
-	Nationality []*Nationality `protobuf:"bytes,9,rep,name=nationality,proto3" json:"nationality,omitempty"`
+	Nationality []*Nationality `protobuf:"bytes,9,rep,name=nationality,proto3" json:"nationality,omitempty" xml:"Nationality"`
 	// @gotags: xml:"PrimaryRole"
-	PrimaryRole *PrimaryRole `protobuf:"bytes,10,opt,name=primary_role,json=primaryRole,proto3" json:"primary_role,omitempty"`
+	PrimaryRole *PrimaryRole `protobuf:"bytes,10,opt,name=primary_role,json=primaryRole,proto3" json:"primary_role,omitempty" xml:"PrimaryRole"`
 	// @gotags: xml:"VocalRegister"
-	VocalRegister *VocalRegister `protobuf:"bytes,11,opt,name=vocal_register,json=vocalRegister,proto3" json:"vocal_register,omitempty"`
+	VocalRegister *VocalRegister `protobuf:"bytes,11,opt,name=vocal_register,json=vocalRegister,proto3" json:"vocal_register,omitempty" xml:"VocalRegister"`
 	// @gotags: xml:"Focus"
-	Focus []*Focus `protobuf:"bytes,12,rep,name=focus,proto3" json:"focus,omitempty"`
+	Focus []*Focus `protobuf:"bytes,12,rep,name=focus,proto3" json:"focus,omitempty" xml:"Focus"`
 	// @gotags: xml:"ArtistType"
-	ArtistType []*ArtistType `protobuf:"bytes,13,rep,name=artist_type,json=artistType,proto3" json:"artist_type,omitempty"`
+	ArtistType []*ArtistType `protobuf:"bytes,13,rep,name=artist_type,json=artistType,proto3" json:"artist_type,omitempty" xml:"ArtistType"`
 	// @gotags: xml:"ClassicalPeriod"
-	ClassicalPeriod *ClassicalPeriod `protobuf:"bytes,14,opt,name=classical_period,json=classicalPeriod,proto3" json:"classical_period,omitempty"`
+	ClassicalPeriod *ClassicalPeriod `protobuf:"bytes,14,opt,name=classical_period,json=classicalPeriod,proto3" json:"classical_period,omitempty" xml:"ClassicalPeriod"`
 	// @gotags: xml:"Epoch"
-	Epoch []*Epoch `protobuf:"bytes,15,rep,name=epoch,proto3" json:"epoch,omitempty"`
+	Epoch []*Epoch `protobuf:"bytes,15,rep,name=epoch,proto3" json:"epoch,omitempty" xml:"Epoch"`
 	// @gotags: xml:"ArtisticInfluence"
-	ArtisticInfluence []*ArtisticInfluence `protobuf:"bytes,16,rep,name=artistic_influence,json=artisticInfluence,proto3" json:"artistic_influence,omitempty"`
+	ArtisticInfluence []*ArtisticInfluence `protobuf:"bytes,16,rep,name=artistic_influence,json=artisticInfluence,proto3" json:"artistic_influence,omitempty" xml:"ArtisticInfluence"`
 	// @gotags: xml:"Award"
-	Award []*Award `protobuf:"bytes,17,rep,name=award,proto3" json:"award,omitempty"`
+	Award []*Award `protobuf:"bytes,17,rep,name=award,proto3" json:"award,omitempty" xml:"Award"`
 	// @gotags: xml:"Biography"
-	Biography []*Biography `protobuf:"bytes,18,rep,name=biography,proto3" json:"biography,omitempty"`
+	Biography []*Biography `protobuf:"bytes,18,rep,name=biography,proto3" json:"biography,omitempty" xml:"Biography"`
 	// @gotags: xml:"Image"
-	Image []*Image `protobuf:"bytes,19,rep,name=image,proto3" json:"image,omitempty"`
+	Image []*Image `protobuf:"bytes,19,rep,name=image,proto3" json:"image,omitempty" xml:"Image"`
 	// @gotags: xml:"SocialMediaURL"
-	SocialMediaURL *SocialMediaURL `protobuf:"bytes,20,opt,name=social_media_u_r_l,json=socialMediaURL,proto3" json:"social_media_u_r_l,omitempty"`
+	SocialMediaURL *SocialMediaURL `protobuf:"bytes,20,opt,name=social_media_u_r_l,json=socialMediaURL,proto3" json:"social_media_u_r_l,omitempty" xml:"SocialMediaURL"`
 	// @gotags: xml:"CommentaryNote"
-	CommentaryNote []*CommentaryNote `protobuf:"bytes,21,rep,name=commentary_note,json=commentaryNote,proto3" json:"commentary_note,omitempty"`
+	CommentaryNote []*CommentaryNote `protobuf:"bytes,21,rep,name=commentary_note,json=commentaryNote,proto3" json:"commentary_note,omitempty" xml:"CommentaryNote"`
 	// @gotags: xml:"LanguageAndScriptCode,attr"
-	LanguageAndScriptCode string `protobuf:"bytes,22,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty"`
+	LanguageAndScriptCode string `protobuf:"bytes,22,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty" xml:"LanguageAndScriptCode,attr"`
 }
 
 func (x *Party) Reset() {
@@ -1641,9 +1641,9 @@ type PartyDescriptorForEntry struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"PartyId"
-	PartyId *DetailedPartyId `protobuf:"bytes,1,opt,name=party_id,json=partyId,proto3" json:"party_id,omitempty"`
+	PartyId *DetailedPartyId `protobuf:"bytes,1,opt,name=party_id,json=partyId,proto3" json:"party_id,omitempty" xml:"PartyId"`
 	// @gotags: xml:"PartyName"
-	PartyName string `protobuf:"bytes,2,opt,name=party_name,json=partyName,proto3" json:"party_name,omitempty"`
+	PartyName string `protobuf:"bytes,2,opt,name=party_name,json=partyName,proto3" json:"party_name,omitempty" xml:"PartyName"`
 }
 
 func (x *PartyDescriptorForEntry) Reset() {
@@ -1698,7 +1698,7 @@ type PartyList struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"Party"
-	Party []*Party `protobuf:"bytes,1,rep,name=party,proto3" json:"party,omitempty"`
+	Party []*Party `protobuf:"bytes,1,rep,name=party,proto3" json:"party,omitempty" xml:"Party"`
 }
 
 func (x *PartyList) Reset() {
@@ -1746,49 +1746,49 @@ type PartyName struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"MetadataSourceReference"
-	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty"`
+	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty" xml:"MetadataSourceReference"`
 	// @gotags: xml:"NameId"
-	NameId []*NameId `protobuf:"bytes,2,rep,name=name_id,json=nameId,proto3" json:"name_id,omitempty"`
+	NameId []*NameId `protobuf:"bytes,2,rep,name=name_id,json=nameId,proto3" json:"name_id,omitempty" xml:"NameId"`
 	// @gotags: xml:"PartyNameType"
-	PartyNameType []*PartyNameType `protobuf:"bytes,3,rep,name=party_name_type,json=partyNameType,proto3" json:"party_name_type,omitempty"`
+	PartyNameType []*PartyNameType `protobuf:"bytes,3,rep,name=party_name_type,json=partyNameType,proto3" json:"party_name_type,omitempty" xml:"PartyNameType"`
 	// @gotags: xml:"ReasonForNameChange"
-	ReasonForNameChange *ReasonForNameChange `protobuf:"bytes,4,opt,name=reason_for_name_change,json=reasonForNameChange,proto3" json:"reason_for_name_change,omitempty"`
+	ReasonForNameChange *ReasonForNameChange `protobuf:"bytes,4,opt,name=reason_for_name_change,json=reasonForNameChange,proto3" json:"reason_for_name_change,omitempty" xml:"ReasonForNameChange"`
 	// @gotags: xml:"PartyNamePurpose"
-	PartyNamePurpose []*PartyNamePurpose `protobuf:"bytes,5,rep,name=party_name_purpose,json=partyNamePurpose,proto3" json:"party_name_purpose,omitempty"`
+	PartyNamePurpose []*PartyNamePurpose `protobuf:"bytes,5,rep,name=party_name_purpose,json=partyNamePurpose,proto3" json:"party_name_purpose,omitempty" xml:"PartyNamePurpose"`
 	// @gotags: xml:"PartyNameFormat"
-	PartyNameFormat []*PartyNameFormat `protobuf:"bytes,6,rep,name=party_name_format,json=partyNameFormat,proto3" json:"party_name_format,omitempty"`
+	PartyNameFormat []*PartyNameFormat `protobuf:"bytes,6,rep,name=party_name_format,json=partyNameFormat,proto3" json:"party_name_format,omitempty" xml:"PartyNameFormat"`
 	// @gotags: xml:"FullName"
-	FullName *NameWithScriptCode `protobuf:"bytes,7,opt,name=full_name,json=fullName,proto3" json:"full_name,omitempty"`
+	FullName *NameWithScriptCode `protobuf:"bytes,7,opt,name=full_name,json=fullName,proto3" json:"full_name,omitempty" xml:"FullName"`
 	// @gotags: xml:"FullNameAsciiTranscribed"
-	FullNameAsciiTranscribed *NameWithPronunciation `protobuf:"bytes,8,opt,name=full_name_ascii_transcribed,json=fullNameAsciiTranscribed,proto3" json:"full_name_ascii_transcribed,omitempty"`
+	FullNameAsciiTranscribed *NameWithPronunciation `protobuf:"bytes,8,opt,name=full_name_ascii_transcribed,json=fullNameAsciiTranscribed,proto3" json:"full_name_ascii_transcribed,omitempty" xml:"FullNameAsciiTranscribed"`
 	// @gotags: xml:"FullNameIndexed"
-	FullNameIndexed *NameWithScriptCode `protobuf:"bytes,9,opt,name=full_name_indexed,json=fullNameIndexed,proto3" json:"full_name_indexed,omitempty"`
+	FullNameIndexed *NameWithScriptCode `protobuf:"bytes,9,opt,name=full_name_indexed,json=fullNameIndexed,proto3" json:"full_name_indexed,omitempty" xml:"FullNameIndexed"`
 	// @gotags: xml:"TitlesBeforeNames"
-	TitlesBeforeNames string `protobuf:"bytes,10,opt,name=titles_before_names,json=titlesBeforeNames,proto3" json:"titles_before_names,omitempty"`
+	TitlesBeforeNames string `protobuf:"bytes,10,opt,name=titles_before_names,json=titlesBeforeNames,proto3" json:"titles_before_names,omitempty" xml:"TitlesBeforeNames"`
 	// @gotags: xml:"NamesBeforeKeyName"
-	NamesBeforeKeyName *NameWithScriptCode `protobuf:"bytes,11,opt,name=names_before_key_name,json=namesBeforeKeyName,proto3" json:"names_before_key_name,omitempty"`
+	NamesBeforeKeyName *NameWithScriptCode `protobuf:"bytes,11,opt,name=names_before_key_name,json=namesBeforeKeyName,proto3" json:"names_before_key_name,omitempty" xml:"NamesBeforeKeyName"`
 	// @gotags: xml:"KeyName"
-	KeyName *NameWithScriptCode `protobuf:"bytes,12,opt,name=key_name,json=keyName,proto3" json:"key_name,omitempty"`
+	KeyName *NameWithScriptCode `protobuf:"bytes,12,opt,name=key_name,json=keyName,proto3" json:"key_name,omitempty" xml:"KeyName"`
 	// @gotags: xml:"NamesAfterKeyName"
-	NamesAfterKeyName *NameWithScriptCode `protobuf:"bytes,13,opt,name=names_after_key_name,json=namesAfterKeyName,proto3" json:"names_after_key_name,omitempty"`
+	NamesAfterKeyName *NameWithScriptCode `protobuf:"bytes,13,opt,name=names_after_key_name,json=namesAfterKeyName,proto3" json:"names_after_key_name,omitempty" xml:"NamesAfterKeyName"`
 	// @gotags: xml:"TitlesAfterNames"
-	TitlesAfterNames string `protobuf:"bytes,14,opt,name=titles_after_names,json=titlesAfterNames,proto3" json:"titles_after_names,omitempty"`
+	TitlesAfterNames string `protobuf:"bytes,14,opt,name=titles_after_names,json=titlesAfterNames,proto3" json:"titles_after_names,omitempty" xml:"TitlesAfterNames"`
 	// @gotags: xml:"ShortName"
-	ShortName []*NameWithScriptCode `protobuf:"bytes,15,rep,name=short_name,json=shortName,proto3" json:"short_name,omitempty"`
+	ShortName []*NameWithScriptCode `protobuf:"bytes,15,rep,name=short_name,json=shortName,proto3" json:"short_name,omitempty" xml:"ShortName"`
 	// @gotags: xml:"AbbreviatedName"
-	AbbreviatedName []*NameWithScriptCode `protobuf:"bytes,16,rep,name=abbreviated_name,json=abbreviatedName,proto3" json:"abbreviated_name,omitempty"`
+	AbbreviatedName []*NameWithScriptCode `protobuf:"bytes,16,rep,name=abbreviated_name,json=abbreviatedName,proto3" json:"abbreviated_name,omitempty" xml:"AbbreviatedName"`
 	// @gotags: xml:"ValidityPeriod"
-	ValidityPeriod []*ValidityPeriod `protobuf:"bytes,17,rep,name=validity_period,json=validityPeriod,proto3" json:"validity_period,omitempty"`
+	ValidityPeriod []*ValidityPeriod `protobuf:"bytes,17,rep,name=validity_period,json=validityPeriod,proto3" json:"validity_period,omitempty" xml:"ValidityPeriod"`
 	// @gotags: xml:"RelatedCreation"
-	RelatedCreation []*RelatedCreationForParty `protobuf:"bytes,18,rep,name=related_creation,json=relatedCreation,proto3" json:"related_creation,omitempty"`
+	RelatedCreation []*RelatedCreationForParty `protobuf:"bytes,18,rep,name=related_creation,json=relatedCreation,proto3" json:"related_creation,omitempty" xml:"RelatedCreation"`
 	// @gotags: xml:"LanguageAndScriptCode,attr"
-	LanguageAndScriptCode string `protobuf:"bytes,19,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty"`
+	LanguageAndScriptCode string `protobuf:"bytes,19,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty" xml:"LanguageAndScriptCode,attr"`
 	// @gotags: xml:"ApplicableTerritoryCode,attr"
-	ApplicableTerritoryCode string `protobuf:"bytes,20,opt,name=applicable_territory_code,json=applicableTerritoryCode,proto3" json:"applicable_territory_code,omitempty"`
+	ApplicableTerritoryCode string `protobuf:"bytes,20,opt,name=applicable_territory_code,json=applicableTerritoryCode,proto3" json:"applicable_territory_code,omitempty" xml:"ApplicableTerritoryCode,attr"`
 	// @gotags: xml:"IsDefault,attr"
-	IsDefault bool `protobuf:"varint,21,opt,name=is_default,json=isDefault,proto3" json:"is_default,omitempty"`
+	IsDefault bool `protobuf:"varint,21,opt,name=is_default,json=isDefault,proto3" json:"is_default,omitempty" xml:"IsDefault,attr"`
 	// @gotags: xml:"IsCanonical,attr"
-	IsCanonical bool `protobuf:"varint,22,opt,name=is_canonical,json=isCanonical,proto3" json:"is_canonical,omitempty"`
+	IsCanonical bool `protobuf:"varint,22,opt,name=is_canonical,json=isCanonical,proto3" json:"is_canonical,omitempty" xml:"IsCanonical,attr"`
 }
 
 func (x *PartyName) Reset() {
@@ -1983,21 +1983,21 @@ type PartyNameForRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"FullName"
-	FullName *Name `protobuf:"bytes,1,opt,name=full_name,json=fullName,proto3" json:"full_name,omitempty"`
+	FullName *Name `protobuf:"bytes,1,opt,name=full_name,json=fullName,proto3" json:"full_name,omitempty" xml:"FullName"`
 	// @gotags: xml:"FullNameAsciiTranscribed"
-	FullNameAsciiTranscribed string `protobuf:"bytes,2,opt,name=full_name_ascii_transcribed,json=fullNameAsciiTranscribed,proto3" json:"full_name_ascii_transcribed,omitempty"`
+	FullNameAsciiTranscribed string `protobuf:"bytes,2,opt,name=full_name_ascii_transcribed,json=fullNameAsciiTranscribed,proto3" json:"full_name_ascii_transcribed,omitempty" xml:"FullNameAsciiTranscribed"`
 	// @gotags: xml:"FullNameIndexed"
-	FullNameIndexed *Name `protobuf:"bytes,3,opt,name=full_name_indexed,json=fullNameIndexed,proto3" json:"full_name_indexed,omitempty"`
+	FullNameIndexed *Name `protobuf:"bytes,3,opt,name=full_name_indexed,json=fullNameIndexed,proto3" json:"full_name_indexed,omitempty" xml:"FullNameIndexed"`
 	// @gotags: xml:"NamesBeforeKeyName"
-	NamesBeforeKeyName *Name `protobuf:"bytes,4,opt,name=names_before_key_name,json=namesBeforeKeyName,proto3" json:"names_before_key_name,omitempty"`
+	NamesBeforeKeyName *Name `protobuf:"bytes,4,opt,name=names_before_key_name,json=namesBeforeKeyName,proto3" json:"names_before_key_name,omitempty" xml:"NamesBeforeKeyName"`
 	// @gotags: xml:"KeyName"
-	KeyName *Name `protobuf:"bytes,5,opt,name=key_name,json=keyName,proto3" json:"key_name,omitempty"`
+	KeyName *Name `protobuf:"bytes,5,opt,name=key_name,json=keyName,proto3" json:"key_name,omitempty" xml:"KeyName"`
 	// @gotags: xml:"NamesAfterKeyName"
-	NamesAfterKeyName *Name `protobuf:"bytes,6,opt,name=names_after_key_name,json=namesAfterKeyName,proto3" json:"names_after_key_name,omitempty"`
+	NamesAfterKeyName *Name `protobuf:"bytes,6,opt,name=names_after_key_name,json=namesAfterKeyName,proto3" json:"names_after_key_name,omitempty" xml:"NamesAfterKeyName"`
 	// @gotags: xml:"AbbreviatedName"
-	AbbreviatedName *Name `protobuf:"bytes,7,opt,name=abbreviated_name,json=abbreviatedName,proto3" json:"abbreviated_name,omitempty"`
+	AbbreviatedName *Name `protobuf:"bytes,7,opt,name=abbreviated_name,json=abbreviatedName,proto3" json:"abbreviated_name,omitempty" xml:"AbbreviatedName"`
 	// @gotags: xml:"LanguageAndScriptCode,attr"
-	LanguageAndScriptCode string `protobuf:"bytes,8,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty"`
+	LanguageAndScriptCode string `protobuf:"bytes,8,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty" xml:"LanguageAndScriptCode,attr"`
 }
 
 func (x *PartyNameForRequest) Reset() {
@@ -2094,11 +2094,11 @@ type PartyNameFormat struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"Namespace,attr"
-	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty" xml:"Namespace,attr"`
 	// @gotags: xml:"UserDefinedValue,attr"
-	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty"`
+	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty" xml:"UserDefinedValue,attr"`
 }
 
 func (x *PartyNameFormat) Reset() {
@@ -2160,11 +2160,11 @@ type PartyNamePurpose struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"Namespace,attr"
-	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty" xml:"Namespace,attr"`
 	// @gotags: xml:"UserDefinedValue,attr"
-	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty"`
+	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty" xml:"UserDefinedValue,attr"`
 }
 
 func (x *PartyNamePurpose) Reset() {
@@ -2226,11 +2226,11 @@ type PartyNameType struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"Namespace,attr"
-	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty" xml:"Namespace,attr"`
 	// @gotags: xml:"UserDefinedValue,attr"
-	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty"`
+	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty" xml:"UserDefinedValue,attr"`
 }
 
 func (x *PartyNameType) Reset() {
@@ -2292,11 +2292,11 @@ type PartyRelationshipType struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"Namespace,attr"
-	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty" xml:"Namespace,attr"`
 	// @gotags: xml:"UserDefinedValue,attr"
-	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty"`
+	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty" xml:"UserDefinedValue,attr"`
 }
 
 func (x *PartyRelationshipType) Reset() {
@@ -2358,9 +2358,9 @@ type PartyType struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"MetadataSourceReference"
-	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty"`
+	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty" xml:"MetadataSourceReference"`
 	// @gotags: xml:"Value"
-	Value *PartyTypeValue `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	Value *PartyTypeValue `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty" xml:"Value"`
 }
 
 func (x *PartyType) Reset() {
@@ -2415,11 +2415,11 @@ type PartyTypeValue struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"Namespace,attr"
-	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty" xml:"Namespace,attr"`
 	// @gotags: xml:"UserDefinedValue,attr"
-	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty"`
+	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty" xml:"UserDefinedValue,attr"`
 }
 
 func (x *PartyTypeValue) Reset() {
@@ -2481,9 +2481,9 @@ type PrimaryRole struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"MetadataSourceReference"
-	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty"`
+	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty" xml:"MetadataSourceReference"`
 	// @gotags: xml:"Value"
-	Value *ContributorRole `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	Value *ContributorRole `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty" xml:"Value"`
 }
 
 func (x *PrimaryRole) Reset() {
@@ -2538,19 +2538,19 @@ type PronunciationForParty struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"IsCanonical,attr"
-	IsCanonical bool `protobuf:"varint,2,opt,name=is_canonical,json=isCanonical,proto3" json:"is_canonical,omitempty"`
+	IsCanonical bool `protobuf:"varint,2,opt,name=is_canonical,json=isCanonical,proto3" json:"is_canonical,omitempty" xml:"IsCanonical,attr"`
 	// @gotags: xml:"IsMispronounced,attr"
-	IsMispronounced bool `protobuf:"varint,3,opt,name=is_mispronounced,json=isMispronounced,proto3" json:"is_mispronounced,omitempty"`
+	IsMispronounced bool `protobuf:"varint,3,opt,name=is_mispronounced,json=isMispronounced,proto3" json:"is_mispronounced,omitempty" xml:"IsMispronounced,attr"`
 	// @gotags: xml:"LanguageCode,attr"
-	LanguageCode string `protobuf:"bytes,4,opt,name=language_code,json=languageCode,proto3" json:"language_code,omitempty"`
+	LanguageCode string `protobuf:"bytes,4,opt,name=language_code,json=languageCode,proto3" json:"language_code,omitempty" xml:"LanguageCode,attr"`
 	// @gotags: xml:"EncodingType,attr"
-	EncodingType string `protobuf:"bytes,5,opt,name=encoding_type,json=encodingType,proto3" json:"encoding_type,omitempty"`
+	EncodingType string `protobuf:"bytes,5,opt,name=encoding_type,json=encodingType,proto3" json:"encoding_type,omitempty" xml:"EncodingType,attr"`
 	// @gotags: xml:"EncodingNamespace,attr"
-	EncodingNamespace string `protobuf:"bytes,6,opt,name=encoding_namespace,json=encodingNamespace,proto3" json:"encoding_namespace,omitempty"`
+	EncodingNamespace string `protobuf:"bytes,6,opt,name=encoding_namespace,json=encodingNamespace,proto3" json:"encoding_namespace,omitempty" xml:"EncodingNamespace,attr"`
 	// @gotags: xml:"EncodingUserDefinedValue,attr"
-	EncodingUserDefinedValue string `protobuf:"bytes,7,opt,name=encoding_user_defined_value,json=encodingUserDefinedValue,proto3" json:"encoding_user_defined_value,omitempty"`
+	EncodingUserDefinedValue string `protobuf:"bytes,7,opt,name=encoding_user_defined_value,json=encodingUserDefinedValue,proto3" json:"encoding_user_defined_value,omitempty" xml:"EncodingUserDefinedValue,attr"`
 }
 
 func (x *PronunciationForParty) Reset() {
@@ -2640,11 +2640,11 @@ type ReasonForNameChange struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"Namespace,attr"
-	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty" xml:"Namespace,attr"`
 	// @gotags: xml:"UserDefinedValue,attr"
-	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty"`
+	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty" xml:"UserDefinedValue,attr"`
 }
 
 func (x *ReasonForNameChange) Reset() {
@@ -2706,31 +2706,31 @@ type RelatedCreationForParty struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"MetadataSourceReference"
-	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty"`
+	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty" xml:"MetadataSourceReference"`
 	// @gotags: xml:"CreationType"
-	CreationType string `protobuf:"bytes,2,opt,name=creation_type,json=creationType,proto3" json:"creation_type,omitempty"`
+	CreationType string `protobuf:"bytes,2,opt,name=creation_type,json=creationType,proto3" json:"creation_type,omitempty" xml:"CreationType"`
 	// @gotags: xml:"Contribution"
-	Contribution *Contribution `protobuf:"bytes,3,opt,name=contribution,proto3" json:"contribution,omitempty"`
+	Contribution *Contribution `protobuf:"bytes,3,opt,name=contribution,proto3" json:"contribution,omitempty" xml:"Contribution"`
 	// @gotags: xml:"RelationshipDescription"
-	RelationshipDescription []*Description `protobuf:"bytes,4,rep,name=relationship_description,json=relationshipDescription,proto3" json:"relationship_description,omitempty"`
+	RelationshipDescription []*Description `protobuf:"bytes,4,rep,name=relationship_description,json=relationshipDescription,proto3" json:"relationship_description,omitempty" xml:"RelationshipDescription"`
 	// @gotags: xml:"Contract"
-	Contract string `protobuf:"bytes,5,opt,name=contract,proto3" json:"contract,omitempty"`
+	Contract string `protobuf:"bytes,5,opt,name=contract,proto3" json:"contract,omitempty" xml:"Contract"`
 	// @gotags: xml:"ReleaseId"
-	ReleaseId *ReleaseId `protobuf:"bytes,6,opt,name=release_id,json=releaseId,proto3" json:"release_id,omitempty"`
+	ReleaseId *ReleaseId `protobuf:"bytes,6,opt,name=release_id,json=releaseId,proto3" json:"release_id,omitempty" xml:"ReleaseId"`
 	// @gotags: xml:"ResourceId"
-	ResourceId *ResourceIdWithoutFlag `protobuf:"bytes,7,opt,name=resource_id,json=resourceId,proto3" json:"resource_id,omitempty"`
+	ResourceId *ResourceIdWithoutFlag `protobuf:"bytes,7,opt,name=resource_id,json=resourceId,proto3" json:"resource_id,omitempty" xml:"ResourceId"`
 	// @gotags: xml:"MusicalWorkId"
-	MusicalWorkId *MusicalWorkIdWithoutFlag `protobuf:"bytes,8,opt,name=musical_work_id,json=musicalWorkId,proto3" json:"musical_work_id,omitempty"`
+	MusicalWorkId *MusicalWorkIdWithoutFlag `protobuf:"bytes,8,opt,name=musical_work_id,json=musicalWorkId,proto3" json:"musical_work_id,omitempty" xml:"MusicalWorkId"`
 	// @gotags: xml:"CreationDescription"
-	CreationDescription *CreationDescription `protobuf:"bytes,9,opt,name=creation_description,json=creationDescription,proto3" json:"creation_description,omitempty"`
+	CreationDescription *CreationDescription `protobuf:"bytes,9,opt,name=creation_description,json=creationDescription,proto3" json:"creation_description,omitempty" xml:"CreationDescription"`
 	// @gotags: xml:"IsFalse,attr"
-	IsFalse bool `protobuf:"varint,10,opt,name=is_false,json=isFalse,proto3" json:"is_false,omitempty"`
+	IsFalse bool `protobuf:"varint,10,opt,name=is_false,json=isFalse,proto3" json:"is_false,omitempty" xml:"IsFalse,attr"`
 	// @gotags: xml:"IsConfidential,attr"
-	IsConfidential bool `protobuf:"varint,11,opt,name=is_confidential,json=isConfidential,proto3" json:"is_confidential,omitempty"`
+	IsConfidential bool `protobuf:"varint,11,opt,name=is_confidential,json=isConfidential,proto3" json:"is_confidential,omitempty" xml:"IsConfidential,attr"`
 	// @gotags: xml:"IsFirstCreation,attr"
-	IsFirstCreation bool `protobuf:"varint,12,opt,name=is_first_creation,json=isFirstCreation,proto3" json:"is_first_creation,omitempty"`
+	IsFirstCreation bool `protobuf:"varint,12,opt,name=is_first_creation,json=isFirstCreation,proto3" json:"is_first_creation,omitempty" xml:"IsFirstCreation,attr"`
 	// @gotags: xml:"IsLastCreation,attr"
-	IsLastCreation bool `protobuf:"varint,13,opt,name=is_last_creation,json=isLastCreation,proto3" json:"is_last_creation,omitempty"`
+	IsLastCreation bool `protobuf:"varint,13,opt,name=is_last_creation,json=isLastCreation,proto3" json:"is_last_creation,omitempty" xml:"IsLastCreation,attr"`
 }
 
 func (x *RelatedCreationForParty) Reset() {
@@ -2862,29 +2862,29 @@ type RelatedParty struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"MetadataSourceReference"
-	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty"`
+	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty" xml:"MetadataSourceReference"`
 	// @gotags: xml:"PartyRelationshipType"
-	PartyRelationshipType *PartyRelationshipType `protobuf:"bytes,2,opt,name=party_relationship_type,json=partyRelationshipType,proto3" json:"party_relationship_type,omitempty"`
+	PartyRelationshipType *PartyRelationshipType `protobuf:"bytes,2,opt,name=party_relationship_type,json=partyRelationshipType,proto3" json:"party_relationship_type,omitempty" xml:"PartyRelationshipType"`
 	// @gotags: xml:"BusinessPurpose"
-	BusinessPurpose string `protobuf:"bytes,3,opt,name=business_purpose,json=businessPurpose,proto3" json:"business_purpose,omitempty"`
+	BusinessPurpose string `protobuf:"bytes,3,opt,name=business_purpose,json=businessPurpose,proto3" json:"business_purpose,omitempty" xml:"BusinessPurpose"`
 	// @gotags: xml:"Description"
-	Description []*Description `protobuf:"bytes,4,rep,name=description,proto3" json:"description,omitempty"`
+	Description []*Description `protobuf:"bytes,4,rep,name=description,proto3" json:"description,omitempty" xml:"Description"`
 	// @gotags: xml:"Contract"
-	Contract string `protobuf:"bytes,5,opt,name=contract,proto3" json:"contract,omitempty"`
+	Contract string `protobuf:"bytes,5,opt,name=contract,proto3" json:"contract,omitempty" xml:"Contract"`
 	// @gotags: xml:"ValidityPeriod"
-	ValidityPeriod []*ValidityPeriod `protobuf:"bytes,6,rep,name=validity_period,json=validityPeriod,proto3" json:"validity_period,omitempty"`
+	ValidityPeriod []*ValidityPeriod `protobuf:"bytes,6,rep,name=validity_period,json=validityPeriod,proto3" json:"validity_period,omitempty" xml:"ValidityPeriod"`
 	// @gotags: xml:"RelatedCreation"
-	RelatedCreation []*RelatedCreationForParty `protobuf:"bytes,7,rep,name=related_creation,json=relatedCreation,proto3" json:"related_creation,omitempty"`
+	RelatedCreation []*RelatedCreationForParty `protobuf:"bytes,7,rep,name=related_creation,json=relatedCreation,proto3" json:"related_creation,omitempty" xml:"RelatedCreation"`
 	// @gotags: xml:"PartyRelatedPartyReference"
-	PartyRelatedPartyReference string `protobuf:"bytes,8,opt,name=party_related_party_reference,json=partyRelatedPartyReference,proto3" json:"party_related_party_reference,omitempty"`
+	PartyRelatedPartyReference string `protobuf:"bytes,8,opt,name=party_related_party_reference,json=partyRelatedPartyReference,proto3" json:"party_related_party_reference,omitempty" xml:"PartyRelatedPartyReference"`
 	// @gotags: xml:"PartyId"
-	PartyId *DetailedPartyIdForParty `protobuf:"bytes,9,opt,name=party_id,json=partyId,proto3" json:"party_id,omitempty"`
+	PartyId *DetailedPartyIdForParty `protobuf:"bytes,9,opt,name=party_id,json=partyId,proto3" json:"party_id,omitempty" xml:"PartyId"`
 	// @gotags: xml:"PartyName"
-	PartyName *PartyName `protobuf:"bytes,10,opt,name=party_name,json=partyName,proto3" json:"party_name,omitempty"`
+	PartyName *PartyName `protobuf:"bytes,10,opt,name=party_name,json=partyName,proto3" json:"party_name,omitempty" xml:"PartyName"`
 	// @gotags: xml:"IsFalse,attr"
-	IsFalse bool `protobuf:"varint,11,opt,name=is_false,json=isFalse,proto3" json:"is_false,omitempty"`
+	IsFalse bool `protobuf:"varint,11,opt,name=is_false,json=isFalse,proto3" json:"is_false,omitempty" xml:"IsFalse,attr"`
 	// @gotags: xml:"IsConfidential,attr"
-	IsConfidential bool `protobuf:"varint,12,opt,name=is_confidential,json=isConfidential,proto3" json:"is_confidential,omitempty"`
+	IsConfidential bool `protobuf:"varint,12,opt,name=is_confidential,json=isConfidential,proto3" json:"is_confidential,omitempty" xml:"IsConfidential,attr"`
 }
 
 func (x *RelatedParty) Reset() {
@@ -3009,9 +3009,9 @@ type ReleaseForRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"ReleaseId"
-	ReleaseId *ReleaseId `protobuf:"bytes,1,opt,name=release_id,json=releaseId,proto3" json:"release_id,omitempty"`
+	ReleaseId *ReleaseId `protobuf:"bytes,1,opt,name=release_id,json=releaseId,proto3" json:"release_id,omitempty" xml:"ReleaseId"`
 	// @gotags: xml:"ReleaseTitle"
-	ReleaseTitle *ReleaseTitle `protobuf:"bytes,2,opt,name=release_title,json=releaseTitle,proto3" json:"release_title,omitempty"`
+	ReleaseTitle *ReleaseTitle `protobuf:"bytes,2,opt,name=release_title,json=releaseTitle,proto3" json:"release_title,omitempty" xml:"ReleaseTitle"`
 }
 
 func (x *ReleaseForRequest) Reset() {
@@ -3066,17 +3066,17 @@ type RequestedParty struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"Role"
-	Role []*ContributorRole `protobuf:"bytes,1,rep,name=role,proto3" json:"role,omitempty"`
+	Role []*ContributorRole `protobuf:"bytes,1,rep,name=role,proto3" json:"role,omitempty" xml:"Role"`
 	// @gotags: xml:"Release"
-	Release []*ReleaseForRequest `protobuf:"bytes,2,rep,name=release,proto3" json:"release,omitempty"`
+	Release []*ReleaseForRequest `protobuf:"bytes,2,rep,name=release,proto3" json:"release,omitempty" xml:"Release"`
 	// @gotags: xml:"Resource"
-	Resource []*ResourceForRequest `protobuf:"bytes,3,rep,name=resource,proto3" json:"resource,omitempty"`
+	Resource []*ResourceForRequest `protobuf:"bytes,3,rep,name=resource,proto3" json:"resource,omitempty" xml:"Resource"`
 	// @gotags: xml:"Work"
-	Work []*WorkForRequest `protobuf:"bytes,4,rep,name=work,proto3" json:"work,omitempty"`
+	Work []*WorkForRequest `protobuf:"bytes,4,rep,name=work,proto3" json:"work,omitempty" xml:"Work"`
 	// @gotags: xml:"PartyId"
-	PartyId *DetailedPartyId `protobuf:"bytes,5,opt,name=party_id,json=partyId,proto3" json:"party_id,omitempty"`
+	PartyId *DetailedPartyId `protobuf:"bytes,5,opt,name=party_id,json=partyId,proto3" json:"party_id,omitempty" xml:"PartyId"`
 	// @gotags: xml:"PartyName"
-	PartyName *PartyNameForRequest `protobuf:"bytes,6,opt,name=party_name,json=partyName,proto3" json:"party_name,omitempty"`
+	PartyName *PartyNameForRequest `protobuf:"bytes,6,opt,name=party_name,json=partyName,proto3" json:"party_name,omitempty" xml:"PartyName"`
 }
 
 func (x *RequestedParty) Reset() {
@@ -3159,11 +3159,11 @@ type ResourceForRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"ResourceId"
-	ResourceId *ResourceIdWithoutFlag `protobuf:"bytes,1,opt,name=resource_id,json=resourceId,proto3" json:"resource_id,omitempty"`
+	ResourceId *ResourceIdWithoutFlag `protobuf:"bytes,1,opt,name=resource_id,json=resourceId,proto3" json:"resource_id,omitempty" xml:"ResourceId"`
 	// @gotags: xml:"ResourceTitle"
-	ResourceTitle *ResourceTitle `protobuf:"bytes,2,opt,name=resource_title,json=resourceTitle,proto3" json:"resource_title,omitempty"`
+	ResourceTitle *ResourceTitle `protobuf:"bytes,2,opt,name=resource_title,json=resourceTitle,proto3" json:"resource_title,omitempty" xml:"ResourceTitle"`
 	// @gotags: xml:"ResourceType"
-	ResourceType string `protobuf:"bytes,3,opt,name=resource_type,json=resourceType,proto3" json:"resource_type,omitempty"`
+	ResourceType string `protobuf:"bytes,3,opt,name=resource_type,json=resourceType,proto3" json:"resource_type,omitempty" xml:"ResourceType"`
 }
 
 func (x *ResourceForRequest) Reset() {
@@ -3225,11 +3225,11 @@ type SocialMediaURL struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"LanguageCode,attr"
-	LanguageCode string `protobuf:"bytes,2,opt,name=language_code,json=languageCode,proto3" json:"language_code,omitempty"`
+	LanguageCode string `protobuf:"bytes,2,opt,name=language_code,json=languageCode,proto3" json:"language_code,omitempty" xml:"LanguageCode,attr"`
 	// @gotags: xml:"ApplicableTerritoryCode,attr"
-	ApplicableTerritoryCode string `protobuf:"bytes,3,opt,name=applicable_territory_code,json=applicableTerritoryCode,proto3" json:"applicable_territory_code,omitempty"`
+	ApplicableTerritoryCode string `protobuf:"bytes,3,opt,name=applicable_territory_code,json=applicableTerritoryCode,proto3" json:"applicable_territory_code,omitempty" xml:"ApplicableTerritoryCode,attr"`
 }
 
 func (x *SocialMediaURL) Reset() {
@@ -3291,9 +3291,9 @@ type WorkForRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"WorkId"
-	WorkId *MusicalWorkIdWithoutFlag `protobuf:"bytes,1,opt,name=work_id,json=workId,proto3" json:"work_id,omitempty"`
+	WorkId *MusicalWorkIdWithoutFlag `protobuf:"bytes,1,opt,name=work_id,json=workId,proto3" json:"work_id,omitempty" xml:"WorkId"`
 	// @gotags: xml:"WorkTitle"
-	WorkTitle *WorkTitle `protobuf:"bytes,2,opt,name=work_title,json=workTitle,proto3" json:"work_title,omitempty"`
+	WorkTitle *WorkTitle `protobuf:"bytes,2,opt,name=work_title,json=workTitle,proto3" json:"work_title,omitempty" xml:"WorkTitle"`
 }
 
 func (x *WorkForRequest) Reset() {
@@ -3348,11 +3348,11 @@ type Category struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"term,attr"
-	Term string `protobuf:"bytes,1,opt,name=term,proto3" json:"term,omitempty"`
+	Term string `protobuf:"bytes,1,opt,name=term,proto3" json:"term,omitempty" xml:"term,attr"`
 	// @gotags: xml:"scheme,attr"
-	Scheme string `protobuf:"bytes,2,opt,name=scheme,proto3" json:"scheme,omitempty"`
+	Scheme string `protobuf:"bytes,2,opt,name=scheme,proto3" json:"scheme,omitempty" xml:"scheme,attr"`
 	// @gotags: xml:"label,attr"
-	Label string `protobuf:"bytes,3,opt,name=label,proto3" json:"label,omitempty"`
+	Label string `protobuf:"bytes,3,opt,name=label,proto3" json:"label,omitempty" xml:"label,attr"`
 }
 
 func (x *Category) Reset() {
@@ -3414,9 +3414,9 @@ type Content struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"type,attr"
-	Type string `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`
+	Type string `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty" xml:"type,attr"`
 	// @gotags: xml:"src,attr"
-	Src string `protobuf:"bytes,2,opt,name=src,proto3" json:"src,omitempty"`
+	Src string `protobuf:"bytes,2,opt,name=src,proto3" json:"src,omitempty" xml:"src,attr"`
 }
 
 func (x *Content) Reset() {
@@ -3471,7 +3471,7 @@ type DateTime struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 }
 
 func (x *DateTime) Reset() {
@@ -3519,11 +3519,11 @@ type Generator struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"uri,attr"
-	Uri string `protobuf:"bytes,2,opt,name=uri,proto3" json:"uri,omitempty"`
+	Uri string `protobuf:"bytes,2,opt,name=uri,proto3" json:"uri,omitempty" xml:"uri,attr"`
 	// @gotags: xml:"version,attr"
-	Version string `protobuf:"bytes,3,opt,name=version,proto3" json:"version,omitempty"`
+	Version string `protobuf:"bytes,3,opt,name=version,proto3" json:"version,omitempty" xml:"version,attr"`
 }
 
 func (x *Generator) Reset() {
@@ -3585,7 +3585,7 @@ type Icon struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 }
 
 func (x *Icon) Reset() {
@@ -3633,7 +3633,7 @@ type Id struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 }
 
 func (x *Id) Reset() {
@@ -3681,17 +3681,17 @@ type Link struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"href,attr"
-	Href string `protobuf:"bytes,1,opt,name=href,proto3" json:"href,omitempty"`
+	Href string `protobuf:"bytes,1,opt,name=href,proto3" json:"href,omitempty" xml:"href,attr"`
 	// @gotags: xml:"rel,attr"
-	Rel string `protobuf:"bytes,2,opt,name=rel,proto3" json:"rel,omitempty"`
+	Rel string `protobuf:"bytes,2,opt,name=rel,proto3" json:"rel,omitempty" xml:"rel,attr"`
 	// @gotags: xml:"type,attr"
-	Type string `protobuf:"bytes,3,opt,name=type,proto3" json:"type,omitempty"`
+	Type string `protobuf:"bytes,3,opt,name=type,proto3" json:"type,omitempty" xml:"type,attr"`
 	// @gotags: xml:"hreflang,attr"
-	Hreflang string `protobuf:"bytes,4,opt,name=hreflang,proto3" json:"hreflang,omitempty"`
+	Hreflang string `protobuf:"bytes,4,opt,name=hreflang,proto3" json:"hreflang,omitempty" xml:"hreflang,attr"`
 	// @gotags: xml:"title,attr"
-	Title string `protobuf:"bytes,5,opt,name=title,proto3" json:"title,omitempty"`
+	Title string `protobuf:"bytes,5,opt,name=title,proto3" json:"title,omitempty" xml:"title,attr"`
 	// @gotags: xml:"length,attr"
-	Length int32 `protobuf:"varint,6,opt,name=length,proto3" json:"length,omitempty"`
+	Length int32 `protobuf:"varint,6,opt,name=length,proto3" json:"length,omitempty" xml:"length,attr"`
 }
 
 func (x *Link) Reset() {
@@ -3774,7 +3774,7 @@ type Logo struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 }
 
 func (x *Logo) Reset() {
@@ -3822,11 +3822,11 @@ type Person struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"name"
-	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty" xml:"name"`
 	// @gotags: xml:"uri"
-	Uri *URI `protobuf:"bytes,2,opt,name=uri,proto3" json:"uri,omitempty"`
+	Uri *URI `protobuf:"bytes,2,opt,name=uri,proto3" json:"uri,omitempty" xml:"uri"`
 	// @gotags: xml:"email"
-	Email string `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
+	Email string `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty" xml:"email"`
 }
 
 func (x *Person) Reset() {
@@ -3888,29 +3888,29 @@ type Source struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"author"
-	Author []*Person `protobuf:"bytes,1,rep,name=author,proto3" json:"author,omitempty"`
+	Author []*Person `protobuf:"bytes,1,rep,name=author,proto3" json:"author,omitempty" xml:"author"`
 	// @gotags: xml:"category"
-	Category []*Category `protobuf:"bytes,2,rep,name=category,proto3" json:"category,omitempty"`
+	Category []*Category `protobuf:"bytes,2,rep,name=category,proto3" json:"category,omitempty" xml:"category"`
 	// @gotags: xml:"contributor"
-	Contributor []*Person `protobuf:"bytes,3,rep,name=contributor,proto3" json:"contributor,omitempty"`
+	Contributor []*Person `protobuf:"bytes,3,rep,name=contributor,proto3" json:"contributor,omitempty" xml:"contributor"`
 	// @gotags: xml:"generator"
-	Generator *Generator `protobuf:"bytes,4,opt,name=generator,proto3" json:"generator,omitempty"`
+	Generator *Generator `protobuf:"bytes,4,opt,name=generator,proto3" json:"generator,omitempty" xml:"generator"`
 	// @gotags: xml:"icon"
-	Icon *Icon `protobuf:"bytes,5,opt,name=icon,proto3" json:"icon,omitempty"`
+	Icon *Icon `protobuf:"bytes,5,opt,name=icon,proto3" json:"icon,omitempty" xml:"icon"`
 	// @gotags: xml:"id"
-	Id *Id `protobuf:"bytes,6,opt,name=id,proto3" json:"id,omitempty"`
+	Id *Id `protobuf:"bytes,6,opt,name=id,proto3" json:"id,omitempty" xml:"id"`
 	// @gotags: xml:"link"
-	Link []*Link `protobuf:"bytes,7,rep,name=link,proto3" json:"link,omitempty"`
+	Link []*Link `protobuf:"bytes,7,rep,name=link,proto3" json:"link,omitempty" xml:"link"`
 	// @gotags: xml:"logo"
-	Logo *Logo `protobuf:"bytes,8,opt,name=logo,proto3" json:"logo,omitempty"`
+	Logo *Logo `protobuf:"bytes,8,opt,name=logo,proto3" json:"logo,omitempty" xml:"logo"`
 	// @gotags: xml:"rights"
-	Rights *Text `protobuf:"bytes,9,opt,name=rights,proto3" json:"rights,omitempty"`
+	Rights *Text `protobuf:"bytes,9,opt,name=rights,proto3" json:"rights,omitempty" xml:"rights"`
 	// @gotags: xml:"subtitle"
-	Subtitle *Text `protobuf:"bytes,10,opt,name=subtitle,proto3" json:"subtitle,omitempty"`
+	Subtitle *Text `protobuf:"bytes,10,opt,name=subtitle,proto3" json:"subtitle,omitempty" xml:"subtitle"`
 	// @gotags: xml:"title"
-	Title *Text `protobuf:"bytes,11,opt,name=title,proto3" json:"title,omitempty"`
+	Title *Text `protobuf:"bytes,11,opt,name=title,proto3" json:"title,omitempty" xml:"title"`
 	// @gotags: xml:"updated"
-	Updated *DateTime `protobuf:"bytes,12,opt,name=updated,proto3" json:"updated,omitempty"`
+	Updated *DateTime `protobuf:"bytes,12,opt,name=updated,proto3" json:"updated,omitempty" xml:"updated"`
 }
 
 func (x *Source) Reset() {
@@ -4035,7 +4035,7 @@ type Text struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"type,attr"
-	Type string `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`
+	Type string `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty" xml:"type,attr"`
 }
 
 func (x *Text) Reset() {
@@ -4083,7 +4083,7 @@ type URI struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 }
 
 func (x *URI) Reset() {
@@ -4131,9 +4131,9 @@ type AllTerritoryCode struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"IdentifierType,attr"
-	IdentifierType string `protobuf:"bytes,2,opt,name=identifier_type,json=identifierType,proto3" json:"identifier_type,omitempty"`
+	IdentifierType string `protobuf:"bytes,2,opt,name=identifier_type,json=identifierType,proto3" json:"identifier_type,omitempty" xml:"IdentifierType,attr"`
 }
 
 func (x *AllTerritoryCode) Reset() {
@@ -4188,11 +4188,11 @@ type ArtistType struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"MetadataSourceReference"
-	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty"`
+	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty" xml:"MetadataSourceReference"`
 	// @gotags: xml:"Value"
-	Value *ArtistTypeValue `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	Value *ArtistTypeValue `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty" xml:"Value"`
 	// @gotags: xml:"TerritoryOfArtistTypeDescription"
-	TerritoryOfArtistTypeDescription []string `protobuf:"bytes,3,rep,name=territory_of_artist_type_description,json=territoryOfArtistTypeDescription,proto3" json:"territory_of_artist_type_description,omitempty"`
+	TerritoryOfArtistTypeDescription []string `protobuf:"bytes,3,rep,name=territory_of_artist_type_description,json=territoryOfArtistTypeDescription,proto3" json:"territory_of_artist_type_description,omitempty" xml:"TerritoryOfArtistTypeDescription"`
 }
 
 func (x *ArtistType) Reset() {
@@ -4254,11 +4254,11 @@ type ArtistTypeValue struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"Namespace,attr"
-	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty" xml:"Namespace,attr"`
 	// @gotags: xml:"UserDefinedValue,attr"
-	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty"`
+	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty" xml:"UserDefinedValue,attr"`
 }
 
 func (x *ArtistTypeValue) Reset() {
@@ -4320,21 +4320,21 @@ type ArtisticInfluence struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"MetadataSourceReference"
-	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty"`
+	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty" xml:"MetadataSourceReference"`
 	// @gotags: xml:"Party"
-	Party []*PartyDescriptorWithPronunciation `protobuf:"bytes,2,rep,name=party,proto3" json:"party,omitempty"`
+	Party []*PartyDescriptorWithPronunciation `protobuf:"bytes,2,rep,name=party,proto3" json:"party,omitempty" xml:"Party"`
 	// @gotags: xml:"Work"
-	Work []*Work `protobuf:"bytes,3,rep,name=work,proto3" json:"work,omitempty"`
+	Work []*Work `protobuf:"bytes,3,rep,name=work,proto3" json:"work,omitempty" xml:"Work"`
 	// @gotags: xml:"Resource"
-	Resource []*Resource `protobuf:"bytes,4,rep,name=resource,proto3" json:"resource,omitempty"`
+	Resource []*Resource `protobuf:"bytes,4,rep,name=resource,proto3" json:"resource,omitempty" xml:"Resource"`
 	// @gotags: xml:"Release"
-	Release []*Release `protobuf:"bytes,5,rep,name=release,proto3" json:"release,omitempty"`
+	Release []*Release `protobuf:"bytes,5,rep,name=release,proto3" json:"release,omitempty" xml:"Release"`
 	// @gotags: xml:"Description"
-	Description []*TextWithFormat `protobuf:"bytes,6,rep,name=description,proto3" json:"description,omitempty"`
+	Description []*TextWithFormat `protobuf:"bytes,6,rep,name=description,proto3" json:"description,omitempty" xml:"Description"`
 	// @gotags: xml:"IsInfluenced"
-	IsInfluenced bool `protobuf:"varint,7,opt,name=is_influenced,json=isInfluenced,proto3" json:"is_influenced,omitempty"`
+	IsInfluenced bool `protobuf:"varint,7,opt,name=is_influenced,json=isInfluenced,proto3" json:"is_influenced,omitempty" xml:"IsInfluenced"`
 	// @gotags: xml:"IsInfluencer"
-	IsInfluencer bool `protobuf:"varint,8,opt,name=is_influencer,json=isInfluencer,proto3" json:"is_influencer,omitempty"`
+	IsInfluencer bool `protobuf:"varint,8,opt,name=is_influencer,json=isInfluencer,proto3" json:"is_influencer,omitempty" xml:"IsInfluencer"`
 }
 
 func (x *ArtisticInfluence) Reset() {
@@ -4431,19 +4431,19 @@ type Award struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"MetadataSourceReference"
-	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty"`
+	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty" xml:"MetadataSourceReference"`
 	// @gotags: xml:"AwardingBody"
-	AwardingBody *PartyDescriptorWithPronunciation `protobuf:"bytes,2,opt,name=awarding_body,json=awardingBody,proto3" json:"awarding_body,omitempty"`
+	AwardingBody *PartyDescriptorWithPronunciation `protobuf:"bytes,2,opt,name=awarding_body,json=awardingBody,proto3" json:"awarding_body,omitempty" xml:"AwardingBody"`
 	// @gotags: xml:"AwardedParty"
-	AwardedParty *PartyDescriptorWithPronunciation `protobuf:"bytes,3,opt,name=awarded_party,json=awardedParty,proto3" json:"awarded_party,omitempty"`
+	AwardedParty *PartyDescriptorWithPronunciation `protobuf:"bytes,3,opt,name=awarded_party,json=awardedParty,proto3" json:"awarded_party,omitempty" xml:"AwardedParty"`
 	// @gotags: xml:"AwardName"
-	AwardName *NameWithPronunciationAndScriptCode `protobuf:"bytes,4,opt,name=award_name,json=awardName,proto3" json:"award_name,omitempty"`
+	AwardName *NameWithPronunciationAndScriptCode `protobuf:"bytes,4,opt,name=award_name,json=awardName,proto3" json:"award_name,omitempty" xml:"AwardName"`
 	// @gotags: xml:"Date"
-	Date *EventDate `protobuf:"bytes,5,opt,name=date,proto3" json:"date,omitempty"`
+	Date *EventDate `protobuf:"bytes,5,opt,name=date,proto3" json:"date,omitempty" xml:"Date"`
 	// @gotags: xml:"IsWinner"
-	IsWinner bool `protobuf:"varint,6,opt,name=is_winner,json=isWinner,proto3" json:"is_winner,omitempty"`
+	IsWinner bool `protobuf:"varint,6,opt,name=is_winner,json=isWinner,proto3" json:"is_winner,omitempty" xml:"IsWinner"`
 	// @gotags: xml:"Comment"
-	Comment []*TextWithFormat `protobuf:"bytes,7,rep,name=comment,proto3" json:"comment,omitempty"`
+	Comment []*TextWithFormat `protobuf:"bytes,7,rep,name=comment,proto3" json:"comment,omitempty" xml:"Comment"`
 }
 
 func (x *Award) Reset() {
@@ -4533,11 +4533,11 @@ type Biography struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"MetadataSourceReference"
-	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty"`
+	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty" xml:"MetadataSourceReference"`
 	// @gotags: xml:"Text"
-	Text []*BiographyText `protobuf:"bytes,2,rep,name=text,proto3" json:"text,omitempty"`
+	Text []*BiographyText `protobuf:"bytes,2,rep,name=text,proto3" json:"text,omitempty" xml:"Text"`
 	// @gotags: xml:"Author"
-	Author []*PartyDescriptorWithPronunciation `protobuf:"bytes,3,rep,name=author,proto3" json:"author,omitempty"`
+	Author []*PartyDescriptorWithPronunciation `protobuf:"bytes,3,rep,name=author,proto3" json:"author,omitempty" xml:"Author"`
 }
 
 func (x *Biography) Reset() {
@@ -4599,17 +4599,17 @@ type BiographyText struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"LanguageAndScriptCode,attr"
-	LanguageAndScriptCode string `protobuf:"bytes,2,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty"`
+	LanguageAndScriptCode string `protobuf:"bytes,2,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty" xml:"LanguageAndScriptCode,attr"`
 	// @gotags: xml:"ApplicableTerritoryCode,attr"
-	ApplicableTerritoryCode string `protobuf:"bytes,3,opt,name=applicable_territory_code,json=applicableTerritoryCode,proto3" json:"applicable_territory_code,omitempty"`
+	ApplicableTerritoryCode string `protobuf:"bytes,3,opt,name=applicable_territory_code,json=applicableTerritoryCode,proto3" json:"applicable_territory_code,omitempty" xml:"ApplicableTerritoryCode,attr"`
 	// @gotags: xml:"Format,attr"
-	Format string `protobuf:"bytes,4,opt,name=format,proto3" json:"format,omitempty"`
+	Format string `protobuf:"bytes,4,opt,name=format,proto3" json:"format,omitempty" xml:"Format,attr"`
 	// @gotags: xml:"Namespace,attr"
-	Namespace string `protobuf:"bytes,5,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Namespace string `protobuf:"bytes,5,opt,name=namespace,proto3" json:"namespace,omitempty" xml:"Namespace,attr"`
 	// @gotags: xml:"UserDefinedValue,attr"
-	UserDefinedValue string `protobuf:"bytes,6,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty"`
+	UserDefinedValue string `protobuf:"bytes,6,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty" xml:"UserDefinedValue,attr"`
 }
 
 func (x *BiographyText) Reset() {
@@ -4692,9 +4692,9 @@ type CatalogNumber struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"Namespace,attr"
-	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty" xml:"Namespace,attr"`
 }
 
 func (x *CatalogNumber) Reset() {
@@ -4749,13 +4749,13 @@ type ClassicalPeriod struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"MetadataSourceReference"
-	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty"`
+	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty" xml:"MetadataSourceReference"`
 	// @gotags: xml:"Name"
-	Name *PeriodValue `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Name *PeriodValue `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty" xml:"Name"`
 	// @gotags: xml:"LanguageAndScriptOfClassicalPeriod"
-	LanguageAndScriptOfClassicalPeriod []string `protobuf:"bytes,3,rep,name=language_and_script_of_classical_period,json=languageAndScriptOfClassicalPeriod,proto3" json:"language_and_script_of_classical_period,omitempty"`
+	LanguageAndScriptOfClassicalPeriod []string `protobuf:"bytes,3,rep,name=language_and_script_of_classical_period,json=languageAndScriptOfClassicalPeriod,proto3" json:"language_and_script_of_classical_period,omitempty" xml:"LanguageAndScriptOfClassicalPeriod"`
 	// @gotags: xml:"TerritoryOfClassicalPeriodDescription"
-	TerritoryOfClassicalPeriodDescription []string `protobuf:"bytes,4,rep,name=territory_of_classical_period_description,json=territoryOfClassicalPeriodDescription,proto3" json:"territory_of_classical_period_description,omitempty"`
+	TerritoryOfClassicalPeriodDescription []string `protobuf:"bytes,4,rep,name=territory_of_classical_period_description,json=territoryOfClassicalPeriodDescription,proto3" json:"territory_of_classical_period_description,omitempty" xml:"TerritoryOfClassicalPeriodDescription"`
 }
 
 func (x *ClassicalPeriod) Reset() {
@@ -4824,17 +4824,17 @@ type CommentaryNote struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"MetadataSourceReference"
-	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty"`
+	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty" xml:"MetadataSourceReference"`
 	// @gotags: xml:"Text"
-	Text []*TextWithoutTerritory `protobuf:"bytes,2,rep,name=text,proto3" json:"text,omitempty"`
+	Text []*TextWithoutTerritory `protobuf:"bytes,2,rep,name=text,proto3" json:"text,omitempty" xml:"Text"`
 	// @gotags: xml:"CommentaryNoteType"
-	CommentaryNoteType []*CommentaryNoteType `protobuf:"bytes,3,rep,name=commentary_note_type,json=commentaryNoteType,proto3" json:"commentary_note_type,omitempty"`
+	CommentaryNoteType []*CommentaryNoteType `protobuf:"bytes,3,rep,name=commentary_note_type,json=commentaryNoteType,proto3" json:"commentary_note_type,omitempty" xml:"CommentaryNoteType"`
 	// @gotags: xml:"LanguageAndScriptOfCommentaryNote"
-	LanguageAndScriptOfCommentaryNote []string `protobuf:"bytes,4,rep,name=language_and_script_of_commentary_note,json=languageAndScriptOfCommentaryNote,proto3" json:"language_and_script_of_commentary_note,omitempty"`
+	LanguageAndScriptOfCommentaryNote []string `protobuf:"bytes,4,rep,name=language_and_script_of_commentary_note,json=languageAndScriptOfCommentaryNote,proto3" json:"language_and_script_of_commentary_note,omitempty" xml:"LanguageAndScriptOfCommentaryNote"`
 	// @gotags: xml:"TerritoryOfCommentaryNoteDescription"
-	TerritoryOfCommentaryNoteDescription []string `protobuf:"bytes,5,rep,name=territory_of_commentary_note_description,json=territoryOfCommentaryNoteDescription,proto3" json:"territory_of_commentary_note_description,omitempty"`
+	TerritoryOfCommentaryNoteDescription []string `protobuf:"bytes,5,rep,name=territory_of_commentary_note_description,json=territoryOfCommentaryNoteDescription,proto3" json:"territory_of_commentary_note_description,omitempty" xml:"TerritoryOfCommentaryNoteDescription"`
 	// @gotags: xml:"Author"
-	Author []*PartyDescriptorWithPronunciation `protobuf:"bytes,6,rep,name=author,proto3" json:"author,omitempty"`
+	Author []*PartyDescriptorWithPronunciation `protobuf:"bytes,6,rep,name=author,proto3" json:"author,omitempty" xml:"Author"`
 }
 
 func (x *CommentaryNote) Reset() {
@@ -4917,11 +4917,11 @@ type CommentaryNoteType struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"Namespace,attr"
-	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty" xml:"Namespace,attr"`
 	// @gotags: xml:"UserDefinedValue,attr"
-	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty"`
+	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty" xml:"UserDefinedValue,attr"`
 }
 
 func (x *CommentaryNoteType) Reset() {
@@ -4983,11 +4983,11 @@ type ContributorRole struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"Namespace,attr"
-	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty" xml:"Namespace,attr"`
 	// @gotags: xml:"UserDefinedValue,attr"
-	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty"`
+	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty" xml:"UserDefinedValue,attr"`
 }
 
 func (x *ContributorRole) Reset() {
@@ -5049,9 +5049,9 @@ type Date struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"IsApproximate,attr"
-	IsApproximate bool `protobuf:"varint,2,opt,name=is_approximate,json=isApproximate,proto3" json:"is_approximate,omitempty"`
+	IsApproximate bool `protobuf:"varint,2,opt,name=is_approximate,json=isApproximate,proto3" json:"is_approximate,omitempty" xml:"IsApproximate,attr"`
 }
 
 func (x *Date) Reset() {
@@ -5106,9 +5106,9 @@ type Description struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"LanguageAndScriptCode,attr"
-	LanguageAndScriptCode string `protobuf:"bytes,2,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty"`
+	LanguageAndScriptCode string `protobuf:"bytes,2,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty" xml:"LanguageAndScriptCode,attr"`
 }
 
 func (x *Description) Reset() {
@@ -5163,15 +5163,15 @@ type DetailedHashSum struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"Algorithm"
-	Algorithm *HashSumAlgorithmType `protobuf:"bytes,1,opt,name=algorithm,proto3" json:"algorithm,omitempty"`
+	Algorithm *HashSumAlgorithmType `protobuf:"bytes,1,opt,name=algorithm,proto3" json:"algorithm,omitempty" xml:"Algorithm"`
 	// @gotags: xml:"Version"
-	Version string `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty"`
+	Version string `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty" xml:"Version"`
 	// @gotags: xml:"Parameter"
-	Parameter string `protobuf:"bytes,3,opt,name=parameter,proto3" json:"parameter,omitempty"`
+	Parameter string `protobuf:"bytes,3,opt,name=parameter,proto3" json:"parameter,omitempty" xml:"Parameter"`
 	// @gotags: xml:"DataType"
-	DataType string `protobuf:"bytes,4,opt,name=data_type,json=dataType,proto3" json:"data_type,omitempty"`
+	DataType string `protobuf:"bytes,4,opt,name=data_type,json=dataType,proto3" json:"data_type,omitempty" xml:"DataType"`
 	// @gotags: xml:"HashSumValue"
-	HashSumValue string `protobuf:"bytes,5,opt,name=hash_sum_value,json=hashSumValue,proto3" json:"hash_sum_value,omitempty"`
+	HashSumValue string `protobuf:"bytes,5,opt,name=hash_sum_value,json=hashSumValue,proto3" json:"hash_sum_value,omitempty" xml:"HashSumValue"`
 }
 
 func (x *DetailedHashSum) Reset() {
@@ -5247,17 +5247,17 @@ type DetailedPartyId struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"ISNI"
-	ISNI string `protobuf:"bytes,1,opt,name=i_s_n_i,json=iSNI,proto3" json:"i_s_n_i,omitempty"`
+	ISNI string `protobuf:"bytes,1,opt,name=i_s_n_i,json=iSNI,proto3" json:"i_s_n_i,omitempty" xml:"ISNI"`
 	// @gotags: xml:"DPID"
-	DPID string `protobuf:"bytes,2,opt,name=d_p_i_d,json=dPID,proto3" json:"d_p_i_d,omitempty"`
+	DPID string `protobuf:"bytes,2,opt,name=d_p_i_d,json=dPID,proto3" json:"d_p_i_d,omitempty" xml:"DPID"`
 	// @gotags: xml:"IpiNameNumber"
-	IpiNameNumber string `protobuf:"bytes,3,opt,name=ipi_name_number,json=ipiNameNumber,proto3" json:"ipi_name_number,omitempty"`
+	IpiNameNumber string `protobuf:"bytes,3,opt,name=ipi_name_number,json=ipiNameNumber,proto3" json:"ipi_name_number,omitempty" xml:"IpiNameNumber"`
 	// @gotags: xml:"IPN"
-	IPN string `protobuf:"bytes,4,opt,name=i_p_n,json=iPN,proto3" json:"i_p_n,omitempty"`
+	IPN string `protobuf:"bytes,4,opt,name=i_p_n,json=iPN,proto3" json:"i_p_n,omitempty" xml:"IPN"`
 	// @gotags: xml:"CisacSocietyId"
-	CisacSocietyId string `protobuf:"bytes,5,opt,name=cisac_society_id,json=cisacSocietyId,proto3" json:"cisac_society_id,omitempty"`
+	CisacSocietyId string `protobuf:"bytes,5,opt,name=cisac_society_id,json=cisacSocietyId,proto3" json:"cisac_society_id,omitempty" xml:"CisacSocietyId"`
 	// @gotags: xml:"ProprietaryId"
-	ProprietaryId []*ProprietaryId `protobuf:"bytes,6,rep,name=proprietary_id,json=proprietaryId,proto3" json:"proprietary_id,omitempty"`
+	ProprietaryId []*ProprietaryId `protobuf:"bytes,6,rep,name=proprietary_id,json=proprietaryId,proto3" json:"proprietary_id,omitempty" xml:"ProprietaryId"`
 }
 
 func (x *DetailedPartyId) Reset() {
@@ -5340,11 +5340,11 @@ type DisplayArtistName struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"LanguageAndScriptCode,attr"
-	LanguageAndScriptCode string `protobuf:"bytes,2,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty"`
+	LanguageAndScriptCode string `protobuf:"bytes,2,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty" xml:"LanguageAndScriptCode,attr"`
 	// @gotags: xml:"ApplicableTerritoryCode,attr"
-	ApplicableTerritoryCode string `protobuf:"bytes,3,opt,name=applicable_territory_code,json=applicableTerritoryCode,proto3" json:"applicable_territory_code,omitempty"`
+	ApplicableTerritoryCode string `protobuf:"bytes,3,opt,name=applicable_territory_code,json=applicableTerritoryCode,proto3" json:"applicable_territory_code,omitempty" xml:"ApplicableTerritoryCode,attr"`
 }
 
 func (x *DisplayArtistName) Reset() {
@@ -5406,13 +5406,13 @@ type DisplayArtistNameWithDefault struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"LanguageAndScriptCode,attr"
-	LanguageAndScriptCode string `protobuf:"bytes,2,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty"`
+	LanguageAndScriptCode string `protobuf:"bytes,2,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty" xml:"LanguageAndScriptCode,attr"`
 	// @gotags: xml:"ApplicableTerritoryCode,attr"
-	ApplicableTerritoryCode string `protobuf:"bytes,3,opt,name=applicable_territory_code,json=applicableTerritoryCode,proto3" json:"applicable_territory_code,omitempty"`
+	ApplicableTerritoryCode string `protobuf:"bytes,3,opt,name=applicable_territory_code,json=applicableTerritoryCode,proto3" json:"applicable_territory_code,omitempty" xml:"ApplicableTerritoryCode,attr"`
 	// @gotags: xml:"IsDefault,attr"
-	IsDefault bool `protobuf:"varint,4,opt,name=is_default,json=isDefault,proto3" json:"is_default,omitempty"`
+	IsDefault bool `protobuf:"varint,4,opt,name=is_default,json=isDefault,proto3" json:"is_default,omitempty" xml:"IsDefault,attr"`
 }
 
 func (x *DisplayArtistNameWithDefault) Reset() {
@@ -5481,9 +5481,9 @@ type DisplayArtistNameWithPronunciation struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"Name"
-	Name *DisplayArtistNameWithDefault `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Name *DisplayArtistNameWithDefault `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty" xml:"Name"`
 	// @gotags: xml:"Pronunciation"
-	Pronunciation []*Pronunciation `protobuf:"bytes,2,rep,name=pronunciation,proto3" json:"pronunciation,omitempty"`
+	Pronunciation []*Pronunciation `protobuf:"bytes,2,rep,name=pronunciation,proto3" json:"pronunciation,omitempty" xml:"Pronunciation"`
 }
 
 func (x *DisplayArtistNameWithPronunciation) Reset() {
@@ -5538,19 +5538,19 @@ type DisplaySubTitle struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"Title"
-	Title string `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
+	Title string `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty" xml:"Title"`
 	// @gotags: xml:"Pronunciation"
-	Pronunciation []*Pronunciation `protobuf:"bytes,2,rep,name=pronunciation,proto3" json:"pronunciation,omitempty"`
+	Pronunciation []*Pronunciation `protobuf:"bytes,2,rep,name=pronunciation,proto3" json:"pronunciation,omitempty" xml:"Pronunciation"`
 	// @gotags: xml:"SequenceNumber,attr"
-	SequenceNumber int32 `protobuf:"varint,3,opt,name=sequence_number,json=sequenceNumber,proto3" json:"sequence_number,omitempty"`
+	SequenceNumber int32 `protobuf:"varint,3,opt,name=sequence_number,json=sequenceNumber,proto3" json:"sequence_number,omitempty" xml:"SequenceNumber,attr"`
 	// @gotags: xml:"IsDisplayedInTitle,attr"
-	IsDisplayedInTitle bool `protobuf:"varint,4,opt,name=is_displayed_in_title,json=isDisplayedInTitle,proto3" json:"is_displayed_in_title,omitempty"`
+	IsDisplayedInTitle bool `protobuf:"varint,4,opt,name=is_displayed_in_title,json=isDisplayedInTitle,proto3" json:"is_displayed_in_title,omitempty" xml:"IsDisplayedInTitle,attr"`
 	// @gotags: xml:"Namespace,attr"
-	Namespace string `protobuf:"bytes,5,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Namespace string `protobuf:"bytes,5,opt,name=namespace,proto3" json:"namespace,omitempty" xml:"Namespace,attr"`
 	// @gotags: xml:"UserDefinedValue,attr"
-	UserDefinedValue string `protobuf:"bytes,6,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty"`
+	UserDefinedValue string `protobuf:"bytes,6,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty" xml:"UserDefinedValue,attr"`
 	// @gotags: xml:"SubTitleType,attr"
-	SubTitleType string `protobuf:"bytes,7,opt,name=sub_title_type,json=subTitleType,proto3" json:"sub_title_type,omitempty"`
+	SubTitleType string `protobuf:"bytes,7,opt,name=sub_title_type,json=subTitleType,proto3" json:"sub_title_type,omitempty" xml:"SubTitleType,attr"`
 }
 
 func (x *DisplaySubTitle) Reset() {
@@ -5640,15 +5640,15 @@ type DisplayTitle struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"TitleText"
-	TitleText *TitleText `protobuf:"bytes,1,opt,name=title_text,json=titleText,proto3" json:"title_text,omitempty"`
+	TitleText *TitleText `protobuf:"bytes,1,opt,name=title_text,json=titleText,proto3" json:"title_text,omitempty" xml:"TitleText"`
 	// @gotags: xml:"SubTitle"
-	SubTitle []*DisplaySubTitle `protobuf:"bytes,2,rep,name=sub_title,json=subTitle,proto3" json:"sub_title,omitempty"`
+	SubTitle []*DisplaySubTitle `protobuf:"bytes,2,rep,name=sub_title,json=subTitle,proto3" json:"sub_title,omitempty" xml:"SubTitle"`
 	// @gotags: xml:"LanguageAndScriptCode,attr"
-	LanguageAndScriptCode string `protobuf:"bytes,3,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty"`
+	LanguageAndScriptCode string `protobuf:"bytes,3,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty" xml:"LanguageAndScriptCode,attr"`
 	// @gotags: xml:"ApplicableTerritoryCode,attr"
-	ApplicableTerritoryCode string `protobuf:"bytes,4,opt,name=applicable_territory_code,json=applicableTerritoryCode,proto3" json:"applicable_territory_code,omitempty"`
+	ApplicableTerritoryCode string `protobuf:"bytes,4,opt,name=applicable_territory_code,json=applicableTerritoryCode,proto3" json:"applicable_territory_code,omitempty" xml:"ApplicableTerritoryCode,attr"`
 	// @gotags: xml:"IsDefault,attr"
-	IsDefault bool `protobuf:"varint,5,opt,name=is_default,json=isDefault,proto3" json:"is_default,omitempty"`
+	IsDefault bool `protobuf:"varint,5,opt,name=is_default,json=isDefault,proto3" json:"is_default,omitempty" xml:"IsDefault,attr"`
 }
 
 func (x *DisplayTitle) Reset() {
@@ -5724,21 +5724,21 @@ type Epoch struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"MetadataSourceReference"
-	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty"`
+	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty" xml:"MetadataSourceReference"`
 	// @gotags: xml:"Value"
-	Value []*Name `protobuf:"bytes,2,rep,name=value,proto3" json:"value,omitempty"`
+	Value []*Name `protobuf:"bytes,2,rep,name=value,proto3" json:"value,omitempty" xml:"Value"`
 	// @gotags: xml:"RelatedArtist"
-	RelatedArtist []*PartyDescriptorWithPronunciation `protobuf:"bytes,3,rep,name=related_artist,json=relatedArtist,proto3" json:"related_artist,omitempty"`
+	RelatedArtist []*PartyDescriptorWithPronunciation `protobuf:"bytes,3,rep,name=related_artist,json=relatedArtist,proto3" json:"related_artist,omitempty" xml:"RelatedArtist"`
 	// @gotags: xml:"RelatedCreation"
-	RelatedCreation []*RelatedCreation `protobuf:"bytes,4,rep,name=related_creation,json=relatedCreation,proto3" json:"related_creation,omitempty"`
+	RelatedCreation []*RelatedCreation `protobuf:"bytes,4,rep,name=related_creation,json=relatedCreation,proto3" json:"related_creation,omitempty" xml:"RelatedCreation"`
 	// @gotags: xml:"StartDate"
-	StartDate *Date `protobuf:"bytes,5,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`
+	StartDate *Date `protobuf:"bytes,5,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty" xml:"StartDate"`
 	// @gotags: xml:"EndDate"
-	EndDate *Date `protobuf:"bytes,6,opt,name=end_date,json=endDate,proto3" json:"end_date,omitempty"`
+	EndDate *Date `protobuf:"bytes,6,opt,name=end_date,json=endDate,proto3" json:"end_date,omitempty" xml:"EndDate"`
 	// @gotags: xml:"LanguageAndScriptOfEpoch"
-	LanguageAndScriptOfEpoch []string `protobuf:"bytes,7,rep,name=language_and_script_of_epoch,json=languageAndScriptOfEpoch,proto3" json:"language_and_script_of_epoch,omitempty"`
+	LanguageAndScriptOfEpoch []string `protobuf:"bytes,7,rep,name=language_and_script_of_epoch,json=languageAndScriptOfEpoch,proto3" json:"language_and_script_of_epoch,omitempty" xml:"LanguageAndScriptOfEpoch"`
 	// @gotags: xml:"TerritoryOfEpochDescription"
-	TerritoryOfEpochDescription []string `protobuf:"bytes,8,rep,name=territory_of_epoch_description,json=territoryOfEpochDescription,proto3" json:"territory_of_epoch_description,omitempty"`
+	TerritoryOfEpochDescription []string `protobuf:"bytes,8,rep,name=territory_of_epoch_description,json=territoryOfEpochDescription,proto3" json:"territory_of_epoch_description,omitempty" xml:"TerritoryOfEpochDescription"`
 }
 
 func (x *Epoch) Reset() {
@@ -5835,19 +5835,19 @@ type EventDate struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"IsApproximate,attr"
-	IsApproximate bool `protobuf:"varint,2,opt,name=is_approximate,json=isApproximate,proto3" json:"is_approximate,omitempty"`
+	IsApproximate bool `protobuf:"varint,2,opt,name=is_approximate,json=isApproximate,proto3" json:"is_approximate,omitempty" xml:"IsApproximate,attr"`
 	// @gotags: xml:"IsBefore,attr"
-	IsBefore bool `protobuf:"varint,3,opt,name=is_before,json=isBefore,proto3" json:"is_before,omitempty"`
+	IsBefore bool `protobuf:"varint,3,opt,name=is_before,json=isBefore,proto3" json:"is_before,omitempty" xml:"IsBefore,attr"`
 	// @gotags: xml:"IsAfter,attr"
-	IsAfter bool `protobuf:"varint,4,opt,name=is_after,json=isAfter,proto3" json:"is_after,omitempty"`
+	IsAfter bool `protobuf:"varint,4,opt,name=is_after,json=isAfter,proto3" json:"is_after,omitempty" xml:"IsAfter,attr"`
 	// @gotags: xml:"ApplicableTerritoryCode,attr"
-	ApplicableTerritoryCode string `protobuf:"bytes,5,opt,name=applicable_territory_code,json=applicableTerritoryCode,proto3" json:"applicable_territory_code,omitempty"`
+	ApplicableTerritoryCode string `protobuf:"bytes,5,opt,name=applicable_territory_code,json=applicableTerritoryCode,proto3" json:"applicable_territory_code,omitempty" xml:"ApplicableTerritoryCode,attr"`
 	// @gotags: xml:"LocationDescription,attr"
-	LocationDescription string `protobuf:"bytes,6,opt,name=location_description,json=locationDescription,proto3" json:"location_description,omitempty"`
+	LocationDescription string `protobuf:"bytes,6,opt,name=location_description,json=locationDescription,proto3" json:"location_description,omitempty" xml:"LocationDescription,attr"`
 	// @gotags: xml:"LanguageAndScriptCode,attr"
-	LanguageAndScriptCode string `protobuf:"bytes,7,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty"`
+	LanguageAndScriptCode string `protobuf:"bytes,7,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty" xml:"LanguageAndScriptCode,attr"`
 }
 
 func (x *EventDate) Reset() {
@@ -5937,11 +5937,11 @@ type File struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"URI"
-	URI string `protobuf:"bytes,1,opt,name=u_r_i,json=uRI,proto3" json:"u_r_i,omitempty"`
+	URI string `protobuf:"bytes,1,opt,name=u_r_i,json=uRI,proto3" json:"u_r_i,omitempty" xml:"URI"`
 	// @gotags: xml:"HashSum"
-	HashSum *DetailedHashSum `protobuf:"bytes,2,opt,name=hash_sum,json=hashSum,proto3" json:"hash_sum,omitempty"`
+	HashSum *DetailedHashSum `protobuf:"bytes,2,opt,name=hash_sum,json=hashSum,proto3" json:"hash_sum,omitempty" xml:"HashSum"`
 	// @gotags: xml:"FileSize"
-	FileSize string `protobuf:"bytes,3,opt,name=file_size,json=fileSize,proto3" json:"file_size,omitempty"`
+	FileSize string `protobuf:"bytes,3,opt,name=file_size,json=fileSize,proto3" json:"file_size,omitempty" xml:"FileSize"`
 }
 
 func (x *File) Reset() {
@@ -6003,11 +6003,11 @@ type HashSumAlgorithmType struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"Namespace,attr"
-	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty" xml:"Namespace,attr"`
 	// @gotags: xml:"UserDefinedValue,attr"
-	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty"`
+	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty" xml:"UserDefinedValue,attr"`
 }
 
 func (x *HashSumAlgorithmType) Reset() {
@@ -6069,11 +6069,11 @@ type Image struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"MetadataSourceReference"
-	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty"`
+	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty" xml:"MetadataSourceReference"`
 	// @gotags: xml:"File"
-	File *File `protobuf:"bytes,2,opt,name=file,proto3" json:"file,omitempty"`
+	File *File `protobuf:"bytes,2,opt,name=file,proto3" json:"file,omitempty" xml:"File"`
 	// @gotags: xml:"ImageType"
-	ImageType []*ImageType `protobuf:"bytes,3,rep,name=image_type,json=imageType,proto3" json:"image_type,omitempty"`
+	ImageType []*ImageType `protobuf:"bytes,3,rep,name=image_type,json=imageType,proto3" json:"image_type,omitempty" xml:"ImageType"`
 }
 
 func (x *Image) Reset() {
@@ -6135,11 +6135,11 @@ type ImageType struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"Namespace,attr"
-	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty" xml:"Namespace,attr"`
 	// @gotags: xml:"UserDefinedValue,attr"
-	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty"`
+	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty" xml:"UserDefinedValue,attr"`
 }
 
 func (x *ImageType) Reset() {
@@ -6201,7 +6201,7 @@ type MessageAuditTrail struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"MessageAuditTrailEvent"
-	MessageAuditTrailEvent []*MessageAuditTrailEvent `protobuf:"bytes,1,rep,name=message_audit_trail_event,json=messageAuditTrailEvent,proto3" json:"message_audit_trail_event,omitempty"`
+	MessageAuditTrailEvent []*MessageAuditTrailEvent `protobuf:"bytes,1,rep,name=message_audit_trail_event,json=messageAuditTrailEvent,proto3" json:"message_audit_trail_event,omitempty" xml:"MessageAuditTrailEvent"`
 }
 
 func (x *MessageAuditTrail) Reset() {
@@ -6249,9 +6249,9 @@ type MessageAuditTrailEvent struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"MessagingPartyDescriptor"
-	MessagingPartyDescriptor *MessagingPartyWithoutCode `protobuf:"bytes,1,opt,name=messaging_party_descriptor,json=messagingPartyDescriptor,proto3" json:"messaging_party_descriptor,omitempty"`
+	MessagingPartyDescriptor *MessagingPartyWithoutCode `protobuf:"bytes,1,opt,name=messaging_party_descriptor,json=messagingPartyDescriptor,proto3" json:"messaging_party_descriptor,omitempty" xml:"MessagingPartyDescriptor"`
 	// @gotags: xml:"DateTime"
-	DateTime string `protobuf:"bytes,2,opt,name=date_time,json=dateTime,proto3" json:"date_time,omitempty"`
+	DateTime string `protobuf:"bytes,2,opt,name=date_time,json=dateTime,proto3" json:"date_time,omitempty" xml:"DateTime"`
 }
 
 func (x *MessageAuditTrailEvent) Reset() {
@@ -6306,23 +6306,23 @@ type MessageHeader struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"MessageThreadId"
-	MessageThreadId string `protobuf:"bytes,1,opt,name=message_thread_id,json=messageThreadId,proto3" json:"message_thread_id,omitempty"`
+	MessageThreadId string `protobuf:"bytes,1,opt,name=message_thread_id,json=messageThreadId,proto3" json:"message_thread_id,omitempty" xml:"MessageThreadId"`
 	// @gotags: xml:"MessageId"
-	MessageId string `protobuf:"bytes,2,opt,name=message_id,json=messageId,proto3" json:"message_id,omitempty"`
+	MessageId string `protobuf:"bytes,2,opt,name=message_id,json=messageId,proto3" json:"message_id,omitempty" xml:"MessageId"`
 	// @gotags: xml:"MessageFileName"
-	MessageFileName string `protobuf:"bytes,3,opt,name=message_file_name,json=messageFileName,proto3" json:"message_file_name,omitempty"`
+	MessageFileName string `protobuf:"bytes,3,opt,name=message_file_name,json=messageFileName,proto3" json:"message_file_name,omitempty" xml:"MessageFileName"`
 	// @gotags: xml:"MessageSender"
-	MessageSender *MessagingPartyWithoutCode `protobuf:"bytes,4,opt,name=message_sender,json=messageSender,proto3" json:"message_sender,omitempty"`
+	MessageSender *MessagingPartyWithoutCode `protobuf:"bytes,4,opt,name=message_sender,json=messageSender,proto3" json:"message_sender,omitempty" xml:"MessageSender"`
 	// @gotags: xml:"SentOnBehalfOf"
-	SentOnBehalfOf *MessagingPartyWithoutCode `protobuf:"bytes,5,opt,name=sent_on_behalf_of,json=sentOnBehalfOf,proto3" json:"sent_on_behalf_of,omitempty"`
+	SentOnBehalfOf *MessagingPartyWithoutCode `protobuf:"bytes,5,opt,name=sent_on_behalf_of,json=sentOnBehalfOf,proto3" json:"sent_on_behalf_of,omitempty" xml:"SentOnBehalfOf"`
 	// @gotags: xml:"MessageRecipient"
-	MessageRecipient []*MessagingPartyWithoutCode `protobuf:"bytes,6,rep,name=message_recipient,json=messageRecipient,proto3" json:"message_recipient,omitempty"`
+	MessageRecipient []*MessagingPartyWithoutCode `protobuf:"bytes,6,rep,name=message_recipient,json=messageRecipient,proto3" json:"message_recipient,omitempty" xml:"MessageRecipient"`
 	// @gotags: xml:"MessageCreatedDateTime"
-	MessageCreatedDateTime string `protobuf:"bytes,7,opt,name=message_created_date_time,json=messageCreatedDateTime,proto3" json:"message_created_date_time,omitempty"`
+	MessageCreatedDateTime string `protobuf:"bytes,7,opt,name=message_created_date_time,json=messageCreatedDateTime,proto3" json:"message_created_date_time,omitempty" xml:"MessageCreatedDateTime"`
 	// @gotags: xml:"MessageAuditTrail"
-	MessageAuditTrail *MessageAuditTrail `protobuf:"bytes,8,opt,name=message_audit_trail,json=messageAuditTrail,proto3" json:"message_audit_trail,omitempty"`
+	MessageAuditTrail *MessageAuditTrail `protobuf:"bytes,8,opt,name=message_audit_trail,json=messageAuditTrail,proto3" json:"message_audit_trail,omitempty" xml:"MessageAuditTrail"`
 	// @gotags: xml:"MessageControlType"
-	MessageControlType string `protobuf:"bytes,9,opt,name=message_control_type,json=messageControlType,proto3" json:"message_control_type,omitempty"`
+	MessageControlType string `protobuf:"bytes,9,opt,name=message_control_type,json=messageControlType,proto3" json:"message_control_type,omitempty" xml:"MessageControlType"`
 }
 
 func (x *MessageHeader) Reset() {
@@ -6426,11 +6426,11 @@ type MessagingPartyWithoutCode struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"PartyId"
-	PartyId string `protobuf:"bytes,1,opt,name=party_id,json=partyId,proto3" json:"party_id,omitempty"`
+	PartyId string `protobuf:"bytes,1,opt,name=party_id,json=partyId,proto3" json:"party_id,omitempty" xml:"PartyId"`
 	// @gotags: xml:"PartyName"
-	PartyName *PartyNameWithoutCode `protobuf:"bytes,2,opt,name=party_name,json=partyName,proto3" json:"party_name,omitempty"`
+	PartyName *PartyNameWithoutCode `protobuf:"bytes,2,opt,name=party_name,json=partyName,proto3" json:"party_name,omitempty" xml:"PartyName"`
 	// @gotags: xml:"TradingName"
-	TradingName string `protobuf:"bytes,3,opt,name=trading_name,json=tradingName,proto3" json:"trading_name,omitempty"`
+	TradingName string `protobuf:"bytes,3,opt,name=trading_name,json=tradingName,proto3" json:"trading_name,omitempty" xml:"TradingName"`
 }
 
 func (x *MessagingPartyWithoutCode) Reset() {
@@ -6492,13 +6492,13 @@ type MetadataSource struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"SourceReference"
-	SourceReference string `protobuf:"bytes,1,opt,name=source_reference,json=sourceReference,proto3" json:"source_reference,omitempty"`
+	SourceReference string `protobuf:"bytes,1,opt,name=source_reference,json=sourceReference,proto3" json:"source_reference,omitempty" xml:"SourceReference"`
 	// @gotags: xml:"MetadataSourceType"
-	MetadataSourceType *MetadataSourceType `protobuf:"bytes,2,opt,name=metadata_source_type,json=metadataSourceType,proto3" json:"metadata_source_type,omitempty"`
+	MetadataSourceType *MetadataSourceType `protobuf:"bytes,2,opt,name=metadata_source_type,json=metadataSourceType,proto3" json:"metadata_source_type,omitempty" xml:"MetadataSourceType"`
 	// @gotags: xml:"PartyId"
-	PartyId []*DetailedPartyId `protobuf:"bytes,3,rep,name=party_id,json=partyId,proto3" json:"party_id,omitempty"`
+	PartyId []*DetailedPartyId `protobuf:"bytes,3,rep,name=party_id,json=partyId,proto3" json:"party_id,omitempty" xml:"PartyId"`
 	// @gotags: xml:"PartyName"
-	PartyName []*PartyNameWithPronunciation `protobuf:"bytes,4,rep,name=party_name,json=partyName,proto3" json:"party_name,omitempty"`
+	PartyName []*PartyNameWithPronunciation `protobuf:"bytes,4,rep,name=party_name,json=partyName,proto3" json:"party_name,omitempty" xml:"PartyName"`
 }
 
 func (x *MetadataSource) Reset() {
@@ -6567,7 +6567,7 @@ type MetadataSourceList struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"MetadataSource"
-	MetadataSource []*MetadataSource `protobuf:"bytes,1,rep,name=metadata_source,json=metadataSource,proto3" json:"metadata_source,omitempty"`
+	MetadataSource []*MetadataSource `protobuf:"bytes,1,rep,name=metadata_source,json=metadataSource,proto3" json:"metadata_source,omitempty" xml:"MetadataSource"`
 }
 
 func (x *MetadataSourceList) Reset() {
@@ -6615,13 +6615,13 @@ type MetadataSourceReference struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"AssertionDateTime,attr"
-	AssertionDateTime string `protobuf:"bytes,2,opt,name=assertion_date_time,json=assertionDateTime,proto3" json:"assertion_date_time,omitempty"`
+	AssertionDateTime string `protobuf:"bytes,2,opt,name=assertion_date_time,json=assertionDateTime,proto3" json:"assertion_date_time,omitempty" xml:"AssertionDateTime,attr"`
 	// @gotags: xml:"Status,attr"
-	Status string `protobuf:"bytes,3,opt,name=status,proto3" json:"status,omitempty"`
+	Status string `protobuf:"bytes,3,opt,name=status,proto3" json:"status,omitempty" xml:"Status,attr"`
 	// @gotags: xml:"Weight,attr"
-	Weight string `protobuf:"bytes,4,opt,name=weight,proto3" json:"weight,omitempty"`
+	Weight string `protobuf:"bytes,4,opt,name=weight,proto3" json:"weight,omitempty" xml:"Weight,attr"`
 }
 
 func (x *MetadataSourceReference) Reset() {
@@ -6690,11 +6690,11 @@ type MetadataSourceType struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"Namespace,attr"
-	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty" xml:"Namespace,attr"`
 	// @gotags: xml:"UserDefinedValue,attr"
-	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty"`
+	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty" xml:"UserDefinedValue,attr"`
 }
 
 func (x *MetadataSourceType) Reset() {
@@ -6756,13 +6756,13 @@ type MusicalWorkIdWithoutFlag struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"ISWC"
-	ISWC string `protobuf:"bytes,1,opt,name=i_s_w_c,json=iSWC,proto3" json:"i_s_w_c,omitempty"`
+	ISWC string `protobuf:"bytes,1,opt,name=i_s_w_c,json=iSWC,proto3" json:"i_s_w_c,omitempty" xml:"ISWC"`
 	// @gotags: xml:"OpusNumber"
-	OpusNumber string `protobuf:"bytes,2,opt,name=opus_number,json=opusNumber,proto3" json:"opus_number,omitempty"`
+	OpusNumber string `protobuf:"bytes,2,opt,name=opus_number,json=opusNumber,proto3" json:"opus_number,omitempty" xml:"OpusNumber"`
 	// @gotags: xml:"ComposerCatalogNumber"
-	ComposerCatalogNumber []string `protobuf:"bytes,3,rep,name=composer_catalog_number,json=composerCatalogNumber,proto3" json:"composer_catalog_number,omitempty"`
+	ComposerCatalogNumber []string `protobuf:"bytes,3,rep,name=composer_catalog_number,json=composerCatalogNumber,proto3" json:"composer_catalog_number,omitempty" xml:"ComposerCatalogNumber"`
 	// @gotags: xml:"ProprietaryId"
-	ProprietaryId []*ProprietaryId `protobuf:"bytes,4,rep,name=proprietary_id,json=proprietaryId,proto3" json:"proprietary_id,omitempty"`
+	ProprietaryId []*ProprietaryId `protobuf:"bytes,4,rep,name=proprietary_id,json=proprietaryId,proto3" json:"proprietary_id,omitempty" xml:"ProprietaryId"`
 }
 
 func (x *MusicalWorkIdWithoutFlag) Reset() {
@@ -6831,9 +6831,9 @@ type Name struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"LanguageAndScriptCode,attr"
-	LanguageAndScriptCode string `protobuf:"bytes,2,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty"`
+	LanguageAndScriptCode string `protobuf:"bytes,2,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty" xml:"LanguageAndScriptCode,attr"`
 }
 
 func (x *Name) Reset() {
@@ -6888,15 +6888,15 @@ type NameId struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"ISNI"
-	ISNI string `protobuf:"bytes,1,opt,name=i_s_n_i,json=iSNI,proto3" json:"i_s_n_i,omitempty"`
+	ISNI string `protobuf:"bytes,1,opt,name=i_s_n_i,json=iSNI,proto3" json:"i_s_n_i,omitempty" xml:"ISNI"`
 	// @gotags: xml:"IpiNameNumber"
-	IpiNameNumber string `protobuf:"bytes,2,opt,name=ipi_name_number,json=ipiNameNumber,proto3" json:"ipi_name_number,omitempty"`
+	IpiNameNumber string `protobuf:"bytes,2,opt,name=ipi_name_number,json=ipiNameNumber,proto3" json:"ipi_name_number,omitempty" xml:"IpiNameNumber"`
 	// @gotags: xml:"IPN"
-	IPN string `protobuf:"bytes,3,opt,name=i_p_n,json=iPN,proto3" json:"i_p_n,omitempty"`
+	IPN string `protobuf:"bytes,3,opt,name=i_p_n,json=iPN,proto3" json:"i_p_n,omitempty" xml:"IPN"`
 	// @gotags: xml:"ProprietaryId"
-	ProprietaryId []*ProprietaryId `protobuf:"bytes,4,rep,name=proprietary_id,json=proprietaryId,proto3" json:"proprietary_id,omitempty"`
+	ProprietaryId []*ProprietaryId `protobuf:"bytes,4,rep,name=proprietary_id,json=proprietaryId,proto3" json:"proprietary_id,omitempty" xml:"ProprietaryId"`
 	// @gotags: xml:"IsDeprecated,attr"
-	IsDeprecated bool `protobuf:"varint,5,opt,name=is_deprecated,json=isDeprecated,proto3" json:"is_deprecated,omitempty"`
+	IsDeprecated bool `protobuf:"varint,5,opt,name=is_deprecated,json=isDeprecated,proto3" json:"is_deprecated,omitempty" xml:"IsDeprecated,attr"`
 }
 
 func (x *NameId) Reset() {
@@ -6972,9 +6972,9 @@ type NameWithPronunciationAndScriptCode struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"Name"
-	Name *Name `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Name *Name `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty" xml:"Name"`
 	// @gotags: xml:"Pronunciation"
-	Pronunciation []*Pronunciation `protobuf:"bytes,2,rep,name=pronunciation,proto3" json:"pronunciation,omitempty"`
+	Pronunciation []*Pronunciation `protobuf:"bytes,2,rep,name=pronunciation,proto3" json:"pronunciation,omitempty" xml:"Pronunciation"`
 }
 
 func (x *NameWithPronunciationAndScriptCode) Reset() {
@@ -7029,9 +7029,9 @@ type PartyDescriptorWithPronunciation struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"PartyId"
-	PartyId []*DetailedPartyId `protobuf:"bytes,1,rep,name=party_id,json=partyId,proto3" json:"party_id,omitempty"`
+	PartyId []*DetailedPartyId `protobuf:"bytes,1,rep,name=party_id,json=partyId,proto3" json:"party_id,omitempty" xml:"PartyId"`
 	// @gotags: xml:"PartyName"
-	PartyName []*PartyNameWithPronunciation `protobuf:"bytes,2,rep,name=party_name,json=partyName,proto3" json:"party_name,omitempty"`
+	PartyName []*PartyNameWithPronunciation `protobuf:"bytes,2,rep,name=party_name,json=partyName,proto3" json:"party_name,omitempty" xml:"PartyName"`
 }
 
 func (x *PartyDescriptorWithPronunciation) Reset() {
@@ -7086,23 +7086,23 @@ type PartyNameWithPronunciation struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"FullName"
-	FullName *NameWithPronunciationAndScriptCode `protobuf:"bytes,1,opt,name=full_name,json=fullName,proto3" json:"full_name,omitempty"`
+	FullName *NameWithPronunciationAndScriptCode `protobuf:"bytes,1,opt,name=full_name,json=fullName,proto3" json:"full_name,omitempty" xml:"FullName"`
 	// @gotags: xml:"FullNameAsciiTranscribed"
-	FullNameAsciiTranscribed *NameWithPronunciationAndScriptCode `protobuf:"bytes,2,opt,name=full_name_ascii_transcribed,json=fullNameAsciiTranscribed,proto3" json:"full_name_ascii_transcribed,omitempty"`
+	FullNameAsciiTranscribed *NameWithPronunciationAndScriptCode `protobuf:"bytes,2,opt,name=full_name_ascii_transcribed,json=fullNameAsciiTranscribed,proto3" json:"full_name_ascii_transcribed,omitempty" xml:"FullNameAsciiTranscribed"`
 	// @gotags: xml:"FullNameIndexed"
-	FullNameIndexed *NameWithPronunciationAndScriptCode `protobuf:"bytes,3,opt,name=full_name_indexed,json=fullNameIndexed,proto3" json:"full_name_indexed,omitempty"`
+	FullNameIndexed *NameWithPronunciationAndScriptCode `protobuf:"bytes,3,opt,name=full_name_indexed,json=fullNameIndexed,proto3" json:"full_name_indexed,omitempty" xml:"FullNameIndexed"`
 	// @gotags: xml:"NamesBeforeKeyName"
-	NamesBeforeKeyName *NameWithPronunciationAndScriptCode `protobuf:"bytes,4,opt,name=names_before_key_name,json=namesBeforeKeyName,proto3" json:"names_before_key_name,omitempty"`
+	NamesBeforeKeyName *NameWithPronunciationAndScriptCode `protobuf:"bytes,4,opt,name=names_before_key_name,json=namesBeforeKeyName,proto3" json:"names_before_key_name,omitempty" xml:"NamesBeforeKeyName"`
 	// @gotags: xml:"KeyName"
-	KeyName *NameWithPronunciationAndScriptCode `protobuf:"bytes,5,opt,name=key_name,json=keyName,proto3" json:"key_name,omitempty"`
+	KeyName *NameWithPronunciationAndScriptCode `protobuf:"bytes,5,opt,name=key_name,json=keyName,proto3" json:"key_name,omitempty" xml:"KeyName"`
 	// @gotags: xml:"NamesAfterKeyName"
-	NamesAfterKeyName *NameWithPronunciationAndScriptCode `protobuf:"bytes,6,opt,name=names_after_key_name,json=namesAfterKeyName,proto3" json:"names_after_key_name,omitempty"`
+	NamesAfterKeyName *NameWithPronunciationAndScriptCode `protobuf:"bytes,6,opt,name=names_after_key_name,json=namesAfterKeyName,proto3" json:"names_after_key_name,omitempty" xml:"NamesAfterKeyName"`
 	// @gotags: xml:"AbbreviatedName"
-	AbbreviatedName *NameWithPronunciationAndScriptCode `protobuf:"bytes,7,opt,name=abbreviated_name,json=abbreviatedName,proto3" json:"abbreviated_name,omitempty"`
+	AbbreviatedName *NameWithPronunciationAndScriptCode `protobuf:"bytes,7,opt,name=abbreviated_name,json=abbreviatedName,proto3" json:"abbreviated_name,omitempty" xml:"AbbreviatedName"`
 	// @gotags: xml:"LanguageAndScriptCode,attr"
-	LanguageAndScriptCode string `protobuf:"bytes,8,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty"`
+	LanguageAndScriptCode string `protobuf:"bytes,8,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty" xml:"LanguageAndScriptCode,attr"`
 	// @gotags: xml:"ApplicableTerritoryCode,attr"
-	ApplicableTerritoryCode string `protobuf:"bytes,9,opt,name=applicable_territory_code,json=applicableTerritoryCode,proto3" json:"applicable_territory_code,omitempty"`
+	ApplicableTerritoryCode string `protobuf:"bytes,9,opt,name=applicable_territory_code,json=applicableTerritoryCode,proto3" json:"applicable_territory_code,omitempty" xml:"ApplicableTerritoryCode,attr"`
 }
 
 func (x *PartyNameWithPronunciation) Reset() {
@@ -7206,19 +7206,19 @@ type PartyNameWithoutCode struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"FullName"
-	FullName string `protobuf:"bytes,1,opt,name=full_name,json=fullName,proto3" json:"full_name,omitempty"`
+	FullName string `protobuf:"bytes,1,opt,name=full_name,json=fullName,proto3" json:"full_name,omitempty" xml:"FullName"`
 	// @gotags: xml:"FullNameAsciiTranscribed"
-	FullNameAsciiTranscribed string `protobuf:"bytes,2,opt,name=full_name_ascii_transcribed,json=fullNameAsciiTranscribed,proto3" json:"full_name_ascii_transcribed,omitempty"`
+	FullNameAsciiTranscribed string `protobuf:"bytes,2,opt,name=full_name_ascii_transcribed,json=fullNameAsciiTranscribed,proto3" json:"full_name_ascii_transcribed,omitempty" xml:"FullNameAsciiTranscribed"`
 	// @gotags: xml:"FullNameIndexed"
-	FullNameIndexed string `protobuf:"bytes,3,opt,name=full_name_indexed,json=fullNameIndexed,proto3" json:"full_name_indexed,omitempty"`
+	FullNameIndexed string `protobuf:"bytes,3,opt,name=full_name_indexed,json=fullNameIndexed,proto3" json:"full_name_indexed,omitempty" xml:"FullNameIndexed"`
 	// @gotags: xml:"NamesBeforeKeyName"
-	NamesBeforeKeyName string `protobuf:"bytes,4,opt,name=names_before_key_name,json=namesBeforeKeyName,proto3" json:"names_before_key_name,omitempty"`
+	NamesBeforeKeyName string `protobuf:"bytes,4,opt,name=names_before_key_name,json=namesBeforeKeyName,proto3" json:"names_before_key_name,omitempty" xml:"NamesBeforeKeyName"`
 	// @gotags: xml:"KeyName"
-	KeyName string `protobuf:"bytes,5,opt,name=key_name,json=keyName,proto3" json:"key_name,omitempty"`
+	KeyName string `protobuf:"bytes,5,opt,name=key_name,json=keyName,proto3" json:"key_name,omitempty" xml:"KeyName"`
 	// @gotags: xml:"NamesAfterKeyName"
-	NamesAfterKeyName string `protobuf:"bytes,6,opt,name=names_after_key_name,json=namesAfterKeyName,proto3" json:"names_after_key_name,omitempty"`
+	NamesAfterKeyName string `protobuf:"bytes,6,opt,name=names_after_key_name,json=namesAfterKeyName,proto3" json:"names_after_key_name,omitempty" xml:"NamesAfterKeyName"`
 	// @gotags: xml:"AbbreviatedName"
-	AbbreviatedName string `protobuf:"bytes,7,opt,name=abbreviated_name,json=abbreviatedName,proto3" json:"abbreviated_name,omitempty"`
+	AbbreviatedName string `protobuf:"bytes,7,opt,name=abbreviated_name,json=abbreviatedName,proto3" json:"abbreviated_name,omitempty" xml:"AbbreviatedName"`
 }
 
 func (x *PartyNameWithoutCode) Reset() {
@@ -7308,11 +7308,11 @@ type PeriodValue struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"Namespace,attr"
-	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty" xml:"Namespace,attr"`
 	// @gotags: xml:"UserDefinedValue,attr"
-	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty"`
+	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty" xml:"UserDefinedValue,attr"`
 }
 
 func (x *PeriodValue) Reset() {
@@ -7374,9 +7374,9 @@ type PeriodWithTime struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"StartDateTime"
-	StartDateTime string `protobuf:"bytes,1,opt,name=start_date_time,json=startDateTime,proto3" json:"start_date_time,omitempty"`
+	StartDateTime string `protobuf:"bytes,1,opt,name=start_date_time,json=startDateTime,proto3" json:"start_date_time,omitempty" xml:"StartDateTime"`
 	// @gotags: xml:"EndDateTime"
-	EndDateTime string `protobuf:"bytes,2,opt,name=end_date_time,json=endDateTime,proto3" json:"end_date_time,omitempty"`
+	EndDateTime string `protobuf:"bytes,2,opt,name=end_date_time,json=endDateTime,proto3" json:"end_date_time,omitempty" xml:"EndDateTime"`
 }
 
 func (x *PeriodWithTime) Reset() {
@@ -7431,17 +7431,17 @@ type Pronunciation struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"IsCanonical,attr"
-	IsCanonical bool `protobuf:"varint,2,opt,name=is_canonical,json=isCanonical,proto3" json:"is_canonical,omitempty"`
+	IsCanonical bool `protobuf:"varint,2,opt,name=is_canonical,json=isCanonical,proto3" json:"is_canonical,omitempty" xml:"IsCanonical,attr"`
 	// @gotags: xml:"LanguageCode,attr"
-	LanguageCode string `protobuf:"bytes,3,opt,name=language_code,json=languageCode,proto3" json:"language_code,omitempty"`
+	LanguageCode string `protobuf:"bytes,3,opt,name=language_code,json=languageCode,proto3" json:"language_code,omitempty" xml:"LanguageCode,attr"`
 	// @gotags: xml:"EncodingType,attr"
-	EncodingType string `protobuf:"bytes,4,opt,name=encoding_type,json=encodingType,proto3" json:"encoding_type,omitempty"`
+	EncodingType string `protobuf:"bytes,4,opt,name=encoding_type,json=encodingType,proto3" json:"encoding_type,omitempty" xml:"EncodingType,attr"`
 	// @gotags: xml:"EncodingNamespace,attr"
-	EncodingNamespace string `protobuf:"bytes,5,opt,name=encoding_namespace,json=encodingNamespace,proto3" json:"encoding_namespace,omitempty"`
+	EncodingNamespace string `protobuf:"bytes,5,opt,name=encoding_namespace,json=encodingNamespace,proto3" json:"encoding_namespace,omitempty" xml:"EncodingNamespace,attr"`
 	// @gotags: xml:"EncodingUserDefinedValue,attr"
-	EncodingUserDefinedValue string `protobuf:"bytes,6,opt,name=encoding_user_defined_value,json=encodingUserDefinedValue,proto3" json:"encoding_user_defined_value,omitempty"`
+	EncodingUserDefinedValue string `protobuf:"bytes,6,opt,name=encoding_user_defined_value,json=encodingUserDefinedValue,proto3" json:"encoding_user_defined_value,omitempty" xml:"EncodingUserDefinedValue,attr"`
 }
 
 func (x *Pronunciation) Reset() {
@@ -7524,9 +7524,9 @@ type ProprietaryId struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"Namespace,attr"
-	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty" xml:"Namespace,attr"`
 }
 
 func (x *ProprietaryId) Reset() {
@@ -7581,13 +7581,13 @@ type RelatedCreation struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"Title"
-	Title *TitleWithPronunciation `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
+	Title *TitleWithPronunciation `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty" xml:"Title"`
 	// @gotags: xml:"ReleaseId"
-	ReleaseId *ReleaseId `protobuf:"bytes,2,opt,name=release_id,json=releaseId,proto3" json:"release_id,omitempty"`
+	ReleaseId *ReleaseId `protobuf:"bytes,2,opt,name=release_id,json=releaseId,proto3" json:"release_id,omitempty" xml:"ReleaseId"`
 	// @gotags: xml:"ResourceId"
-	ResourceId *ResourceIdWithoutFlag `protobuf:"bytes,3,opt,name=resource_id,json=resourceId,proto3" json:"resource_id,omitempty"`
+	ResourceId *ResourceIdWithoutFlag `protobuf:"bytes,3,opt,name=resource_id,json=resourceId,proto3" json:"resource_id,omitempty" xml:"ResourceId"`
 	// @gotags: xml:"MusicalWorkId"
-	MusicalWorkId *MusicalWorkIdWithoutFlag `protobuf:"bytes,4,opt,name=musical_work_id,json=musicalWorkId,proto3" json:"musical_work_id,omitempty"`
+	MusicalWorkId *MusicalWorkIdWithoutFlag `protobuf:"bytes,4,opt,name=musical_work_id,json=musicalWorkId,proto3" json:"musical_work_id,omitempty" xml:"MusicalWorkId"`
 }
 
 func (x *RelatedCreation) Reset() {
@@ -7656,17 +7656,17 @@ type Release struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"GRid"
-	GRid string `protobuf:"bytes,1,opt,name=g_rid,json=gRid,proto3" json:"g_rid,omitempty"`
+	GRid string `protobuf:"bytes,1,opt,name=g_rid,json=gRid,proto3" json:"g_rid,omitempty" xml:"GRid"`
 	// @gotags: xml:"ICPN"
-	ICPN string `protobuf:"bytes,2,opt,name=i_c_p_n,json=iCPN,proto3" json:"i_c_p_n,omitempty"`
+	ICPN string `protobuf:"bytes,2,opt,name=i_c_p_n,json=iCPN,proto3" json:"i_c_p_n,omitempty" xml:"ICPN"`
 	// @gotags: xml:"ProprietaryReleaseId"
-	ProprietaryReleaseId string `protobuf:"bytes,3,opt,name=proprietary_release_id,json=proprietaryReleaseId,proto3" json:"proprietary_release_id,omitempty"`
+	ProprietaryReleaseId string `protobuf:"bytes,3,opt,name=proprietary_release_id,json=proprietaryReleaseId,proto3" json:"proprietary_release_id,omitempty" xml:"ProprietaryReleaseId"`
 	// @gotags: xml:"ReleaseTitle"
-	ReleaseTitle []*ReleaseTitle `protobuf:"bytes,4,rep,name=release_title,json=releaseTitle,proto3" json:"release_title,omitempty"`
+	ReleaseTitle []*ReleaseTitle `protobuf:"bytes,4,rep,name=release_title,json=releaseTitle,proto3" json:"release_title,omitempty" xml:"ReleaseTitle"`
 	// @gotags: xml:"DisplayArtistName"
-	DisplayArtistName []*DisplayArtistNameWithPronunciation `protobuf:"bytes,5,rep,name=display_artist_name,json=displayArtistName,proto3" json:"display_artist_name,omitempty"`
+	DisplayArtistName []*DisplayArtistNameWithPronunciation `protobuf:"bytes,5,rep,name=display_artist_name,json=displayArtistName,proto3" json:"display_artist_name,omitempty" xml:"DisplayArtistName"`
 	// @gotags: xml:"DisplayArtist"
-	DisplayArtist []*PartyDescriptorWithPronunciation `protobuf:"bytes,6,rep,name=display_artist,json=displayArtist,proto3" json:"display_artist,omitempty"`
+	DisplayArtist []*PartyDescriptorWithPronunciation `protobuf:"bytes,6,rep,name=display_artist,json=displayArtist,proto3" json:"display_artist,omitempty" xml:"DisplayArtist"`
 }
 
 func (x *Release) Reset() {
@@ -7749,15 +7749,15 @@ type ReleaseId struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"GRid"
-	GRid string `protobuf:"bytes,1,opt,name=g_rid,json=gRid,proto3" json:"g_rid,omitempty"`
+	GRid string `protobuf:"bytes,1,opt,name=g_rid,json=gRid,proto3" json:"g_rid,omitempty" xml:"GRid"`
 	// @gotags: xml:"ISRC"
-	ISRC string `protobuf:"bytes,2,opt,name=i_s_r_c,json=iSRC,proto3" json:"i_s_r_c,omitempty"`
+	ISRC string `protobuf:"bytes,2,opt,name=i_s_r_c,json=iSRC,proto3" json:"i_s_r_c,omitempty" xml:"ISRC"`
 	// @gotags: xml:"ICPN"
-	ICPN string `protobuf:"bytes,3,opt,name=i_c_p_n,json=iCPN,proto3" json:"i_c_p_n,omitempty"`
+	ICPN string `protobuf:"bytes,3,opt,name=i_c_p_n,json=iCPN,proto3" json:"i_c_p_n,omitempty" xml:"ICPN"`
 	// @gotags: xml:"CatalogNumber"
-	CatalogNumber *CatalogNumber `protobuf:"bytes,4,opt,name=catalog_number,json=catalogNumber,proto3" json:"catalog_number,omitempty"`
+	CatalogNumber *CatalogNumber `protobuf:"bytes,4,opt,name=catalog_number,json=catalogNumber,proto3" json:"catalog_number,omitempty" xml:"CatalogNumber"`
 	// @gotags: xml:"ProprietaryId"
-	ProprietaryId []*ProprietaryId `protobuf:"bytes,5,rep,name=proprietary_id,json=proprietaryId,proto3" json:"proprietary_id,omitempty"`
+	ProprietaryId []*ProprietaryId `protobuf:"bytes,5,rep,name=proprietary_id,json=proprietaryId,proto3" json:"proprietary_id,omitempty" xml:"ProprietaryId"`
 }
 
 func (x *ReleaseId) Reset() {
@@ -7833,13 +7833,13 @@ type ReleaseSummary struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"ReleaseId"
-	ReleaseId *ReleaseId `protobuf:"bytes,1,opt,name=release_id,json=releaseId,proto3" json:"release_id,omitempty"`
+	ReleaseId *ReleaseId `protobuf:"bytes,1,opt,name=release_id,json=releaseId,proto3" json:"release_id,omitempty" xml:"ReleaseId"`
 	// @gotags: xml:"DisplayTitle"
-	DisplayTitle []*DisplayTitle `protobuf:"bytes,2,rep,name=display_title,json=displayTitle,proto3" json:"display_title,omitempty"`
+	DisplayTitle []*DisplayTitle `protobuf:"bytes,2,rep,name=display_title,json=displayTitle,proto3" json:"display_title,omitempty" xml:"DisplayTitle"`
 	// @gotags: xml:"DisplayArtistName"
-	DisplayArtistName []*DisplayArtistNameWithPronunciation `protobuf:"bytes,3,rep,name=display_artist_name,json=displayArtistName,proto3" json:"display_artist_name,omitempty"`
+	DisplayArtistName []*DisplayArtistNameWithPronunciation `protobuf:"bytes,3,rep,name=display_artist_name,json=displayArtistName,proto3" json:"display_artist_name,omitempty" xml:"DisplayArtistName"`
 	// @gotags: xml:"DisplayArtist"
-	DisplayArtist []*PartyDescriptorWithPronunciation `protobuf:"bytes,4,rep,name=display_artist,json=displayArtist,proto3" json:"display_artist,omitempty"`
+	DisplayArtist []*PartyDescriptorWithPronunciation `protobuf:"bytes,4,rep,name=display_artist,json=displayArtist,proto3" json:"display_artist,omitempty" xml:"DisplayArtist"`
 }
 
 func (x *ReleaseSummary) Reset() {
@@ -7908,9 +7908,9 @@ type ReleaseTitle struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"LanguageAndScriptCode,attr"
-	LanguageAndScriptCode string `protobuf:"bytes,2,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty"`
+	LanguageAndScriptCode string `protobuf:"bytes,2,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty" xml:"LanguageAndScriptCode,attr"`
 }
 
 func (x *ReleaseTitle) Reset() {
@@ -7965,17 +7965,17 @@ type Resource struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"ISRC"
-	ISRC string `protobuf:"bytes,1,opt,name=i_s_r_c,json=iSRC,proto3" json:"i_s_r_c,omitempty"`
+	ISRC string `protobuf:"bytes,1,opt,name=i_s_r_c,json=iSRC,proto3" json:"i_s_r_c,omitempty" xml:"ISRC"`
 	// @gotags: xml:"CatalogNumber"
-	CatalogNumber string `protobuf:"bytes,2,opt,name=catalog_number,json=catalogNumber,proto3" json:"catalog_number,omitempty"`
+	CatalogNumber string `protobuf:"bytes,2,opt,name=catalog_number,json=catalogNumber,proto3" json:"catalog_number,omitempty" xml:"CatalogNumber"`
 	// @gotags: xml:"ProprietaryResourceId"
-	ProprietaryResourceId string `protobuf:"bytes,3,opt,name=proprietary_resource_id,json=proprietaryResourceId,proto3" json:"proprietary_resource_id,omitempty"`
+	ProprietaryResourceId string `protobuf:"bytes,3,opt,name=proprietary_resource_id,json=proprietaryResourceId,proto3" json:"proprietary_resource_id,omitempty" xml:"ProprietaryResourceId"`
 	// @gotags: xml:"ResourceTitle"
-	ResourceTitle []*ResourceTitle `protobuf:"bytes,4,rep,name=resource_title,json=resourceTitle,proto3" json:"resource_title,omitempty"`
+	ResourceTitle []*ResourceTitle `protobuf:"bytes,4,rep,name=resource_title,json=resourceTitle,proto3" json:"resource_title,omitempty" xml:"ResourceTitle"`
 	// @gotags: xml:"DisplayArtistName"
-	DisplayArtistName []*DisplayArtistNameWithPronunciation `protobuf:"bytes,5,rep,name=display_artist_name,json=displayArtistName,proto3" json:"display_artist_name,omitempty"`
+	DisplayArtistName []*DisplayArtistNameWithPronunciation `protobuf:"bytes,5,rep,name=display_artist_name,json=displayArtistName,proto3" json:"display_artist_name,omitempty" xml:"DisplayArtistName"`
 	// @gotags: xml:"DisplayArtist"
-	DisplayArtist []*PartyDescriptorWithPronunciation `protobuf:"bytes,6,rep,name=display_artist,json=displayArtist,proto3" json:"display_artist,omitempty"`
+	DisplayArtist []*PartyDescriptorWithPronunciation `protobuf:"bytes,6,rep,name=display_artist,json=displayArtist,proto3" json:"display_artist,omitempty" xml:"DisplayArtist"`
 }
 
 func (x *Resource) Reset() {
@@ -8058,23 +8058,23 @@ type ResourceIdWithoutFlag struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"ISRC"
-	ISRC string `protobuf:"bytes,1,opt,name=i_s_r_c,json=iSRC,proto3" json:"i_s_r_c,omitempty"`
+	ISRC string `protobuf:"bytes,1,opt,name=i_s_r_c,json=iSRC,proto3" json:"i_s_r_c,omitempty" xml:"ISRC"`
 	// @gotags: xml:"ISMN"
-	ISMN string `protobuf:"bytes,2,opt,name=i_s_m_n,json=iSMN,proto3" json:"i_s_m_n,omitempty"`
+	ISMN string `protobuf:"bytes,2,opt,name=i_s_m_n,json=iSMN,proto3" json:"i_s_m_n,omitempty" xml:"ISMN"`
 	// @gotags: xml:"ISAN"
-	ISAN string `protobuf:"bytes,3,opt,name=i_s_a_n,json=iSAN,proto3" json:"i_s_a_n,omitempty"`
+	ISAN string `protobuf:"bytes,3,opt,name=i_s_a_n,json=iSAN,proto3" json:"i_s_a_n,omitempty" xml:"ISAN"`
 	// @gotags: xml:"VISAN"
-	VISAN string `protobuf:"bytes,4,opt,name=v_i_s_a_n,json=vISAN,proto3" json:"v_i_s_a_n,omitempty"`
+	VISAN string `protobuf:"bytes,4,opt,name=v_i_s_a_n,json=vISAN,proto3" json:"v_i_s_a_n,omitempty" xml:"VISAN"`
 	// @gotags: xml:"ISBN"
-	ISBN string `protobuf:"bytes,5,opt,name=i_s_b_n,json=iSBN,proto3" json:"i_s_b_n,omitempty"`
+	ISBN string `protobuf:"bytes,5,opt,name=i_s_b_n,json=iSBN,proto3" json:"i_s_b_n,omitempty" xml:"ISBN"`
 	// @gotags: xml:"ISSN"
-	ISSN string `protobuf:"bytes,6,opt,name=i_s_s_n,json=iSSN,proto3" json:"i_s_s_n,omitempty"`
+	ISSN string `protobuf:"bytes,6,opt,name=i_s_s_n,json=iSSN,proto3" json:"i_s_s_n,omitempty" xml:"ISSN"`
 	// @gotags: xml:"SICI"
-	SICI string `protobuf:"bytes,7,opt,name=s_i_c_i,json=sICI,proto3" json:"s_i_c_i,omitempty"`
+	SICI string `protobuf:"bytes,7,opt,name=s_i_c_i,json=sICI,proto3" json:"s_i_c_i,omitempty" xml:"SICI"`
 	// @gotags: xml:"CatalogNumber"
-	CatalogNumber *CatalogNumber `protobuf:"bytes,8,opt,name=catalog_number,json=catalogNumber,proto3" json:"catalog_number,omitempty"`
+	CatalogNumber *CatalogNumber `protobuf:"bytes,8,opt,name=catalog_number,json=catalogNumber,proto3" json:"catalog_number,omitempty" xml:"CatalogNumber"`
 	// @gotags: xml:"ProprietaryId"
-	ProprietaryId []*ProprietaryId `protobuf:"bytes,9,rep,name=proprietary_id,json=proprietaryId,proto3" json:"proprietary_id,omitempty"`
+	ProprietaryId []*ProprietaryId `protobuf:"bytes,9,rep,name=proprietary_id,json=proprietaryId,proto3" json:"proprietary_id,omitempty" xml:"ProprietaryId"`
 }
 
 func (x *ResourceIdWithoutFlag) Reset() {
@@ -8178,13 +8178,13 @@ type ResourceSummary struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"ResourceId"
-	ResourceId *ResourceIdWithoutFlag `protobuf:"bytes,1,opt,name=resource_id,json=resourceId,proto3" json:"resource_id,omitempty"`
+	ResourceId *ResourceIdWithoutFlag `protobuf:"bytes,1,opt,name=resource_id,json=resourceId,proto3" json:"resource_id,omitempty" xml:"ResourceId"`
 	// @gotags: xml:"DisplayTitle"
-	DisplayTitle []*DisplayTitle `protobuf:"bytes,2,rep,name=display_title,json=displayTitle,proto3" json:"display_title,omitempty"`
+	DisplayTitle []*DisplayTitle `protobuf:"bytes,2,rep,name=display_title,json=displayTitle,proto3" json:"display_title,omitempty" xml:"DisplayTitle"`
 	// @gotags: xml:"DisplayArtistName"
-	DisplayArtistName []*DisplayArtistNameWithPronunciation `protobuf:"bytes,3,rep,name=display_artist_name,json=displayArtistName,proto3" json:"display_artist_name,omitempty"`
+	DisplayArtistName []*DisplayArtistNameWithPronunciation `protobuf:"bytes,3,rep,name=display_artist_name,json=displayArtistName,proto3" json:"display_artist_name,omitempty" xml:"DisplayArtistName"`
 	// @gotags: xml:"DisplayArtist"
-	DisplayArtist []*PartyDescriptorWithPronunciation `protobuf:"bytes,4,rep,name=display_artist,json=displayArtist,proto3" json:"display_artist,omitempty"`
+	DisplayArtist []*PartyDescriptorWithPronunciation `protobuf:"bytes,4,rep,name=display_artist,json=displayArtist,proto3" json:"display_artist,omitempty" xml:"DisplayArtist"`
 }
 
 func (x *ResourceSummary) Reset() {
@@ -8253,9 +8253,9 @@ type ResourceTitle struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"LanguageAndScriptCode,attr"
-	LanguageAndScriptCode string `protobuf:"bytes,2,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty"`
+	LanguageAndScriptCode string `protobuf:"bytes,2,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty" xml:"LanguageAndScriptCode,attr"`
 }
 
 func (x *ResourceTitle) Reset() {
@@ -8310,9 +8310,9 @@ type SubTitle struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"SubTitleType,attr"
-	SubTitleType string `protobuf:"bytes,2,opt,name=sub_title_type,json=subTitleType,proto3" json:"sub_title_type,omitempty"`
+	SubTitleType string `protobuf:"bytes,2,opt,name=sub_title_type,json=subTitleType,proto3" json:"sub_title_type,omitempty" xml:"SubTitleType,attr"`
 }
 
 func (x *SubTitle) Reset() {
@@ -8367,19 +8367,19 @@ type TextWithFormat struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"LanguageAndScriptCode,attr"
-	LanguageAndScriptCode string `protobuf:"bytes,2,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty"`
+	LanguageAndScriptCode string `protobuf:"bytes,2,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty" xml:"LanguageAndScriptCode,attr"`
 	// @gotags: xml:"ApplicableTerritoryCode,attr"
-	ApplicableTerritoryCode string `protobuf:"bytes,3,opt,name=applicable_territory_code,json=applicableTerritoryCode,proto3" json:"applicable_territory_code,omitempty"`
+	ApplicableTerritoryCode string `protobuf:"bytes,3,opt,name=applicable_territory_code,json=applicableTerritoryCode,proto3" json:"applicable_territory_code,omitempty" xml:"ApplicableTerritoryCode,attr"`
 	// @gotags: xml:"IsDefault,attr"
-	IsDefault bool `protobuf:"varint,4,opt,name=is_default,json=isDefault,proto3" json:"is_default,omitempty"`
+	IsDefault bool `protobuf:"varint,4,opt,name=is_default,json=isDefault,proto3" json:"is_default,omitempty" xml:"IsDefault,attr"`
 	// @gotags: xml:"Format,attr"
-	Format string `protobuf:"bytes,5,opt,name=format,proto3" json:"format,omitempty"`
+	Format string `protobuf:"bytes,5,opt,name=format,proto3" json:"format,omitempty" xml:"Format,attr"`
 	// @gotags: xml:"Namespace,attr"
-	Namespace string `protobuf:"bytes,6,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Namespace string `protobuf:"bytes,6,opt,name=namespace,proto3" json:"namespace,omitempty" xml:"Namespace,attr"`
 	// @gotags: xml:"UserDefinedValue,attr"
-	UserDefinedValue string `protobuf:"bytes,7,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty"`
+	UserDefinedValue string `protobuf:"bytes,7,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty" xml:"UserDefinedValue,attr"`
 }
 
 func (x *TextWithFormat) Reset() {
@@ -8469,19 +8469,19 @@ type TextWithoutTerritory struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"LanguageAndScriptCode,attr"
-	LanguageAndScriptCode string `protobuf:"bytes,2,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty"`
+	LanguageAndScriptCode string `protobuf:"bytes,2,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty" xml:"LanguageAndScriptCode,attr"`
 	// @gotags: xml:"ApplicableTerritoryCode,attr"
-	ApplicableTerritoryCode string `protobuf:"bytes,3,opt,name=applicable_territory_code,json=applicableTerritoryCode,proto3" json:"applicable_territory_code,omitempty"`
+	ApplicableTerritoryCode string `protobuf:"bytes,3,opt,name=applicable_territory_code,json=applicableTerritoryCode,proto3" json:"applicable_territory_code,omitempty" xml:"ApplicableTerritoryCode,attr"`
 	// @gotags: xml:"IsDefault,attr"
-	IsDefault bool `protobuf:"varint,4,opt,name=is_default,json=isDefault,proto3" json:"is_default,omitempty"`
+	IsDefault bool `protobuf:"varint,4,opt,name=is_default,json=isDefault,proto3" json:"is_default,omitempty" xml:"IsDefault,attr"`
 	// @gotags: xml:"Format,attr"
-	Format string `protobuf:"bytes,5,opt,name=format,proto3" json:"format,omitempty"`
+	Format string `protobuf:"bytes,5,opt,name=format,proto3" json:"format,omitempty" xml:"Format,attr"`
 	// @gotags: xml:"Namespace,attr"
-	Namespace string `protobuf:"bytes,6,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Namespace string `protobuf:"bytes,6,opt,name=namespace,proto3" json:"namespace,omitempty" xml:"Namespace,attr"`
 	// @gotags: xml:"UserDefinedValue,attr"
-	UserDefinedValue string `protobuf:"bytes,7,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty"`
+	UserDefinedValue string `protobuf:"bytes,7,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty" xml:"UserDefinedValue,attr"`
 }
 
 func (x *TextWithoutTerritory) Reset() {
@@ -8571,9 +8571,9 @@ type TitleText struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"Title"
-	Title string `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
+	Title string `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty" xml:"Title"`
 	// @gotags: xml:"Pronunciation"
-	Pronunciation []*Pronunciation `protobuf:"bytes,2,rep,name=pronunciation,proto3" json:"pronunciation,omitempty"`
+	Pronunciation []*Pronunciation `protobuf:"bytes,2,rep,name=pronunciation,proto3" json:"pronunciation,omitempty" xml:"Pronunciation"`
 }
 
 func (x *TitleText) Reset() {
@@ -8628,17 +8628,17 @@ type TitleWithPronunciation struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"TitleText"
-	TitleText *TitleText `protobuf:"bytes,1,opt,name=title_text,json=titleText,proto3" json:"title_text,omitempty"`
+	TitleText *TitleText `protobuf:"bytes,1,opt,name=title_text,json=titleText,proto3" json:"title_text,omitempty" xml:"TitleText"`
 	// @gotags: xml:"SubTitle"
-	SubTitle *TitleText `protobuf:"bytes,2,opt,name=sub_title,json=subTitle,proto3" json:"sub_title,omitempty"`
+	SubTitle *TitleText `protobuf:"bytes,2,opt,name=sub_title,json=subTitle,proto3" json:"sub_title,omitempty" xml:"SubTitle"`
 	// @gotags: xml:"LanguageAndScriptCode,attr"
-	LanguageAndScriptCode string `protobuf:"bytes,3,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty"`
+	LanguageAndScriptCode string `protobuf:"bytes,3,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty" xml:"LanguageAndScriptCode,attr"`
 	// @gotags: xml:"TitleType,attr"
-	TitleType string `protobuf:"bytes,4,opt,name=title_type,json=titleType,proto3" json:"title_type,omitempty"`
+	TitleType string `protobuf:"bytes,4,opt,name=title_type,json=titleType,proto3" json:"title_type,omitempty" xml:"TitleType,attr"`
 	// @gotags: xml:"Namespace,attr"
-	Namespace string `protobuf:"bytes,5,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Namespace string `protobuf:"bytes,5,opt,name=namespace,proto3" json:"namespace,omitempty" xml:"Namespace,attr"`
 	// @gotags: xml:"UserDefinedValue,attr"
-	UserDefinedValue string `protobuf:"bytes,6,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty"`
+	UserDefinedValue string `protobuf:"bytes,6,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty" xml:"UserDefinedValue,attr"`
 }
 
 func (x *TitleWithPronunciation) Reset() {
@@ -8721,17 +8721,17 @@ type TitleWithUDV struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"TitleText"
-	TitleText string `protobuf:"bytes,1,opt,name=title_text,json=titleText,proto3" json:"title_text,omitempty"`
+	TitleText string `protobuf:"bytes,1,opt,name=title_text,json=titleText,proto3" json:"title_text,omitempty" xml:"TitleText"`
 	// @gotags: xml:"SubTitle"
-	SubTitle []*SubTitle `protobuf:"bytes,2,rep,name=sub_title,json=subTitle,proto3" json:"sub_title,omitempty"`
+	SubTitle []*SubTitle `protobuf:"bytes,2,rep,name=sub_title,json=subTitle,proto3" json:"sub_title,omitempty" xml:"SubTitle"`
 	// @gotags: xml:"LanguageAndScriptCode,attr"
-	LanguageAndScriptCode string `protobuf:"bytes,3,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty"`
+	LanguageAndScriptCode string `protobuf:"bytes,3,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty" xml:"LanguageAndScriptCode,attr"`
 	// @gotags: xml:"TitleType,attr"
-	TitleType string `protobuf:"bytes,4,opt,name=title_type,json=titleType,proto3" json:"title_type,omitempty"`
+	TitleType string `protobuf:"bytes,4,opt,name=title_type,json=titleType,proto3" json:"title_type,omitempty" xml:"TitleType,attr"`
 	// @gotags: xml:"Namespace,attr"
-	Namespace string `protobuf:"bytes,5,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Namespace string `protobuf:"bytes,5,opt,name=namespace,proto3" json:"namespace,omitempty" xml:"Namespace,attr"`
 	// @gotags: xml:"UserDefinedValue,attr"
-	UserDefinedValue string `protobuf:"bytes,6,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty"`
+	UserDefinedValue string `protobuf:"bytes,6,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty" xml:"UserDefinedValue,attr"`
 }
 
 func (x *TitleWithUDV) Reset() {
@@ -8814,9 +8814,9 @@ type ValidityPeriod struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"StartDate"
-	StartDate *EventDate `protobuf:"bytes,1,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`
+	StartDate *EventDate `protobuf:"bytes,1,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty" xml:"StartDate"`
 	// @gotags: xml:"EndDate"
-	EndDate *EventDate `protobuf:"bytes,2,opt,name=end_date,json=endDate,proto3" json:"end_date,omitempty"`
+	EndDate *EventDate `protobuf:"bytes,2,opt,name=end_date,json=endDate,proto3" json:"end_date,omitempty" xml:"EndDate"`
 }
 
 func (x *ValidityPeriod) Reset() {
@@ -8871,9 +8871,9 @@ type VocalRegister struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"MetadataSourceReference"
-	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty"`
+	MetadataSourceReference []*MetadataSourceReference `protobuf:"bytes,1,rep,name=metadata_source_reference,json=metadataSourceReference,proto3" json:"metadata_source_reference,omitempty" xml:"MetadataSourceReference"`
 	// @gotags: xml:"Value"
-	Value *VocalRegisterValue `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	Value *VocalRegisterValue `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty" xml:"Value"`
 }
 
 func (x *VocalRegister) Reset() {
@@ -8928,11 +8928,11 @@ type VocalRegisterValue struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"Namespace,attr"
-	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty" xml:"Namespace,attr"`
 	// @gotags: xml:"UserDefinedValue,attr"
-	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty"`
+	UserDefinedValue string `protobuf:"bytes,3,opt,name=user_defined_value,json=userDefinedValue,proto3" json:"user_defined_value,omitempty" xml:"UserDefinedValue,attr"`
 }
 
 func (x *VocalRegisterValue) Reset() {
@@ -8994,13 +8994,13 @@ type Work struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"ISWC"
-	ISWC string `protobuf:"bytes,1,opt,name=i_s_w_c,json=iSWC,proto3" json:"i_s_w_c,omitempty"`
+	ISWC string `protobuf:"bytes,1,opt,name=i_s_w_c,json=iSWC,proto3" json:"i_s_w_c,omitempty" xml:"ISWC"`
 	// @gotags: xml:"ProprietaryWorkId"
-	ProprietaryWorkId string `protobuf:"bytes,2,opt,name=proprietary_work_id,json=proprietaryWorkId,proto3" json:"proprietary_work_id,omitempty"`
+	ProprietaryWorkId string `protobuf:"bytes,2,opt,name=proprietary_work_id,json=proprietaryWorkId,proto3" json:"proprietary_work_id,omitempty" xml:"ProprietaryWorkId"`
 	// @gotags: xml:"WorkTitle"
-	WorkTitle []*WorkTitle `protobuf:"bytes,3,rep,name=work_title,json=workTitle,proto3" json:"work_title,omitempty"`
+	WorkTitle []*WorkTitle `protobuf:"bytes,3,rep,name=work_title,json=workTitle,proto3" json:"work_title,omitempty" xml:"WorkTitle"`
 	// @gotags: xml:"Writer"
-	Writer []*PartyDescriptorWithPronunciation `protobuf:"bytes,4,rep,name=writer,proto3" json:"writer,omitempty"`
+	Writer []*PartyDescriptorWithPronunciation `protobuf:"bytes,4,rep,name=writer,proto3" json:"writer,omitempty" xml:"Writer"`
 }
 
 func (x *Work) Reset() {
@@ -9069,11 +9069,11 @@ type WorkSummary struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:"MusicalWorkId"
-	MusicalWorkId *MusicalWorkIdWithoutFlag `protobuf:"bytes,1,opt,name=musical_work_id,json=musicalWorkId,proto3" json:"musical_work_id,omitempty"`
+	MusicalWorkId *MusicalWorkIdWithoutFlag `protobuf:"bytes,1,opt,name=musical_work_id,json=musicalWorkId,proto3" json:"musical_work_id,omitempty" xml:"MusicalWorkId"`
 	// @gotags: xml:"WorkTitle"
-	WorkTitle []*TitleWithPronunciation `protobuf:"bytes,2,rep,name=work_title,json=workTitle,proto3" json:"work_title,omitempty"`
+	WorkTitle []*TitleWithPronunciation `protobuf:"bytes,2,rep,name=work_title,json=workTitle,proto3" json:"work_title,omitempty" xml:"WorkTitle"`
 	// @gotags: xml:"Writer"
-	Writer []*PartyDescriptorWithPronunciation `protobuf:"bytes,3,rep,name=writer,proto3" json:"writer,omitempty"`
+	Writer []*PartyDescriptorWithPronunciation `protobuf:"bytes,3,rep,name=writer,proto3" json:"writer,omitempty" xml:"Writer"`
 }
 
 func (x *WorkSummary) Reset() {
@@ -9135,9 +9135,9 @@ type WorkTitle struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: xml:",chardata"
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty" xml:",chardata"`
 	// @gotags: xml:"LanguageAndScriptCode,attr"
-	LanguageAndScriptCode string `protobuf:"bytes,2,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty"`
+	LanguageAndScriptCode string `protobuf:"bytes,2,opt,name=language_and_script_code,json=languageAndScriptCode,proto3" json:"language_and_script_code,omitempty" xml:"LanguageAndScriptCode,attr"`
 }
 
 func (x *WorkTitle) Reset() {
