@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package chain.v1;
+
+import "chain/v1/ddex.proto";
+
+message SignedTransaction {
+  bytes payload = 1;
+  bytes signature = 2;
+}
+
+message Transaction {
+  Header header = 1;
+  Body body = 2;
+  Footer footer = 3;
+}
+
+message Header {
+  uint64 chain_id = 1;
+  uint64 nonce = 2;
+  uint64 gas_limit = 3;
+  uint64 gas_price = 4;
+  uint64 deadline_height = 5;
+  string signer = 6;
+}
+
+message Body {
+  oneof action {
+    ElectronicReleaseNotification ern = 1;
+    PartyIdentificationAndEnrichment pie = 2;
+    MediaEnrichmentAndDescription mead = 3;
+  }
+}
+
+message Footer {
+  // receipts and shit
+}
+
+message TransactionEvent {
+  string sender = 1;
+  string tx_hash = 2;
+  int64 block_height = 3;
+}

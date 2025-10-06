@@ -9,4 +9,4 @@ breaking:
     - FILE
 lint:
   use:
-    - DEFAULT
+    - MINIMAL
