@@ -2,7 +2,9 @@ syntax = "proto3";
 
 package oap.core.v1;
 
-import "core/v1/ddex.proto";
+import "oap/core/v1/ddex.proto";
+
+option go_package = "github.com/alecsavvy/clockwise/oap/core/v1;corev1";
 
 message SignedTransaction {
   bytes payload = 1;

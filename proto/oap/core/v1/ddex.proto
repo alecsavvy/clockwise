@@ -10,6 +10,8 @@ import "ddex/ern/v432/v432.proto";
 import "ddex/mead/v11/v11.proto";
 import "ddex/pie/v10/v10.proto";
 
+option go_package = "github.com/alecsavvy/clockwise/oap/core/v1;corev1";
+
 message ElectronicReleaseNotification {
   oneof msg {
     ddex.ern.v381.NewReleaseMessage v381 = 1;
